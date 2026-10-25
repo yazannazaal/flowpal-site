@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ممشى · نماذج تصميم متجر رياضي</title>
+<meta name="description" content="ثلاث رؤى لتصميم متجر رياضي إلكتروني، من إعداد Flowpal.">
+<meta property="og:title" content="ممشى · نماذج تصميم متجر رياضي من Flowpal">
+<meta property="og:description" content="ثلاث رؤى تصميم: فاخر، ستريت وير، وتجاري عالي التحويل. من إعداد Flowpal.">
+<meta property="og:image" content="https://flowpal.co/demos/mamsha/assets/previews/c1-index-d.webp">
+<link rel="icon" href="assets/flowpal-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared.css">
+<style>
+:root{--bg:#f6f5f2;--ink:#111;--muted:#6b6862;--line:#e4e1da;--card:#fff;--fp:#0f766e;--font:"IBM Plex Sans Arabic",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f0f10;--ink:#f2f1ee;--muted:#9c9a95;--line:#2a2a2c;--card:#18181a}}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.7 var(--font)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+@media (max-width:760px){.wrap{padding:0 16px}}
+.top{display:flex;justify-content:space-between;align-items:center;padding:24px 0}
+.fp{display:flex;align-items:center;gap:10px;font:600 15px/1 "Inter Tight",sans-serif;direction:ltr}
+.fp img{width:30px;height:30px}
+.top small{color:var(--muted);font-size:13px}
+.intro{padding:64px 0 54px;display:grid;grid-template-columns:1.3fr 1fr;gap:60px;align-items:end;border-bottom:1px solid var(--line)}
+.intro .k{font-size:13px;color:var(--fp);font-weight:600;letter-spacing:.04em}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .intro .k{color:#5eead4}}
+.intro h1{font-size:clamp(36px,5vw,64px);line-height:1.08;margin:14px 0 0;font-weight:600;letter-spacing:-.02em}
+.intro h1 span{color:var(--muted);font-weight:400}
+.intro p{color:var(--muted);margin:0 0 6px;font-size:16.5px}
+.intro ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px;font-size:14.5px}
+.intro li{display:flex;gap:10px;align-items:center}
+.intro li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--fp);flex:none}
+@media (max-width:860px){.intro{grid-template-columns:1fr;gap:20px;padding:36px 0 34px}}
+.concept{display:grid;grid-template-columns:1.55fr 1fr;gap:48px;padding:64px 0;border-bottom:1px solid var(--line);align-items:center}
+.concept:nth-of-type(even) .shots{order:2}
+.shots{position:relative;padding-bottom:40px}
+.shots .d{border-radius:14px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.14),0 0 0 1px rgba(0,0,0,.06);background:#ddd;aspect-ratio:16/10}
+.shots .d img{width:100%;height:100%;object-fit:cover;object-position:top}
+.shots .m{position:absolute;bottom:0;left:-18px;width:22%;border-radius:22px;overflow:hidden;border:5px solid #111;box-shadow:0 20px 50px rgba(0,0,0,.3);aspect-ratio:390/780;background:#111}
+.concept:nth-of-type(even) .shots .m{left:auto;right:-18px}
+.shots .m img{width:100%;height:100%;object-fit:cover;object-position:top}
+.num{font:600 13px/1 "Inter Tight",sans-serif;color:var(--muted);letter-spacing:.1em}
+.concept h2{font-size:clamp(28px,3vw,40px);margin:10px 0 6px;line-height:1.15;font-weight:600}
+.concept h2 small{display:block;font:500 14px/1.4 "Inter Tight",sans-serif;color:var(--muted);letter-spacing:.06em;margin-top:6px;direction:ltr;text-align:right}
+.concept p{color:var(--muted);margin:14px 0 18px}
+.pal{display:flex;gap:6px;margin-bottom:22px}
+.pal i{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.feats{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:7px;font-size:14.5px}
+.feats li{display:flex;gap:8px}.feats li::before{content:"✓";color:var(--fp);font-weight:700}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links a{height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;transition:.2s;background:var(--card)}
+.links a:hover{border-color:var(--ink)}
+.links a.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+@media (max-width:860px){.concept{grid-template-columns:1fr;gap:26px;padding:44px 0}.concept:nth-of-type(even) .shots{order:0}.shots .m{left:-6px!important;right:auto!important;width:26%;border-width:3px;border-radius:14px}.links a{height:40px;padding:0 14px;font-size:13px}}
+.next{padding:64px 0;display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.next h3{font-size:28px;margin:0 0 12px;font-weight:600}
+.next p{color:var(--muted);margin:0}
+.steps{display:grid;gap:14px;counter-reset:s}
+.steps div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px 16px 18px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;counter-increment:s}
+.steps div::before{content:counter(s);grid-row:span 2;width:34px;height:34px;border-radius:50%;background:var(--fp);color:#fff;display:grid;place-items:center;font:600 14px "Inter Tight"}
+.steps b{font-weight:600}.steps span{color:var(--muted);font-size:14px}
+@media (max-width:860px){.next{grid-template-columns:1fr;gap:24px;padding:44px 0}}
+.note{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding:22px 0 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><span class="fp"><img src="assets/flowpal-mark.svg" alt="">Flowpal</span><small>مقترح تصميم · أكتوبر 2026</small></header>
+
+  <section class="intro">
+    <div><span class="k">MAMSHA · ممشى سبورت</span><h1>ثلاث رؤى لمتجرك الإلكتروني <span>بنفس منتجاتك وأسعارك.</span></h1></div>
+    <div>
+      <p>جهّزنا ثلاث اتجاهات تصميم مختلفة لمتجر أحذية وملابس رياضية تجريبي اسمه «ممشى». كل اتجاه فيه الصفحة الرئيسية، صفحة الأقسام والفلاتر، وصفحة المنتج، وكلها تشتغل على الجوال والكمبيوتر.</p>
+      <ul><li>عربي بالكامل (من اليمين لليسار) مع خيار إنجليزي</li><li>أسعار بالشيكل، توصيل، دفع عند الاستلام، وطلب عبر واتساب</li><li>جرّب: اختار مقاس، أضف للسلة، وافتح الفلاتر</li></ul>
+    </div>
+  </section>
+
+  <section class="concept">
+    <div class="shots"><div class="d"><img src="assets/previews/c1-index-d.webp" alt="المفهوم 1 على الكمبيوتر"></div><div class="m"><img src="assets/previews/c1-index-m.webp" alt="المفهوم 1 على الجوال"></div></div>
+    <div>
+      <span class="num">01</span>
+      <h2>متجر رياضي فاخر<small>PREMIUM SPORTS RETAIL</small></h2>
+      <div class="pal"><i style="background:#f4f2ee"></i><i style="background:#141414"></i><i style="background:#1e3b2e"></i><i style="background:#b4572e"></i></div>
+      <p>هادئ وأنيق، مثل متاجر الماركات العالمية. صور كبيرة، مساحات بيضاء، وتركيز على جودة المنتج.</p>
+      <ul class="feats"><li>بانر رئيسي بتصوير من طبيعة الضفة</li><li>فلاتر جانبية بالماركة والمقاس والسعر واللون</li><li>صفحة منتج بمعرض صور ومعلومات توصيل واضحة</li></ul>
+      <div class="links"><a class="main" href="c1/index.html">افتح التصميم</a><a href="c1/shop.html">قائمة المنتجات</a><a href="c1/product.html">صفحة المنتج</a><a href="preview.html?c=1">معاينة الجوال</a></div>
+    </div>
+  </section>
+
+  <section class="concept">
+    <div class="shots"><div class="d"><img src="assets/previews/c2-index-d.webp" alt="المفهوم 2 على الكمبيوتر" loading="lazy"></div><div class="m"><img src="assets/previews/c2-index-m.webp" alt="المفهوم 2 على الجوال" loading="lazy"></div></div>
+    <div>
+      <span class="num">02</span>
+      <h2>سبورت وستريت وير<small>MODERN SPORT &amp; STREETWEAR</small></h2>
+      <div class="pal"><i style="background:#0b0b0c"></i><i style="background:#c8ff3d"></i><i style="background:#8b5cf6"></i><i style="background:#ff4d2e"></i></div>
+      <p>جريء وشبابي، لجمهور السنيكرز والستريت وير. خلفية داكنة، خطوط كبيرة، وألوان نيون.</p>
+      <ul class="feats"><li>قسم "الترند هلأ" مرتّب حسب الطلب</li><li>عرض نهاية الأسبوع مع عدّاد تنازلي</li><li>فلاتر سريعة على شكل أزرار، ولوك كامل بكبسة</li></ul>
+      <div class="links"><a class="main" href="c2/index.html">افتح التصميم</a><a href="c2/shop.html">قائمة المنتجات</a><a href="c2/product.html">صفحة المنتج</a><a href="preview.html?c=2">معاينة الجوال</a></div>
+    </div>
+  </section>
+
+  <section class="concept">
+    <div class="shots"><div class="d"><img src="assets/previews/c3-index-d.webp" alt="المفهوم 3 على الكمبيوتر" loading="lazy"></div><div class="m"><img src="assets/previews/c3-index-m.webp" alt="المفهوم 3 على الجوال" loading="lazy"></div></div>
+    <div>
+      <span class="num">03</span>
+      <h2>متجر تجاري يركّز على البيع<small>HIGH-CONVERTING COMMERCIAL STORE</small></h2>
+      <div class="pal"><i style="background:#0f2747"></i><i style="background:#ffb020"></i><i style="background:#e23744"></i><i style="background:#12a150"></i></div>
+      <p>عملي وسريع، مصمم ليزيد المبيعات. بحث كبير، عروض واضحة، ومعلومات ثقة في كل مكان.</p>
+      <ul class="feats"><li>شارات خصم، "وفّر"، وكم قطعة باقية</li><li>اختيار المدينة ومعرفة موعد وصول الطلب</li><li>"يُشترى معاً" لرفع قيمة الطلب، وتقييمات الزبائن</li></ul>
+      <div class="links"><a class="main" href="c3/index.html">افتح التصميم</a><a href="c3/shop.html">قائمة المنتجات</a><a href="c3/product.html">صفحة المنتج</a><a href="preview.html?c=3">معاينة الجوال</a></div>
+    </div>
+  </section>
+
+  <section class="next">
+    <div><h3>الخطوة التالية</h3><p>نختار معكم الاتجاه الأقرب لكم (أو نمزج بين أكثر من واحد)، وبعدها نبني المتجر الحقيقي بمنتجاتكم وصوركم.</p></div>
+    <div class="steps">
+      <div><b>اختيار الاتجاه</b><span>جلسة قصيرة نراجع فيها التصاميم ونسجّل ملاحظاتكم.</span></div>
+      <div><b>ربط المنتجات والصور</b><span>نربط الأصناف والمقاسات والأسعار من نظامكم الحالي.</span></div>
+      <div><b>الإطلاق</b><span>متجر جاهز للطلب، مع واتساب والدفع عند الاستلام.</span></div>
+    </div>
+  </section>
+
+  <footer class="note"><span>«ممشى» متجر تجريبي واسمه وهمي، والتصاميم للعرض فقط. صور المنتجات توضيحية، وتفاصيل التوصيل والاستبدال أمثلة.</span><span class="fp" style="font-size:13px"><img src="assets/flowpal-mark.svg" alt="" style="width:20px;height:20px">Flowpal · flowpal.co</span></footer>
+</div>
+</body>
+</html>
