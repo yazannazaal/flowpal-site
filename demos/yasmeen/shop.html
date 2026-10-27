@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1a140b">
+<title>المنتجات | مؤسسة الياسمين للأدوات المنزلية</title>
+<link rel="icon" href="assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared.css">
+<link rel="stylesheet" href="assets/store.css">
+</head>
+<body data-page="shop">
+<div data-header></div>
+<main class="wrap">
+  <nav class="crumbs"><a href="index.html">الرئيسية</a>›<span data-crumb></span></nav>
+  <div class="pl-top"><h1 data-title></h1><div class="deliver-note"><span data-i="truck" data-s="18"></span>يوصلك خلال 3 أيام عمل · الدفع عند الاستلام</div></div>
+  <div class="quick" data-quick-cats></div>
+  <div class="f-mobile"><button data-filters-open><span data-i="filter"></span>الأقسام والفلترة</button><button data-sort-m><span data-i="down"></span>تغيير الترتيب</button></div>
+  <div class="pl">
+    <aside class="filters">
+      <div class="filters-head"><b><span data-i="filter" data-s="18"></span>الفلاتر</b><button data-clear>مسح الكل</button><button class="filters-x" data-filters-close aria-label="إغلاق"><span data-i="x"></span></button></div>
+      <div class="fgroup"><label class="check ar"><input type="checkbox" data-only-sale><span>العروض والخصومات فقط</span></label></div>
+      <div class="fgroup"><h4>السعر (₪)</h4><div class="price-row"><input data-min inputmode="numeric" placeholder="من" aria-label="من"><span>–</span><input data-max inputmode="numeric" placeholder="إلى" aria-label="إلى"><button data-apply>تطبيق</button></div></div>
+      <div class="fgroup" style="border:0"><h4>الأقسام</h4><div class="cat-list" data-cats></div></div>
+      <div class="filters-apply"><button class="btn btn-white" style="border:1px solid var(--line)" data-filters-close>إغلاق</button><button class="btn btn-amber" data-filters-close>عرض <span data-count></span> منتج</button></div>
+    </aside>
+    <section>
+      <div class="pl-bar">
+        <div class="applied"><span style="color:var(--muted)">المعروض: <b data-count></b> منتج</span></div>
+        <div style="display:flex;gap:10px;align-items:center"><label class="sort">ترتيب:<select data-sort><option value="">الافتراضي</option><option value="new">الأحدث</option><option value="low">السعر: من الأقل</option><option value="high">السعر: من الأعلى</option><option value="off">أعلى خصم</option></select></label></div>
+      </div>
+      <div class="grid g4" data-list></div>
+      <div class="grid g4" style="margin-top:14px">
+        <div class="inline-banner"><div><b>بدك موديل أو لون مش موجود هون؟</b><small>ابعتلنا صورة أو اسم المنتج على واتساب، ومنرد عليك بالسعر والتوفر.</small></div><a class="btn btn-amber" href="https://wa.me/972598844197" target="_blank" rel="noopener"><span data-i="wa"></span>اسألنا على واتساب</a></div>
+      </div>
+    </section>
+  </div>
+</main>
+<div data-footer></div>
+<script src="assets/catalog.js"></script>
+<script src="assets/store.js"></script>
+</body>
+</html>
