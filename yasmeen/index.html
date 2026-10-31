@@ -51,6 +51,13 @@
   .txt b { display: block; font-size: 17px; margin-bottom: 3px; }
   .txt span { font-size: 14px; color: var(--muted); line-height: 1.5; }
   .arrow { color: var(--muted); flex-shrink: 0; }
+  .creds { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .creds h2 { font-size: 16px; margin: 0; }
+  .field { display: flex; align-items: center; gap: 8px; background: var(--page); border-radius: 12px; padding: 8px 10px; }
+  .field small { color: var(--muted); font-size: 12px; flex-shrink: 0; min-width: 52px; }
+  .field code { flex: 1; min-width: 0; direction: ltr; text-align: left; font-size: 13px; font-family: ui-monospace, Menlo, Consolas, monospace; overflow-wrap: anywhere; user-select: all; }
+  .field button { font: inherit; font-size: 13px; font-weight: 700; border: 0; border-radius: 999px; background: var(--accent); color: #fff; padding: 7px 12px; cursor: pointer; flex-shrink: 0; min-height: 34px; }
+  .creds p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.7; }
   .tip { font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 12px 14px; margin-top: 4px; }
   footer { margin-top: auto; padding-top: 26px; display: flex; justify-content: center; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
   footer img { height: 20px; }
@@ -87,11 +94,28 @@
     <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
   </a>
 
+  <section class="creds" aria-labelledby="creds-title">
+    <h2 id="creds-title">معلومات الدخول على لوحة التحكم</h2>
+    <div class="field"><small>الإيميل</small><code id="c-email">mnmn7.mnmn7z@gmail.com</code><button type="button" data-copy="c-email">نسخ</button></div>
+    <div class="field"><small>كلمة السر</small><code id="c-pass">yasmeen-home22@@33</code><button type="button" data-copy="c-pass">نسخ</button></div>
+    <p>🔒 كلمة السر هاي للتجربة فقط. عندك صلاحية تغيّرها من لوحة التحكم لكلمة سر خاصة فيك، ومنصحك تغيّرها أول ما تدخل.</p>
+  </section>
+
   <p class="tip">💡 عشان يضل الرابط عندك: على الآيفون اضغط زر المشاركة بـ Safari ثم «إضافة إلى الشاشة الرئيسية».</p>
 
   <footer>
     <img src="/assets/flowpal-lockup-color.svg" alt="Flowpal">
   </footer>
 </main>
+<script>
+for (const b of document.querySelectorAll("[data-copy]")) {
+  b.addEventListener("click", async () => {
+    const text = document.getElementById(b.dataset.copy).textContent;
+    try { await navigator.clipboard.writeText(text); b.textContent = "تم ✓"; }
+    catch { const r = document.createRange(); r.selectNodeContents(document.getElementById(b.dataset.copy)); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = "انسخ يدويًا"; }
+    setTimeout(() => { b.textContent = "نسخ"; }, 1800);
+  });
+}
+</script>
 </body>
 </html>
