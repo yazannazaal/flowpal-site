@@ -146,7 +146,7 @@
       <button class="icon-btn" type="button" id="restart" aria-label="محادثة جديدة" title="محادثة جديدة">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
       </button>
-      <button class="icon-btn" type="button" id="settings" aria-label="الإعدادات" title="الإعدادات">
+      <button class="icon-btn" type="button" id="settings" aria-label="الإعدادات" title="الإعدادات" hidden>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
       </button>
     </header>
@@ -444,6 +444,10 @@ for (const b of document.querySelectorAll("[data-skin]")) {
   });
 }
 if (store.get("yasmeen.skin") === "ig") document.querySelector('[data-skin="ig"]').click();
+
+// The settings button is for the Flowpal team only: open the page with ?setup to see it.
+if (new URLSearchParams(location.search).has("setup")) document.getElementById("settings").hidden = false;
+else chatUrl = validChatUrl(DEFAULT_CHAT_URL);
 
 applyMode();
 restart();
