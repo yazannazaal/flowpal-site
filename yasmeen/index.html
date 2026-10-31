@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ffffff">
+<title>الياسمين · Flowpal</title>
+<link rel="icon" href="/assets/flowpal-mark-color.svg">
+<link rel="apple-touch-icon" href="/demos/yasmeen/assets/img/logo.png">
+<style>
+  :root {
+    --page: #f4f5f7;
+    --surface: #ffffff;
+    --ink: #111418;
+    --muted: #5f6672;
+    --line: #e3e6ea;
+    --accent: #1a140b;
+    --gold: #c99a2e;
+    --font: system-ui, -apple-system, "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100dvh;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 16px calc(24px + env(safe-area-inset-bottom));
+  }
+  main { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 14px; }
+  .head { text-align: center; padding: 8px 0 10px; }
+  .logo { width: 72px; height: 72px; border-radius: 20px; background: var(--surface); box-shadow: 0 6px 20px rgba(0,0,0,.08); display: grid; place-items: center; margin: 0 auto 14px; overflow: hidden; }
+  .logo img { width: 100%; height: 100%; object-fit: contain; }
+  h1 { font-size: 22px; margin: 0 0 6px; line-height: 1.4; }
+  .sub { color: var(--muted); font-size: 15px; margin: 0; line-height: 1.6; }
+  a.card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+    padding: 18px 16px; text-decoration: none; color: inherit;
+    box-shadow: 0 2px 10px rgba(0,0,0,.04);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  a.card:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,.08); }
+  a.card:focus-visible { outline: 3px solid #8ab4ff; outline-offset: 2px; }
+  .ic { width: 48px; height: 48px; border-radius: 14px; background: var(--accent); color: #f1c35b; display: grid; place-items: center; flex-shrink: 0; }
+  .txt { flex: 1; min-width: 0; }
+  .txt b { display: block; font-size: 17px; margin-bottom: 3px; }
+  .txt span { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .arrow { color: var(--muted); flex-shrink: 0; }
+  .tip { font-size: 13px; color: var(--muted); line-height: 1.7; background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 12px 14px; margin-top: 4px; }
+  footer { margin-top: auto; padding-top: 26px; display: flex; justify-content: center; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+  footer img { height: 20px; }
+  @media (prefers-reduced-motion: reduce) { a.card { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="head">
+    <div class="logo"><img src="/demos/yasmeen/assets/img/logo.png" alt=""></div>
+    <h1>مؤسسة الياسمين للأدوات المنزلية</h1>
+    <p class="sub">كل أدوات المساعد الذكي بمكان واحد</p>
+  </div>
+
+  <a class="card" href="/demos/yasmeen/chat/">
+    <div class="ic" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
+    </div>
+    <div class="txt">
+      <b>جرّب المساعد</b>
+      <span>احكي مع المساعد زي ما بيحكي معه زبونك على إنستغرام وماسنجر</span>
+    </div>
+    <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+  </a>
+
+  <a class="card" href="https://dashboard-e-commerce-ruddy.vercel.app/login" target="_blank" rel="noopener">
+    <div class="ic" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+    </div>
+    <div class="txt">
+      <b>لوحة التحكم</b>
+      <span>الطلبات، بيانات الزبائن والمحادثات</span>
+    </div>
+    <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+  </a>
+
+  <p class="tip">💡 عشان يضل الرابط عندك: على الآيفون اضغط زر المشاركة بـ Safari ثم «إضافة إلى الشاشة الرئيسية».</p>
+
+  <footer>
+    <img src="/assets/flowpal-lockup-color.svg" alt="Flowpal">
+  </footer>
+</main>
+</body>
+</html>
