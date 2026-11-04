@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ffffff">
+<title>ربط حسابات الياسمين · Flowpal</title>
+<link rel="icon" href="/assets/flowpal-mark-color.svg">
+<style>
+  :root {
+    --page: #f4f5f7; --surface: #ffffff; --ink: #111418; --muted: #5f6672;
+    --line: #e3e6ea; --teal: #1FB1AE; --teal-dark: #158f8c; --ok: #1f9d55;
+    --font: system-ui, -apple-system, "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100dvh; background: var(--page); color: var(--ink); font-family: var(--font);
+    display: flex; justify-content: center;
+    padding: 24px 16px calc(28px + env(safe-area-inset-bottom)); line-height: 1.7;
+  }
+  main { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 14px; }
+  .head { text-align: center; padding: 6px 0 4px; }
+  .head img { height: 34px; margin-bottom: 14px; }
+  h1 { font-size: 22px; margin: 0 0 6px; line-height: 1.45; }
+  .sub { color: var(--muted); font-size: 15px; margin: 0; }
+  .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+  .badge { background: #e8f7f6; color: var(--teal-dark); font-size: 13px; padding: 4px 10px; border-radius: 999px; font-weight: 600; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px 16px; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+  .card h2 { font-size: 17px; margin: 0 0 10px; }
+  ol { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+  ol li { counter-increment: s; position: relative; padding-right: 38px; margin-bottom: 12px; font-size: 15px; }
+  ol li:last-child { margin-bottom: 0; }
+  ol li::before {
+    content: counter(s); position: absolute; right: 0; top: 1px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; display: grid; place-items: center;
+  }
+  .check li::before { content: "✓"; background: var(--ok); }
+  .path { display: inline-block; direction: ltr; unicode-bidi: isolate; background: #f1f3f6; border-radius: 6px; padding: 1px 6px; font-size: 13.5px; }
+  .btn {
+    display: block; text-align: center; background: var(--teal); color: #fff; text-decoration: none;
+    font-size: 18px; font-weight: 700; padding: 16px; border-radius: 14px; box-shadow: 0 6px 18px rgba(31,177,174,.35);
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible { outline: 3px solid #8ab4ff; outline-offset: 3px; }
+  .note { color: var(--muted); font-size: 13.5px; text-align: center; margin: 2px 0 0; }
+  .done { text-align: center; font-size: 15px; }
+  footer { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="head">
+    <img src="/assets/flowpal-lockup-color.svg" alt="Flowpal">
+    <h1>تشغيل المساعد الذكي لمتجر الياسمين</h1>
+    <p class="sub">خطوة ربط وحدة بس عشان يشتغل المساعد على الفيسبوك والإنستغرام.</p>
+    <div class="badges">
+      <span class="badge">بدون كلمة سر</span>
+      <span class="badge">بدون إيميل</span>
+      <span class="badge">دقيقتين</span>
+    </div>
+  </div>
+
+  <section class="card">
+    <h2>قبل ما تبدأ، تأكد من:</h2>
+    <ol class="check">
+      <li>إنك أدمن (<span class="path">Full control</span>) على صفحة الفيسبوك.</li>
+      <li>حساب الإنستغرام نوعه <span class="path">Business</span> أو <span class="path">Creator</span> ومربوط بصفحة الفيسبوك.</li>
+      <li>على الإنستغرام: <span class="path">Settings ← Messages and story replies ← Message controls</span> وفعّل <span class="path">Allow access to messages</span>.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>خطوات الربط</h2>
+    <ol>
+      <li>اكبس الزر تحت وإنت مسجّل دخول بحسابك على الفيسبوك.</li>
+      <li>اكبس <span class="path">Continue</span>.</li>
+      <li>اختار صفحة المتجر وحساب الإنستغرام المربوط فيها.</li>
+      <li>وافق على الصلاحيات واكبس <span class="path">Save</span> أو <span class="path">Done</span>.</li>
+      <li>رح تطلعلك رسالة «تم ربط حسابك بنجاح ✅».</li>
+    </ol>
+  </section>
+
+  <a class="btn" href="https://www.facebook.com/v23.0/dialog/oauth?client_id=1443840081260519&amp;redirect_uri=https%3A%2F%2Fn8n-ffs0.srv1955533.hstgr.cloud%2Fwebhook%2Fmeta-connect-callback&amp;config_id=1128596936764725&amp;response_type=code&amp;override_default_response_type=true&amp;state=yasmeen-home" rel="noopener">ربط الحسابات الآن</a>
+  <p class="note">رح يفتحلك صفحة فيسبوك الرسمية. افتحها من المتصفح (مش من داخل تطبيق).</p>
+
+  <section class="card done">
+    بعد ما تخلص، ابعتلنا كلمة <b>«تم»</b> وبنجرب معك المساعد الذكي مباشرة 🙌
+  </section>
+
+  <footer>© 2026 Flowpal · <a href="/privacy.html">سياسة الخصوصية</a> · <a href="/data-deletion.html">حذف البيانات</a></footer>
+</main>
+</body>
+</html>
