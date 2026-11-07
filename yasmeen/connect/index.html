@@ -46,6 +46,10 @@
   .btn:focus-visible { outline: 3px solid #8ab4ff; outline-offset: 3px; }
   .note { color: var(--muted); font-size: 13.5px; text-align: center; margin: 2px 0 0; }
   .done { text-align: center; font-size: 15px; }
+  .status { display: none; border-radius: 14px; padding: 14px 16px; font-size: 15.5px; font-weight: 600; text-align: center; }
+  .status.ok { display: block; background: #e7f6ee; color: #17663a; border: 1px solid #bfe6cf; }
+  .status.err { display: block; background: #fdecec; color: #8a1f1f; border: 1px solid #f3c4c4; }
+  .btn.done-btn { background: #e7f6ee; color: #17663a; box-shadow: none; }
   footer { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
   footer a { color: var(--muted); }
 </style>
@@ -80,8 +84,9 @@
       <li>ارجع لهاي الصفحة واكبس زر <b>الإنستغرام</b>، واختار نفس الصفحة المربوط فيها حساب الإنستغرام.</li>    </ol>
   </section>
 
-  <a class="btn" href="https://n8n-ffs0.srv1955533.hstgr.cloud/webhook/flowpal-connect?store=yasmeen-home&amp;p=facebook&amp;k=CpokYnWJcNxR" rel="noopener">١. ربط صفحة الفيسبوك</a>
-  <a class="btn" href="https://n8n-ffs0.srv1955533.hstgr.cloud/webhook/flowpal-connect?store=yasmeen-home&amp;p=instagram&amp;k=CpokYnWJcNxR" rel="noopener">٢. ربط حساب الإنستغرام</a>
+  <div id="status" class="status" role="status"></div>
+  <a class="btn" id="btn-facebook" href="https://n8n-ffs0.srv1955533.hstgr.cloud/webhook/flowpal-connect?store=yasmeen-home&amp;p=facebook&amp;k=CpokYnWJcNxR" rel="noopener">١. ربط صفحة الفيسبوك</a>
+  <a class="btn" id="btn-instagram" href="https://n8n-ffs0.srv1955533.hstgr.cloud/webhook/flowpal-connect?store=yasmeen-home&amp;p=instagram&amp;k=CpokYnWJcNxR" rel="noopener">٢. ربط حساب الإنستغرام</a>
   <p class="note">رح يفتحلك صفحة فيسبوك الرسمية. افتحها من المتصفح (مش من داخل تطبيق).</p>
 
   <section class="card done">
@@ -90,5 +95,36 @@
 
   <footer>© 2026 Flowpal · <a href="/privacy.html">سياسة الخصوصية</a> · <a href="/data-deletion.html">حذف البيانات</a></footer>
 </main>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem('flowpal-connected') || '{}'); } catch (e) {}
+  var connected = q.get('connected');
+  var box = document.getElementById('status');
+  if (connected === 'facebook' || connected === 'instagram') {
+    done[connected] = true;
+    try { localStorage.setItem('flowpal-connected', JSON.stringify(done)); } catch (e) {}
+  }
+  ['facebook', 'instagram'].forEach(function (p) {
+    var b = document.getElementById('btn-' + p);
+    if (done[p] && b) { b.classList.add('done-btn'); b.textContent = (p === 'facebook' ? 'تم ربط صفحة الفيسبوك' : 'تم ربط حساب الإنستغرام') + ' ✅'; }
+  });
+  if (q.get('error')) {
+    box.className = 'status err';
+    box.textContent = 'ما اكتمل الربط. جرّب مرة ثانية، وإذا ضلت المشكلة تواصل معنا.';
+  } else if (done.facebook && done.instagram) {
+    box.className = 'status ok';
+    box.textContent = 'تم ربط الفيسبوك والإنستغرام بنجاح ✅ المساعد الذكي صار جاهز.';
+  } else if (connected === 'facebook') {
+    box.className = 'status ok';
+    box.textContent = 'تم ربط صفحة الفيسبوك ✅ هلأ اكبس زر الإنستغرام.';
+  } else if (connected === 'instagram') {
+    box.className = 'status ok';
+    box.textContent = 'تم ربط حساب الإنستغرام ✅';
+  }
+  if (connected || q.get('error')) { box.scrollIntoView({ block: 'center' }); }
+})();
+</script>
 </body>
 </html>
