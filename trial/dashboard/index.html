@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة التحكم · تجربة Flowpal</title>
+<link rel="icon" href="/assets/flowpal-mark-color.svg">
+<link rel="stylesheet" href="/trial/common.css">
+<style>
+.wrap{max-width:980px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.top h1{font-size:20px;margin:0}
+.ro{background:var(--warn);border:1px solid #f5d38a;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:16px}
+nav{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px}
+nav button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+nav button[aria-selected=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+section{display:none}section.on{display:block}
+.explain{background:var(--soft);border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:14px}
+.explain b{display:block;margin-bottom:4px}
+.explain ol{margin:6px 0 0;padding-inline-start:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi small{color:var(--muted);font-size:12px}.kpi b{display:block;font-size:24px}
+.tbl{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px;background:#fafbfc}
+.st{font-size:12px;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.st.new{background:#e0f2fe;color:#075985}.st.ok{background:#dcfce7;color:#166534}.st.hand{background:#fef3c7;color:#92400e}
+.prod{display:flex;align-items:center;gap:10px}.prod img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:#eee}
+.bars div{display:flex;align-items:center;gap:8px;font-size:13px;margin:6px 0}
+.bars span{flex:0 0 120px}.bars i{display:block;height:12px;background:var(--accent);border-radius:6px}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;font-size:14px}
+.chat p{margin:4px 0}.chat .u{color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><h1 id="store">لوحة التحكم</h1><a href="/trial/" id="back">← رجوع للتجربة</a></div>
+  <div class="ro">👀 هاي نسخة للعرض فقط، والأرقام والطلبات فيها أمثلة توضيحية. بالنسخة الحقيقية كل إشي بيتحدث لحاله من محادثات زباينك.</div>
+  <nav role="tablist">
+    <button role="tab" data-t="orders" aria-selected="true">الطلبات</button>
+    <button role="tab" data-t="chats">المحادثات</button>
+    <button role="tab" data-t="products">المنتجات</button>
+    <button role="tab" data-t="stats">الإحصائيات</button>
+  </nav>
+
+  <section id="orders" class="on">
+    <div class="explain"><b>كيف بتوصلك الطلبات؟</b>
+      <ol><li>الزبون بيحكي مع المساعد على إنستغرام أو ماسنجر وبيختار المنتج.</li>
+      <li>المساعد بياخد الاسم، الجوال، المدينة والعنوان، وبيحسب المجموع مع التوصيل، وبيأكد مع الزبون.</li>
+      <li>الطلب بينزل هون فورًا بحالة «جديد»، وبيوصلك تنبيه.</li>
+      <li>إنت أو موظفك بتراجعوه وبتتواصلوا مع الزبون لتأكيد التوصيل.</li></ol></div>
+    <div class="tbl"><table><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>المنتجات</th><th>المجموع</th><th>القناة</th><th>الحالة</th></tr></thead><tbody id="o-body"></tbody></table></div>
+  </section>
+
+  <section id="chats">
+    <div class="explain"><b>المحادثات</b>كل محادثة بيرد عليها المساعد بتنحفظ هون، فبتقدر تشوف شو سأل الزبون وشو انرد عليه. إذا المساعد ما عرف يجاوب أو الزبون طلب موظف، المحادثة بتتعلّم «بحاجة لموظف» وبيوصلك تنبيه عشان ترد إنت.</div>
+    <div id="c-list"></div>
+  </section>
+
+  <section id="products">
+    <div class="explain"><b>كيف بتضيف المنتجات؟</b>
+      <ol><li>إذا عندك موقع: بنربط المساعد فيه، وأي منتج أو سعر بتغيره بالموقع بيتحدث عند المساعد لحاله.</li>
+      <li>إذا ما عندك موقع: بتبعتلنا المنتجات (اسم، سعر، صورة، خيارات) بملف أو صور، وإحنا بنضيفهم.</li>
+      <li>المساعد بيرد بس من المنتجات والأسعار الموجودة هون، وما بيخترع إشي.</li></ol></div>
+    <div class="tbl"><table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>الخيارات</th></tr></thead><tbody id="p-body"></tbody></table></div>
+  </section>
+
+  <section id="stats">
+    <div class="explain"><b>الإحصائيات</b>بتعرف قديش رسالة انردّ عليها، قديش طلب طلع من المحادثات، أكتر المنتجات اللي بيسألوا عنها، وقديش مرة احتاج المساعد يحوّل لموظف.</div>
+    <div class="grid" id="kpis"></div>
+    <div class="tbl" style="padding:14px"><b style="font-size:14px">أكتر المنتجات اللي انسأل عنها</b><div class="bars" id="bars"></div></div>
+  </section>
+  <footer><img src="/assets/flowpal-lockup-color.svg" alt="Flowpal"></footer>
+</main>
+<script src="/trial/trial.js"></script>
+<script>
+document.getElementById("back").href = trialLink("/trial/");
+for (const b of document.querySelectorAll("nav button")) b.onclick = () => {
+  for (const x of document.querySelectorAll("nav button")) x.setAttribute("aria-selected", x === b);
+  for (const s of document.querySelectorAll("section")) s.classList.toggle("on", s.id === b.dataset.t);
+};
+const td = (...k) => { const r = h("tr"); for (const x of k) r.append(x instanceof Node ? h("td", {}, x) : h("td", {}, String(x))); return r; };
+function render(c) {
+  const P = c.products || [];
+  if (c.store_name) document.getElementById("store").textContent = "لوحة التحكم · " + c.store_name;
+  const p = i => P[i % P.length] || { name: "منتج", price: 0 };
+  const names = [["سماح ع.", "نابلس", 20, "إنستغرام"], ["محمد ك.", "رام الله", 20, "ماسنجر"], ["رنا س.", "القدس", 30, "إنستغرام"], ["أحمد ي.", "جنين", 20, "إنستغرام"]];
+  const st = [["جديد", "new"], ["تم التأكيد", "ok"], ["تم التأكيد", "ok"], ["جديد", "new"]];
+  const ob = document.getElementById("o-body");
+  names.forEach(([n, city, fee, ch], i) => {
+    const a = p(i), q = (i % 2) + 1, sum = a.price * q + fee;
+    ob.append(td("#10" + (24 + i), n + " · " + city, `${q} × ${a.name}`, `${sum} ₪ (مع توصيل ${fee})`, ch, h("span", { class: "st " + st[i][1] }, st[i][0])));
+  });
+  const cl = document.getElementById("c-list");
+  [[p(0), "قديش سعر " + p(0).name + "؟", `سعره ${p(0).price} شيكل 🌸 بتحب أضيفه عالسلة؟`, "تم الرد", "ok"],
+   [p(2), "بتوصلوا على الخليل؟ وقديش؟", "أكيد، التوصيل عالضفة 20 شيكل وبيوصل خلال تقريبًا 3 أيام عمل.", "تم الرد", "ok"],
+   [p(1), "في عندكم نفس المنتج بلون تاني؟", "هاد السؤال بحتاج أتأكد منه مع فريق المحل، رح يرجعولك بأقرب وقت 🙏", "بحاجة لموظف", "hand"]]
+   .forEach(([_, u, b, s, k]) => cl.append(h("div", { class: "chat" }, h("span", { class: "st " + k }, s), h("p", { class: "u" }, "👤 " + u), h("p", {}, "🤖 " + b))));
+  const pb = document.getElementById("p-body");
+  for (const x of P) {
+    const cell = h("div", { class: "prod" }); const im = h("img", { alt: "", loading: "lazy" }); im.src = x.image_url; cell.append(im, x.name);
+    pb.append(td(cell, x.category || "", x.max_price ? `${x.price}-${x.max_price} ₪` : `${x.price} ₪`, (x.options || []).join("، ") || "—"));
+  }
+  const k = document.getElementById("kpis");
+  [["رسائل انردّ عليها", "312"], ["طلبات من المحادثات", "18"], ["متوسط وقت الرد", "أقل من دقيقة"], ["تحويل لموظف", "9%"]].forEach(([a, b]) => k.append(h("div", { class: "kpi" }, h("small", {}, a), h("b", {}, b))));
+  const bars = document.getElementById("bars"); [42, 31, 24, 15, 9].forEach((v, i) => { if (!P[i]) return; const bar = h("i"); bar.style.width = v * 2 + "px"; bars.append(h("div", {}, h("span", {}, P[i].name), bar, String(v))); });
+}
+trialCall({ action: "config" }).then(render).catch(() => render({ products: [] }));
+</script>
+</body>
+</html>

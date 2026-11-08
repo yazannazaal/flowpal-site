@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>جرّب المساعد · Flowpal</title>
+<link rel="icon" href="/assets/flowpal-mark-color.svg">
+<link rel="stylesheet" href="/trial/common.css">
+<style>
+body{display:flex;flex-direction:column;height:100dvh}
+header{background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:10px}
+header a.back{text-decoration:none;font-size:22px;color:var(--muted)}
+header b{display:block;font-size:16px}header small{color:var(--muted);font-size:12px}
+#thread{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;max-width:640px;width:100%;margin:0 auto}
+.row{display:flex;flex-direction:column;gap:8px;max-width:88%}
+.row.user{align-self:flex-start}.row.bot{align-self:flex-end}
+.bubble{white-space:pre-wrap;padding:10px 14px;border-radius:18px;font-size:15px}
+.user .bubble{background:var(--accent);color:#fff;border-bottom-right-radius:6px}
+.bot .bubble{background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:6px}
+.cards{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.pc{flex:0 0 160px;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13px}
+.pc img{width:100%;height:120px;object-fit:cover;background:#eee;display:block}
+.pc div{padding:8px}.pc .pr{font-weight:700;color:var(--accent)}
+.cart{font-size:12px;color:var(--muted)}
+.typing{color:var(--muted);font-size:13px;align-self:flex-end}
+#quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 8px;max-width:640px;width:100%;margin:0 auto}
+#quick button{font:inherit;font-size:13px;border:1px solid var(--accent);color:var(--accent);background:var(--surface);border-radius:999px;padding:6px 12px;cursor:pointer}
+form{display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--line)}
+form input{flex:1;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:999px;padding:10px 14px;min-width:0}
+form button{font:inherit;font-weight:700;border:0;border-radius:999px;background:var(--accent);color:#fff;padding:0 18px}
+.err{color:#b42318;font-size:13px;align-self:center}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" id="back" href="/trial/" aria-label="رجوع">→</a>
+  <div><b id="name">المساعد الذكي</b><small>نسخة تجريبية · 5 منتجات</small></div>
+</header>
+<div id="thread" aria-live="polite"></div>
+<div id="quick"></div>
+<form id="f"><input id="in" autocomplete="off" placeholder="اكتب رسالتك هون..." maxlength="500"><button>إرسال</button></form>
+<script src="/trial/trial.js"></script>
+<script>
+document.getElementById("back").href = trialLink("/trial/");
+const thread = document.getElementById("thread"), quick = document.getElementById("quick"), input = document.getElementById("in");
+const sessionId = "t-" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+let busy = false;
+const safe = u => { try { const x = new URL(u); return x.protocol === "https:" ? x.href : ""; } catch { return ""; } };
+function scroll() { thread.scrollTop = thread.scrollHeight; }
+function setQuick(list) { quick.replaceChildren(); for (const q of (list || []).slice(0, 4)) { const b = h("button", { type: "button" }, q); b.onclick = () => send(q); quick.append(b); } }
+function addUser(t) { thread.append(h("div", { class: "row user" }, h("div", { class: "bubble" }, t))); scroll(); }
+function addBot(r) {
+  const row = h("div", { class: "row bot" });
+  if (r.text) row.append(h("div", { class: "bubble" }, String(r.text).replace(/\*\*/g, "")));
+  if (Array.isArray(r.products) && r.products.length) {
+    const cards = h("div", { class: "cards" });
+    for (const p of r.products) {
+      const c = h("div", { class: "pc" });
+      const src = safe(p.image_url); if (src) { const i = h("img", { alt: "", loading: "lazy" }); i.src = src; c.append(i); }
+      c.append(h("div", {}, h("div", {}, p.name), h("div", { class: "pr" }, p.max_price ? `${p.price}-${p.max_price} ₪` : `${p.price} ₪`)));
+      cards.append(c);
+    }
+    row.append(cards);
+  }
+  if (r.cart && r.cart.item_count) row.append(h("div", { class: "cart" }, `🛒 بالسلة ${r.cart.item_count} قطعة · ${r.cart.subtotal} ₪`));
+  if (r.order_confirmed) row.append(h("div", { class: "cart" }, "✅ بالنسخة الكاملة هون الطلب بيوصل فورًا على لوحة التحكم وبتوصلك إشعار."));
+  if (r.handover) row.append(h("div", { class: "cart" }, "👤 بالنسخة الكاملة هون المحادثة بتتحول لموظف من المحل مع تنبيه."));
+  thread.append(row); setQuick(r.quick_replies); scroll();
+}
+async function send(text) {
+  const msg = String(text || "").trim(); if (!msg || busy) return;
+  busy = true; input.value = ""; quick.replaceChildren(); addUser(msg);
+  const t = h("div", { class: "typing" }, "عم يكتب…"); thread.append(t); scroll();
+  try { addBot(await trialCall({ sessionId, chatInput: msg })); }
+  catch { thread.append(h("div", { class: "err" }, "ما قدرنا نوصل للمساعد، جرّب كمان مرة.")); }
+  finally { t.remove(); busy = false; input.focus(); }
+}
+document.getElementById("f").onsubmit = e => { e.preventDefault(); send(input.value); };
+trialCall({ action: "config" }).then(c => {
+  if (c.assistant_name) document.getElementById("name").textContent = c.assistant_name;
+  addBot({ text: c.welcome, products: c.products, quick_replies: c.quick_replies });
+}).catch(() => addBot({ text: "أهلا وسهلا! شو بتدور عليه اليوم؟" }));
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>جرّب Flowpal على محلك</title>
+<link rel="icon" href="/assets/flowpal-mark-color.svg">
+<link rel="stylesheet" href="/trial/common.css">
+</head>
+<body>
+<main class="wrap">
+  <div class="head">
+    <span class="badge">نسخة تجريبية</span>
+    <h1 id="store">جرّب موظف خدمة العملاء الذكي</h1>
+    <p>جهزنالك نسخة تجريبية على 5 منتجات من محلك. جرّبها كأنك زبون، وبعدها شوف لوحة التحكم.</p>
+  </div>
+  <a class="card" id="go-chat" href="/trial/chat/">
+    <div class="ic" aria-hidden="true">💬</div>
+    <div><b>1. جرّب المساعد</b><span>احكي معه زي ما بيحكي زبونك على إنستغرام وماسنجر: اسأل عن سعر، توصيل، واطلب.</span></div>
+  </a>
+  <a class="card" id="go-dash" href="/trial/dashboard/">
+    <div class="ic" aria-hidden="true">📊</div>
+    <div><b>2. شوف لوحة التحكم</b><span>كيف بتوصلك الطلبات، المحادثات، المنتجات والإحصائيات (للعرض فقط).</span></div>
+  </a>
+  <p class="note">💡 هاي تجربة على عدد محدود من المنتجات. بالنسخة الكاملة المساعد بيعرف كل منتجات محلك، وبيشتغل على حساباتك الحقيقية 24 ساعة.</p>
+  <footer><img src="/assets/flowpal-lockup-color.svg" alt="Flowpal"></footer>
+</main>
+<script src="/trial/trial.js"></script>
+<script>
+document.getElementById("go-chat").href = trialLink("/trial/chat/");
+document.getElementById("go-dash").href = trialLink("/trial/dashboard/");
+trialCall({ action: "config" }).then(c => { if (c.store_name) { document.getElementById("store").textContent = c.store_name; document.title = c.store_name + " · تجربة Flowpal"; } }).catch(() => {});
+</script>
+</body>
+</html>
