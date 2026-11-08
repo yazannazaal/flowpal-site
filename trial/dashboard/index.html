@@ -5,109 +5,152 @@
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة التحكم · تجربة Flowpal</title>
 <link rel="icon" href="/assets/flowpal-mark-color.svg">
-<link rel="stylesheet" href="/trial/common.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-.wrap{max-width:980px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-.top h1{font-size:20px;margin:0}
-.ro{background:var(--warn);border:1px solid #f5d38a;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:16px}
-nav{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px}
-nav button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
-nav button[aria-selected=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
-section{display:none}section.on{display:block}
-.explain{background:var(--soft);border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:14px}
-.explain b{display:block;margin-bottom:4px}
-.explain ol{margin:6px 0 0;padding-inline-start:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
-.kpi small{color:var(--muted);font-size:12px}.kpi b{display:block;font-size:24px}
-.tbl{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
-th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
-th{color:var(--muted);font-weight:600;font-size:12px;background:#fafbfc}
-.st{font-size:12px;border-radius:999px;padding:2px 8px;white-space:nowrap}
-.st.new{background:#e0f2fe;color:#075985}.st.ok{background:#dcfce7;color:#166534}.st.hand{background:#fef3c7;color:#92400e}
-.prod{display:flex;align-items:center;gap:10px}.prod img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:#eee}
-.bars div{display:flex;align-items:center;gap:8px;font-size:13px;margin:6px 0}
-.bars span{flex:0 0 120px}.bars i{display:block;height:12px;background:var(--accent);border-radius:6px}
-.chat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;font-size:14px}
-.chat p{margin:4px 0}.chat .u{color:var(--muted)}
+:root{--bg:#f7f8fa;--card:#fff;--ink:#101828;--muted:#667085;--line:#e4e7ec;--brand:#0f8a74;--brand-soft:#e7f6f2;--blue:#2563eb;--blue-soft:#eef4ff;--amber:#b54708;--amber-soft:#fef6ee;--violet:#6941c6}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6}
+.app{display:flex;min-height:100dvh}
+aside{width:244px;flex-shrink:0;background:var(--card);border-inline-start:1px solid var(--line);display:flex;flex-direction:column;padding:12px;position:sticky;top:0;height:100dvh}
+.store{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.store .lg{width:32px;height:32px;border-radius:8px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700;flex-shrink:0}
+.store b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}.store small{color:var(--muted);font-size:11px}
+.grp{color:var(--muted);font-size:11px;margin:22px 10px 6px}
+.nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#344054;text-decoration:none;font-weight:500;cursor:pointer}
+.nav a svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+.nav a.on{background:var(--brand-soft);color:var(--brand);font-weight:700}
+.user{margin-top:auto;border-top:1px solid var(--line);padding-top:12px;display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted)}
+.user i{width:32px;height:32px;border-radius:50%;background:#f2f4f7;display:grid;place-items:center;font-style:normal;font-weight:700;color:#344054}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{height:56px;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:12px}
+.crumb{color:var(--muted);font-size:13px}.crumb b{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;background:var(--card)}
+.pill:before{content:"";width:7px;height:7px;border-radius:50%;background:#f79009}
+.demo{background:var(--amber-soft);color:var(--amber);border-bottom:1px solid #fedf89;padding:8px 24px;font-size:13px}
+.content{padding:24px 32px;max-width:1100px;width:100%}
+h1{font-size:22px;margin:0}.lead{color:var(--muted);margin:4px 0 18px}
+.how{background:var(--brand-soft);border:1px solid #c9ebe2;border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:13px}
+.how b{color:var(--brand)}.how ol{margin:6px 0 0;padding-inline-start:18px}
+.tabs{display:flex;gap:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tabs span{padding:8px 2px;color:var(--muted);font-weight:500}.tabs span.on{color:var(--ink);font-weight:700;border-bottom:2px solid var(--brand)}
+.cnt{background:#f2f4f7;border-radius:999px;font-size:11px;padding:1px 7px;margin-inline-start:6px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+.col{background:#f2f4f7;border:1px solid var(--line);border-radius:12px;padding:10px}
+.col h3{font-size:14px;margin:4px 6px 10px;display:flex;justify-content:space-between}
+.empty{border:1.5px dashed var(--line);border-radius:10px;padding:28px 10px;text-align:center;color:var(--muted);font-size:13px;background:var(--card)}
+.oc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px}
+.oc .id{font-weight:700;direction:ltr;text-align:right}.oc .t{color:var(--muted);font-size:12px}
+.badge{display:inline-block;font-size:11px;border-radius:999px;padding:1px 8px;font-weight:600}
+.b-blue{background:var(--blue-soft);color:var(--blue)}.b-green{background:var(--brand-soft);color:var(--brand)}.b-amber{background:var(--amber-soft);color:var(--amber)}
+.who{display:flex;gap:10px;align-items:center;margin:10px 0}.who i{width:34px;height:34px;border-radius:8px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-style:normal;font-weight:700}
+.loc{background:#f9fafb;border-radius:8px;padding:6px 10px;color:var(--muted);font-size:12px}
+.li{display:flex;justify-content:space-between;margin:10px 0;gap:8px}.li small{color:var(--muted)}
+.tot{border-top:1px dashed var(--line);padding-top:10px;display:flex;justify-content:space-between;align-items:center}.tot b{color:var(--brand);font-size:18px}
+.btn{display:block;width:100%;margin-top:8px;border-radius:8px;padding:8px;text-align:center;font:inherit;font-weight:600;border:1px solid var(--line);background:var(--card);color:#344054;cursor:not-allowed;opacity:.75}
+.btn.p{background:var(--brand);border-color:var(--brand);color:#fff}
+.split{display:grid;grid-template-columns:340px 1fr;background:var(--card);border:1px solid var(--line);border-radius:12px;min-height:460px;overflow:hidden}
+.clist{border-inline-end:1px solid var(--line)}.ci{padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer}.ci.on{background:#f9fafb}
+.ci b{display:flex;justify-content:space-between}.ci p{margin:2px 0 0;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv{padding:16px;background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.m{max-width:75%;padding:8px 12px;border-radius:12px;white-space:pre-wrap}.m.u{align-self:flex-start;background:var(--card);border:1px solid var(--line)}.m.b{align-self:flex-end;background:var(--brand);color:#fff}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.ph{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}.ph .l{display:flex;gap:12px}
+.ph img{width:70px;height:70px;border-radius:8px;object-fit:cover;background:#f2f4f7}.ph .pr{color:var(--brand);font-weight:700}
+.vt{width:100%;border:1px solid var(--line);border-radius:8px;border-collapse:separate;border-spacing:0;margin-top:12px;font-size:13px}
+.vt th{background:#f9fafb;color:var(--muted);font-weight:500;text-align:right;padding:8px 12px}.vt td{padding:8px 12px;border-top:1px solid var(--line)}
+.kpis{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:18px;margin-bottom:18px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}.k.big{border-top:3px solid var(--brand)}
+.k small{color:var(--muted)}.k b{display:block;font-size:28px;margin:4px 0}.k span{color:var(--muted);font-size:12px}
+.lists{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.lst{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}.lst h3{margin:0;font-size:15px}.lst>small{color:var(--muted)}
+.lr{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}.lr i{font-style:normal;background:#f2f4f7;border-radius:6px;padding:0 7px;font-size:12px;margin-inline-end:8px}
+.mobnav{display:none}
+@media (max-width:860px){aside{display:none}.mobnav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.mobnav a{white-space:nowrap;padding:6px 12px;border-radius:999px;border:1px solid var(--line);text-decoration:none;color:#344054}.mobnav a.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.content{padding:16px}.cols,.kpis,.lists{grid-template-columns:1fr}.split{grid-template-columns:1fr}.top{padding:0 16px}.demo{padding:8px 16px}}
 </style>
 </head>
 <body>
-<main class="wrap">
-  <div class="top"><h1 id="store">لوحة التحكم</h1><a href="/trial/" id="back">← رجوع للتجربة</a></div>
-  <div class="ro">👀 هاي نسخة للعرض فقط، والأرقام والطلبات فيها أمثلة توضيحية. بالنسخة الحقيقية كل إشي بيتحدث لحاله من محادثات زباينك.</div>
-  <nav role="tablist">
-    <button role="tab" data-t="orders" aria-selected="true">الطلبات</button>
-    <button role="tab" data-t="chats">المحادثات</button>
-    <button role="tab" data-t="products">المنتجات</button>
-    <button role="tab" data-t="stats">الإحصائيات</button>
-  </nav>
-
-  <section id="orders" class="on">
-    <div class="explain"><b>كيف بتوصلك الطلبات؟</b>
-      <ol><li>الزبون بيحكي مع المساعد على إنستغرام أو ماسنجر وبيختار المنتج.</li>
-      <li>المساعد بياخد الاسم، الجوال، المدينة والعنوان، وبيحسب المجموع مع التوصيل، وبيأكد مع الزبون.</li>
-      <li>الطلب بينزل هون فورًا بحالة «جديد»، وبيوصلك تنبيه.</li>
-      <li>إنت أو موظفك بتراجعوه وبتتواصلوا مع الزبون لتأكيد التوصيل.</li></ol></div>
-    <div class="tbl"><table><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>المنتجات</th><th>المجموع</th><th>القناة</th><th>الحالة</th></tr></thead><tbody id="o-body"></tbody></table></div>
-  </section>
-
-  <section id="chats">
-    <div class="explain"><b>المحادثات</b>كل محادثة بيرد عليها المساعد بتنحفظ هون، فبتقدر تشوف شو سأل الزبون وشو انرد عليه. إذا المساعد ما عرف يجاوب أو الزبون طلب موظف، المحادثة بتتعلّم «بحاجة لموظف» وبيوصلك تنبيه عشان ترد إنت.</div>
-    <div id="c-list"></div>
-  </section>
-
-  <section id="products">
-    <div class="explain"><b>كيف بتضيف المنتجات؟</b>
-      <ol><li>إذا عندك موقع: بنربط المساعد فيه، وأي منتج أو سعر بتغيره بالموقع بيتحدث عند المساعد لحاله.</li>
-      <li>إذا ما عندك موقع: بتبعتلنا المنتجات (اسم، سعر، صورة، خيارات) بملف أو صور، وإحنا بنضيفهم.</li>
-      <li>المساعد بيرد بس من المنتجات والأسعار الموجودة هون، وما بيخترع إشي.</li></ol></div>
-    <div class="tbl"><table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>الخيارات</th></tr></thead><tbody id="p-body"></tbody></table></div>
-  </section>
-
-  <section id="stats">
-    <div class="explain"><b>الإحصائيات</b>بتعرف قديش رسالة انردّ عليها، قديش طلب طلع من المحادثات، أكتر المنتجات اللي بيسألوا عنها، وقديش مرة احتاج المساعد يحوّل لموظف.</div>
-    <div class="grid" id="kpis"></div>
-    <div class="tbl" style="padding:14px"><b style="font-size:14px">أكتر المنتجات اللي انسأل عنها</b><div class="bars" id="bars"></div></div>
-  </section>
-  <footer><img src="/assets/flowpal-lockup-color.svg" alt="Flowpal"></footer>
-</main>
+<div class="app">
+  <aside>
+    <div class="store"><div class="lg" id="lg">م</div><div><b id="sname">المتجر</b><small>صاحب المتجر</small></div></div>
+    <div class="grp">العمل اليومي</div>
+    <nav class="nav">
+      <a data-p="orders" class="on"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>الطلبات</a>
+      <a data-p="chats"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>المحادثات</a>
+      <a data-p="products"><svg viewBox="0 0 24 24"><path d="M20 12l-8 8-8-8V4h8z"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>المنتجات والمخزون</a>
+    </nav>
+    <div class="grp">المتابعة والإعداد</div>
+    <nav class="nav"><a data-p="stats"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>الإحصائيات</a></nav>
+    <div class="user"><i>F</i><div><b style="color:var(--ink)">حساب تجريبي</b><br>للعرض فقط</div></div>
+  </aside>
+  <div class="main">
+    <div class="top"><div class="crumb"><span id="crumb-s">المتجر</span> / <b id="crumb-p">الطلبات</b></div><span class="pill">نسخة عرض</span></div>
+    <div class="mobnav"><a data-p="orders" class="on">الطلبات</a><a data-p="chats">المحادثات</a><a data-p="products">المنتجات</a><a data-p="stats">الإحصائيات</a></div>
+    <div class="demo">👀 هاي لوحة تحكم للعرض فقط: الأزرار مقفولة والطلبات والأرقام أمثلة. <a id="back" href="/trial/" style="color:inherit;font-weight:700">رجوع للتجربة</a></div>
+    <div class="content" id="view"></div>
+  </div>
+</div>
 <script src="/trial/trial.js"></script>
 <script>
 document.getElementById("back").href = trialLink("/trial/");
-for (const b of document.querySelectorAll("nav button")) b.onclick = () => {
-  for (const x of document.querySelectorAll("nav button")) x.setAttribute("aria-selected", x === b);
-  for (const s of document.querySelectorAll("section")) s.classList.toggle("on", s.id === b.dataset.t);
-};
-const td = (...k) => { const r = h("tr"); for (const x of k) r.append(x instanceof Node ? h("td", {}, x) : h("td", {}, String(x))); return r; };
-function render(c) {
-  const P = c.products || [];
-  if (c.store_name) document.getElementById("store").textContent = "لوحة التحكم · " + c.store_name;
-  const p = i => P[i % P.length] || { name: "منتج", price: 0 };
-  const names = [["سماح ع.", "نابلس", 20, "إنستغرام"], ["محمد ك.", "رام الله", 20, "ماسنجر"], ["رنا س.", "القدس", 30, "إنستغرام"], ["أحمد ي.", "جنين", 20, "إنستغرام"]];
-  const st = [["جديد", "new"], ["تم التأكيد", "ok"], ["تم التأكيد", "ok"], ["جديد", "new"]];
-  const ob = document.getElementById("o-body");
-  names.forEach(([n, city, fee, ch], i) => {
-    const a = p(i), q = (i % 2) + 1, sum = a.price * q + fee;
-    ob.append(td("#10" + (24 + i), n + " · " + city, `${q} × ${a.name}`, `${sum} ₪ (مع توصيل ${fee})`, ch, h("span", { class: "st " + st[i][1] }, st[i][0])));
-  });
-  const cl = document.getElementById("c-list");
-  [[p(0), "قديش سعر " + p(0).name + "؟", `سعره ${p(0).price} شيكل 🌸 بتحب أضيفه عالسلة؟`, "تم الرد", "ok"],
-   [p(2), "بتوصلوا على الخليل؟ وقديش؟", "أكيد، التوصيل عالضفة 20 شيكل وبيوصل خلال تقريبًا 3 أيام عمل.", "تم الرد", "ok"],
-   [p(1), "في عندكم نفس المنتج بلون تاني؟", "هاد السؤال بحتاج أتأكد منه مع فريق المحل، رح يرجعولك بأقرب وقت 🙏", "بحاجة لموظف", "hand"]]
-   .forEach(([_, u, b, s, k]) => cl.append(h("div", { class: "chat" }, h("span", { class: "st " + k }, s), h("p", { class: "u" }, "👤 " + u), h("p", {}, "🤖 " + b))));
-  const pb = document.getElementById("p-body");
-  for (const x of P) {
-    const cell = h("div", { class: "prod" }); const im = h("img", { alt: "", loading: "lazy" }); im.src = x.image_url; cell.append(im, x.name);
-    pb.append(td(cell, x.category || "", x.max_price ? `${x.price}-${x.max_price} ₪` : `${x.price} ₪`, (x.options || []).join("، ") || "—"));
-  }
-  const k = document.getElementById("kpis");
-  [["رسائل انردّ عليها", "312"], ["طلبات من المحادثات", "18"], ["متوسط وقت الرد", "أقل من دقيقة"], ["تحويل لموظف", "9%"]].forEach(([a, b]) => k.append(h("div", { class: "kpi" }, h("small", {}, a), h("b", {}, b))));
-  const bars = document.getElementById("bars"); [42, 31, 24, 15, 9].forEach((v, i) => { if (!P[i]) return; const bar = h("i"); bar.style.width = v * 2 + "px"; bars.append(h("div", {}, h("span", {}, P[i].name), bar, String(v))); });
+let C = { store_name: "المتجر", products: [] };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const money = p => p.max_price ? `₪ ${p.price} - ₪ ${p.max_price}` : `₪ ${p.price}`;
+const P = i => C.products[i % Math.max(1, C.products.length)] || { name: "منتج", price: 0, options: [] };
+const TITLES = { orders: "الطلبات", chats: "المحادثات", products: "المنتجات والمخزون", stats: "الإحصائيات" };
+function order(id, name, phone, city, i, q, fee, badge, cls) {
+  const p = P(i), opt = (p.options || [])[0];
+  return `<div class="oc"><div style="display:flex;justify-content:space-between"><span class="id">${id}</span><span class="t">اليوم، ${10 + i}:${20 + i} ص</span></div>
+  <span class="badge ${cls}">● ${badge}</span>
+  <div class="who"><i>${esc(name[0])}</i><div><b>${esc(name)}</b><div class="t" dir="ltr" style="text-align:right">${phone}</div></div></div>
+  <div class="loc">📍 ${esc(city)}</div>
+  <div class="li"><span><b style="color:var(--brand)">×${q}</b> ${esc(p.name)}${opt ? `<br><small>· ${esc(opt)}</small>` : ""}</span><span>₪ ${p.price * q}</span></div>
+  <div class="tot"><span class="t">المبلغ المطلوب (شامل التوصيل ${fee} ₪)</span><b>₪ ${p.price * q + fee}</b></div>`;
 }
-trialCall({ action: "config" }).then(render).catch(() => render({ products: [] }));
+const VIEWS = {
+  orders: () => `<h1>الطلبات</h1><p class="lead">تصل طلبات البوت هنا تلقائيًا مع تنبيه صوتي. تأكد من توفر المنتجات مع العميل قبل إرسال الطلب.</p>
+  <div class="how"><b>كيف بتوصلك الطلبات؟</b><ol><li>الزبون بيختار المنتج بالمحادثة، والمساعد بياخد الاسم والجوال والعنوان وبيحسب التوصيل.</li><li>بعد ما الزبون يأكد، الطلب بينزل هون بعمود «بانتظار المراجعة» مع تنبيه.</li><li>بتأكد مع الزبون، وبتنقله «مؤكدة وجاهزة للتوصيل»، وبعدين «عند شركة التوصيل» بكبسة.</li></ol></div>
+  <div class="tabs"><span class="on">الطلبات الجارية<span class="cnt">3</span></span><span>المسلّمة والملغاة</span></div>
+  <div class="cols">
+   <div class="col"><h3>بانتظار المراجعة <span class="cnt">1</span></h3>${order("YH-1027-A8KQ", "سماح", "0599 123 456", "نابلس، رفيديا · الضفة", 0, 1, 20, "جديد", "b-amber")}<button class="btn p" disabled>تأكيد الطلب</button><button class="btn" disabled>إلغاء</button></div></div>
+   <div class="col"><h3>مؤكدة وجاهزة للتوصيل <span class="cnt">1</span></h3>${order("YH-1026-Q3LM", "محمد", "0568 987 654", "رام الله، البيرة · الضفة", 2, 1, 20, "مؤكد", "b-blue")}<button class="btn p" disabled>سلّم لشركة التوصيل ←</button><button class="btn" disabled>التفاصيل ونسخ للتوصيل</button></div></div>
+   <div class="col"><h3>عند شركة التوصيل <span class="cnt">1</span></h3>${order("YH-1025-Z7PD", "رنا", "0597 555 210", "القدس · القدس", 3, 2, 30, "قيد التوصيل", "b-green")}<button class="btn" disabled>تم التسليم</button></div></div>
+  </div>`,
+  chats: () => {
+    const cs = [
+      ["سماح", "إنستغرام", "قديش سعر " + P(0).name + "؟", "تم الرد", "b-green", [["u", "مرحبا، قديش سعر " + P(0).name + "؟"], ["b", `أهلا وسهلا 🌸 سعره ${P(0).price} شيكل. بتحب أضيفه عالسلة؟`], ["u", "اه، وبدي اطلب لنابلس"], ["b", "تمام ✅ التوصيل لنابلس 20 شيكل، المجموع " + (P(0).price + 20) + " شيكل. ابعتلي اسمك ورقمك وعنوانك."]]],
+      ["أحمد", "ماسنجر", "في عندكم نفس المنتج بلون تاني؟", "تحتاج إلى رد", "b-amber", [["u", "في عندكم " + P(1).name + " بلون تاني؟"], ["b", "هاد السؤال بحتاج أتأكد منه مع فريق المحل، رح يرجعولك بأقرب وقت 🙏"]]],
+      ["رنا", "إنستغرام", "بتوصلوا عالقدس؟", "تم الرد", "b-green", [["u", "بتوصلوا عالقدس؟"], ["b", "أكيد، التوصيل للقدس 30 شيكل وبيوصل خلال تقريبًا 3 أيام عمل."]]]];
+    const list = cs.map((c, i) => `<div class="ci${i ? "" : " on"}" data-i="${i}"><b>${esc(c[0])} <span class="badge ${c[4]}">${c[3]}</span></b><p>${esc(c[1])} · ${esc(c[2])}</p></div>`).join("");
+    setTimeout(() => { const show = i => { document.getElementById("cv").innerHTML = cs[i][5].map(([w, t]) => `<div class="m ${w}">${esc(t)}</div>`).join("") + (cs[i][3] === "تحتاج إلى رد" ? `<button class="btn p" disabled>رد على الزبون (بيوقف البوت تلقائيًا)</button>` : ""); document.querySelectorAll(".ci").forEach(e => e.classList.toggle("on", +e.dataset.i === i)); }; document.querySelectorAll(".ci").forEach(e => e.onclick = () => show(+e.dataset.i)); show(0); });
+    return `<h1>المحادثات</h1><p class="lead">عندما يحوّل البوت عميلًا إلى موظف، تظهر المحادثة في «تحتاج إلى رد». يمكنك الرد على عملاء ماسنجر وإنستغرام من هنا مباشرة، ويتوقف البوت تلقائيًا عند ردك.</p>
+    <div class="how"><b>شو بتشوف هون؟</b> كل محادثة رد عليها المساعد بتنحفظ. إذا ما عرف يجاوب أو الزبون طلب موظف، بتطلع بـ «تحتاج إلى رد» وبيوصلك تنبيه. اضغط على أي محادثة لتشوفها.</div>
+    <div class="split"><div class="clist">${list}</div><div class="cv" id="cv"></div></div>`;
+  },
+  products: () => `<h1>المنتجات والمخزون</h1><p class="lead">تُحدَّث المنتجات تلقائيًا من موقع المتجر. عند اختيار «نفدت الكمية» يتوقف البوت عن عرض المنتج فورًا.</p>
+  <div class="how"><b>كيف بتضيف المنتجات؟</b><ol><li>إذا عندك موقع: بنربطه، وأي منتج أو سعر بتغيّره بالموقع بيتحدث عند المساعد لحاله.</li><li>إذا ما عندك موقع: بتبعتلنا المنتجات (اسم، سعر، صورة، خيارات) وبنضيفهم.</li><li>المساعد بيرد بس من المنتجات والأسعار الموجودة هون.</li></ol></div>
+  <div class="tabs"><span class="on">الكل<span class="cnt">${C.products.length}</span></span><span>نفدت كميتها<span class="cnt">0</span></span></div>
+  ${C.products.map(p => { const opts = p.options && p.options.length ? p.options : ["الأساسي"]; return `<div class="pcard"><div class="ph"><div class="l"><img src="${esc(p.image_url)}" alt="" loading="lazy"><div><b>${esc(p.name)}</b> <span class="t" style="color:var(--muted)">#${p.id}</span><div class="pr">${money(p)}</div><span class="badge b-green">● متوفر</span></div></div><button class="btn" style="width:auto;padding:6px 18px" disabled>نفدت الكمية</button></div>
+  <table class="vt"><tr><th>النوع</th><th>السعر</th><th>الحالة</th></tr>${opts.map((o, j) => `<tr><td>${esc(o)}</td><td>₪ ${p.max_price && j ? p.max_price : p.price}</td><td><span class="badge b-green">● متوفر</span></td></tr>`).join("")}</table></div>`; }).join("")}`,
+  stats: () => `<h1>الإحصائيات</h1><p class="lead">آخر 30 يومًا (أرقام توضيحية)</p>
+  <div class="how"><b>شو بتعرف من هون؟</b> قيمة الطلبات اللي طلعت من المحادثات، قديش محادثة تحولت لطلب، أكتر المنتجات اللي انسأل عنها، وأسباب التحويل لموظف. بتساعدك تعرف شو بيبيع وشو ناقص.</div>
+  <div class="kpis"><div class="k big"><small>قيمة الطلبات</small><b>₪ 1,840</b><span>دون التوصيل والطلبات الملغاة · <span style="color:var(--brand)">14 طلب مسلّم</span></span></div>
+  <div class="k"><small>الطلبات</small><b>18</b><span>12.5% من المحادثات تحولت إلى طلبات</span></div><div class="k"><small>المحادثات</small><b>144</b><span>9 حُوّلت إلى موظف · 1 طلب ملغي</span></div></div>
+  <div class="lists"><div class="lst"><h3>أكثر المنتجات طلبًا</h3><small>عدد مرات عرض البوت للمنتج</small>${C.products.map((p, i) => `<div class="lr"><span><i>${i + 1}</i>${esc(p.name)}</span><b>${[42, 31, 24, 15, 9][i] || 3}</b></div>`).join("")}</div>
+  <div class="lst"><h3>عمليات بحث بلا نتائج</h3><small>أفكار لمنتجات جديدة</small><div class="lr"><span>طقم كاسات عصير</span><b>6</b></div><div class="lr"><span>سلة غسيل</span><b>4</b></div><div class="lr"><span>ترمس قهوة</span><b>3</b></div></div>
+  <div class="lst"><h3>أسباب التحويل إلى موظف</h3><small>9 محادثات</small><div class="lr"><span>سؤال عن لون أو مقاس مش موجود</span><b>4</b></div><div class="lr"><span>طلب جملة / كمية كبيرة</span><b>3</b></div><div class="lr"><span>الزبون طلب يحكي مع موظف</span><b>2</b></div></div></div>`
+};
+function go(p) {
+  document.getElementById("view").innerHTML = VIEWS[p]();
+  document.getElementById("crumb-p").textContent = TITLES[p];
+  document.querySelectorAll("[data-p]").forEach(a => a.classList.toggle("on", a.dataset.p === p));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("[data-p]").forEach(a => a.onclick = () => go(a.dataset.p));
+function start(c) { C = c; for (const id of ["sname", "crumb-s"]) document.getElementById(id).textContent = c.store_name; document.getElementById("lg").textContent = (c.store_name || "م").replace(/^مؤسسة\s+/, "")[0]; go("orders"); }
+trialCall({ action: "config" }).then(start).catch(() => start(C));
 </script>
 </body>
 </html>
