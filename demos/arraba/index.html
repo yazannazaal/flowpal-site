@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>مساعد عرابة سنتر · واتساب</title>
+<style>
+  :root {
+    --page: #d1d7db;
+    --wa-green: #008069;
+    --wa-accent: #00a884;
+    --chat-bg: #efeae2;
+    --in-bubble: #ffffff;
+    --out-bubble: #d9fdd3;
+    --ink: #111b21;
+    --muted: #667781;
+    --link: #027eb5;
+    --tick-read: #53bdeb;
+    --line: #e9edef;
+    --gold: #c2993a;
+    --font: "Segoe UI", "Helvetica Neue", Tahoma, "Noto Sans Arabic", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px max(12px, env(safe-area-inset-left)) 16px max(12px, env(safe-area-inset-right));
+    gap: 10px;
+  }
+  .topbar { width: 100%; max-width: 420px; display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .note { font-size: 13px; color: #3b4a54; }
+  .note b { color: var(--wa-green); }
+
+  .phone {
+    width: 100%;
+    max-width: 420px;
+    height: min(840px, calc(100dvh - 80px));
+    min-height: 540px;
+    background: var(--chat-bg);
+    border-radius: 28px;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.18), 0 0 0 8px #111, 0 0 0 9px #333;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* header */
+  header.wa-head { background: var(--wa-green); color: #fff; display: flex; align-items: center; gap: 6px; padding: 10px 8px 10px 6px; }
+  .back { width: 28px; display: grid; place-items: center; opacity: 0.95; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: #1f1f1f; flex-shrink: 0; overflow: hidden; display: grid; place-items: center; color: var(--gold); font-weight: 800; font-size: 18px; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; background: #fff; }
+  .who { flex: 1; min-width: 0; padding-inline-start: 4px; }
+  .who b { display: flex; align-items: center; gap: 4px; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .who span { font-size: 12.5px; opacity: 0.85; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .head-btn { border: 0; background: transparent; color: #fff; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; flex-shrink: 0; }
+  .head-btn:hover { background: rgba(255, 255, 255, 0.12); }
+  .head-btn.deco { cursor: default; }
+  .head-btn.deco:hover { background: transparent; }
+
+  /* chat */
+  .thread {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 14px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    scroll-behavior: smooth;
+    background-color: var(--chat-bg);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.035) 0 2px, transparent 3px),
+      radial-gradient(circle at 70% 80%, rgba(0, 0, 0, 0.03) 0 3px, transparent 4px),
+      radial-gradient(circle at 85% 20%, rgba(0, 0, 0, 0.025) 0 1.5px, transparent 2.5px);
+    background-size: 46px 46px, 64px 64px, 38px 38px;
+  }
+  .chip { align-self: center; background: #fff; color: #54656f; font-size: 12.5px; padding: 5px 12px; border-radius: 8px; box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13); margin: 6px 0; }
+  .chip.notice { background: #ffeecd; color: #54656f; max-width: 88%; text-align: center; line-height: 1.5; }
+
+  .msg { display: flex; flex-direction: column; max-width: 82%; margin-top: 2px; }
+  .msg.first { margin-top: 8px; }
+  .msg.in { align-self: flex-start; }
+  .msg.out { align-self: flex-end; }
+  .bubble {
+    position: relative;
+    padding: 6px 9px 8px;
+    border-radius: 8px;
+    font-size: 14.6px;
+    line-height: 1.5;
+    box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+    overflow-wrap: anywhere;
+  }
+  .msg.in .bubble { background: var(--in-bubble); }
+  .msg.out .bubble { background: var(--out-bubble); }
+  /* tails: store messages on the right, customer on the left (Arabic WhatsApp layout) */
+  .msg.first.in > .bubble { border-start-start-radius: 0; }
+  .msg.first.out > .bubble { border-start-end-radius: 0; }
+  .msg.first.in > .bubble::before, .msg.first.out > .bubble::before {
+    content: ""; position: absolute; top: 0; width: 8px; height: 13px;
+  }
+  .msg.first.in > .bubble::before { inset-inline-start: -8px; background: var(--in-bubble); clip-path: polygon(0 0, 100% 0, 100% 100%); }
+  .msg.first.out > .bubble::before { inset-inline-end: -8px; background: var(--out-bubble); clip-path: polygon(0 0, 100% 0, 0 100%); }
+
+  .text { white-space: pre-line; }
+  .meta { float: inline-end; margin-inline-start: 10px; margin-top: 6px; margin-bottom: -4px; font-size: 11px; color: var(--muted); display: inline-flex; align-items: center; gap: 3px; direction: ltr; white-space: nowrap; }
+  .ticks { color: #8696a0; }
+  .ticks.read { color: var(--tick-read); }
+
+  .quote { background: rgba(11, 20, 26, 0.05); border-inline-start: 4px solid #06cf9c; border-radius: 6px; padding: 4px 8px; margin-bottom: 4px; font-size: 13px; color: var(--muted); }
+  .quote b { display: block; color: #06cf9c; font-size: 12.5px; }
+  .quote span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 230px; }
+
+  .bubble.media { padding: 3px 3px 6px; width: 290px; max-width: 100%; }
+  .bubble.media img, .bubble.media .no-img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 6px; background: #dfe5e7; }
+  .bubble.media .text { padding: 5px 6px 0; }
+  .bubble.media .meta { margin-inline-end: 6px; }
+
+  /* interactive buttons and list */
+  .wa-btns { display: flex; flex-direction: column; gap: 2px; margin-top: 2px; }
+  .wa-btns button, .wa-btns a {
+    font: inherit; font-size: 14.2px; color: var(--link); background: var(--in-bubble); border: 0; border-radius: 8px;
+    min-height: 40px; padding: 8px 10px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;
+    box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+  }
+  .wa-btns button:disabled { cursor: default; color: #7aa6bb; }
+  .bubble .list-btn { margin: 8px -9px -8px; border-top: 1px solid var(--line); border-radius: 0 0 8px 8px; }
+  .bubble .list-btn button { width: 100%; font: inherit; font-size: 14.2px; color: var(--link); background: transparent; border: 0; min-height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .bubble .list-btn button:disabled { cursor: default; color: #7aa6bb; }
+  .cart-note { font-size: 12px; color: var(--muted); margin-top: 3px; padding-inline-start: 4px; }
+  .old { color: var(--muted); }
+
+  .typing { display: inline-flex; gap: 4px; padding: 12px 14px; }
+  .typing i { width: 7px; height: 7px; border-radius: 50%; background: #8696a0; animation: blink 1.2s infinite; }
+  .typing i:nth-child(2) { animation-delay: 0.2s; }
+  .typing i:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+  .error { align-self: center; font-size: 12.5px; color: #b3261e; background: #fdecea; padding: 6px 10px; border-radius: 8px; margin: 6px 0; }
+
+  /* composer */
+  .demo-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; background: #fff8e1; color: #6b4e00; font-size: 12.5px; border-top: 1px solid #f1e3b5; }
+  .demo-bar button { font: inherit; font-size: 13px; font-weight: 700; border: 0; border-radius: 999px; background: var(--wa-green); color: #fff; padding: 7px 14px; cursor: pointer; flex-shrink: 0; }
+  form.composer { display: flex; gap: 6px; align-items: flex-end; padding: 6px 8px calc(8px + env(safe-area-inset-bottom)); background: transparent; }
+  .field { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; background: #fff; border-radius: 24px; padding: 4px 10px; min-height: 46px; box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13); }
+  .field svg { flex-shrink: 0; color: #8696a0; }
+  .field input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: inherit; font-size: 15.5px; padding: 8px 4px; color: var(--ink); }
+  .field input:disabled { opacity: 0.6; }
+  .send { width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--wa-accent); color: #fff; display: grid; place-items: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
+  .send:disabled { opacity: 0.55; cursor: not-allowed; }
+  .send .i-send { display: none; }
+  .send.has-text .i-send { display: block; }
+  .send.has-text .i-mic { display: none; }
+
+  /* list sheet */
+  dialog { border: 0; padding: 0; }
+  dialog::backdrop { background: rgba(11, 20, 26, 0.45); }
+  dialog.sheet { width: min(420px, 100%); max-width: 100%; margin: auto auto 0; border-radius: 16px 16px 0 0; }
+  .sheet-head { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .sheet-head b { flex: 1; font-size: 16px; }
+  .sheet-head button { border: 0; background: transparent; font-size: 22px; line-height: 1; cursor: pointer; color: #54656f; width: 36px; height: 36px; border-radius: 50%; }
+  .sheet-list { max-height: 55vh; overflow-y: auto; padding: 4px 0; margin: 0; list-style: none; }
+  .sheet-list label { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; }
+  .sheet-list label:hover { background: #f5f6f6; }
+  .sheet-list .t { flex: 1; }
+  .sheet-list .t b { display: block; font-weight: 500; font-size: 15px; }
+  .sheet-list .t span { font-size: 13px; color: var(--muted); }
+  .sheet-list input { width: 20px; height: 20px; accent-color: var(--wa-accent); }
+  .sheet-foot { padding: 10px 16px 16px; display: flex; justify-content: flex-end; }
+  .sheet-foot button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; background: var(--wa-accent); color: #fff; padding: 10px 22px; cursor: pointer; }
+  .sheet-foot button:disabled { opacity: 0.5; }
+
+  dialog.settings { border-radius: 16px; padding: 20px; max-width: 380px; width: calc(100% - 32px); }
+  dialog.settings label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  dialog.settings input { width: 100%; padding: 10px 12px; border: 1px solid #d1d7db; border-radius: 10px; font: inherit; font-size: 14px; direction: ltr; }
+  dialog.settings p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  dialog.settings .row-btns { display: flex; gap: 8px; margin-top: 14px; }
+  dialog.settings button { font: inherit; font-weight: 700; border-radius: 10px; padding: 9px 16px; border: 1px solid #d1d7db; background: #fff; cursor: pointer; }
+  dialog.settings button.primary { background: var(--wa-green); color: #fff; border-color: var(--wa-green); }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :focus-visible { outline: 3px solid #53bdeb; outline-offset: 2px; }
+  @media (max-width: 460px) {
+    body { padding: 0; gap: 0; }
+    .topbar { padding: 8px 12px; }
+    .phone { border-radius: 0; box-shadow: none; max-width: none; height: calc(100dvh - 44px); min-height: 480px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .typing i { animation: none; } .thread { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="note">عرض توضيحي: هيك بيبان مساعد <b>عرابة سنتر</b> على واتساب</span>
+  </div>
+
+  <main class="phone">
+    <header class="wa-head">
+      <span class="back" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+      <div class="avatar" aria-hidden="true"><img id="logo" alt="" src="https://arrabacenter.ps/upload/08-2026/system/icon%20copy.png"></div>
+      <div class="who">
+        <b>عرابة سنتر
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-label="حساب تجاري"><circle cx="12" cy="12" r="10" fill="#25d366"/><path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </b>
+        <span id="status">حساب تجاري</span>
+      </div>
+      <span class="head-btn deco" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+      </span>
+      <button class="head-btn" type="button" id="restart" aria-label="محادثة جديدة" title="محادثة جديدة">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      </button>
+      <button class="head-btn" type="button" id="settings" aria-label="الإعدادات" title="ربط البوت">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
+    </header>
+
+    <div class="thread" id="thread" aria-live="polite"></div>
+
+    <div class="demo-bar" id="demo-bar" hidden>
+      <span>محادثة توضيحية بمنتجات وأسعار ومخزون حقيقي من المتجر</span>
+      <button type="button" id="play">▶ شغّل العرض</button>
+    </div>
+    <form class="composer" id="composer">
+      <div class="field">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5s1.3 2 3.5 2 3.5-2 3.5-2" stroke-linecap="round"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
+        <label for="msg" class="sr-only">رسالتك</label>
+        <input id="msg" autocomplete="off" maxlength="500" placeholder="رسالة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg>
+      </div>
+      <button type="submit" class="send" id="send" aria-label="إرسال">
+        <svg class="i-mic" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12h-2z"/></svg>
+        <svg class="i-send" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="transform: scaleX(-1)"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
+    </form>
+  </main>
+
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+    <form method="dialog" id="sheet-form">
+      <div class="sheet-head">
+        <button type="submit" value="cancel" aria-label="إغلاق">×</button>
+        <b id="sheet-title"></b>
+      </div>
+      <ul class="sheet-list" id="sheet-list"></ul>
+      <div class="sheet-foot"><button type="submit" value="send" id="sheet-send" disabled>إرسال</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="settings" id="settings-dialog">
+    <form method="dialog" id="settings-form">
+      <label for="webhook">رابط شات n8n (اختياري)</label>
+      <input id="webhook" type="url" placeholder="https://xxx.app.n8n.cloud/webhook/…/chat">
+      <p>لما يجهز بوت عرابة سنتر: من n8n افتح node «When chat message received» وانسخ <b>Chat URL</b> (لازم الـ workflow يكون Active).<br>اتركه فاضي عشان تشوف المحادثة التوضيحية.</p>
+      <div class="row-btns">
+        <button type="submit" class="primary" value="save">حفظ</button>
+        <button type="submit" value="cancel">إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+<script>
+"use strict";
+
+// The Arraba Center bot (workflow "Arraba Center Assistant (demo)" → node «When chat message received» → Chat URL).
+// It answers once that workflow is imported and set to Active on this n8n server.
+const DEFAULT_CHAT_URL = "https://n8n-ffs0.srv1955533.hstgr.cloud/webhook/3f6c1a52-8e4b-4d7a-9c21-a7d0e5b4f913/chat";
+
+const IMG = (path) => `https://arrabacenter.ps/upload/${path}`;
+// A scripted conversation built from the store's real products, prices, colours, sizes and stock (9 Nov 2026).
+const DEMO = [
+  {
+    user: "مرحبا",
+    bot: [{
+      text: "أهلا وسهلا فيك بـ *عرابة سنتر* 👋\nأنا مساعد المحل على واتساب: بساعدك تلاقي ترنجات، جاكيتات، بناطيل وأحذية الشتا، بحكيلك شو متوفر من ألوان وقياسات، وبجهزلك الطلب.\nشو بتدور عليه اليوم؟",
+      buttons: ["ترنجات شتوية", "جاكيتات", "بناطيل"],
+    }],
+  },
+  {
+    user: "ترنجات شتوية", quote: "أهلا وسهلا فيك بـ عرابة سنتر 👋",
+    bot: [{
+      text: "هاي أحلى ترنجات الشتا عنا، وكلها متوفرة هلأ 🔥",
+      products: [
+        { name: "ترنج كبيورا", price: 100, original_price: 150, reason: "ترند الموسم 2026 · أسود، بيج، رمادي · من S لـ 4XL", image_url: IMG("09-2026/product/6aa7ebaaa7220-450px.png"), product_url: "https://arrabacenter.ps/?app=product.show.53" },
+        { name: "ترنج باراشوت ثقيل مع كابتشيون", price: 120, original_price: 150, reason: "أسود، رمادي، زيتي، بيج · من S لـ 2XL", image_url: IMG("09-2026/product/6aa82258705ca-450px.png"), product_url: "https://arrabacenter.ps/?app=product.show.57" },
+        { name: "ترنج فوتر مع زمة وسحاب كامل", price: 80, original_price: 100, reason: "أرخص خيار · بس الكمية قليلة ببعض القياسات", image_url: IMG("09-2026/product/6aa7f9bf58cc4-450px.png"), product_url: "https://arrabacenter.ps/?app=product.show.55" },
+      ],
+    }],
+  },
+  {
+    user: "اختار اللون والقياس", quote: "ترنج كبيورا",
+    bot: [{
+      text: "*ترنج كبيورا* متوفر بـ 3 ألوان:\n▫️ أسود سادة\n▫️ بيج\n▫️ رمادي\nوكل القياسات من S لـ 4XL متوفرة 👌\nأي لون بدك؟",
+      buttons: ["أسود سادة", "بيج", "رمادي"],
+    }],
+  },
+  {
+    user: "أسود سادة", quote: "أي لون بدك؟",
+    bot: [{
+      image_url: IMG("09-2026/product/6aa7ebf9bcfc2-450px.png"),
+      text: "*ترنج كبيورا · أسود سادة*\n*100 ₪* ~150 ₪~\nشو قياسك؟",
+      list: {
+        button: "اختار القياس",
+        title: "قياسات الأسود",
+        rows: [
+          { title: "S", description: "متوفر" }, { title: "M", description: "متوفر" }, { title: "L", description: "متوفر" },
+          { title: "XL", description: "كمية محدودة" }, { title: "2XL", description: "متوفر" }, { title: "3XL", description: "متوفر" }, { title: "4XL", description: "متوفر" },
+        ],
+      },
+    }],
+  },
+  {
+    user: "XL", quote: "اختار القياس",
+    bot: [{
+      text: "تمام ✅ ضفت للسلة:\n1 × ترنج كبيورا — أسود سادة، XL\nالسعر: *100 ₪* بدل ~150 ₪~\nهاد القياس كميته محدودة، فمنيح إنك لحقته 😉\nبدك تكمل الطلب ولا أفرجيك بوت شتوي بيلبق معه؟",
+      buttons: ["كمل الطلب", "شو بيلبق معه؟", "قديش التوصيل؟"],
+      cart: { item_count: 1, subtotal: 100 },
+    }],
+  },
+  {
+    user: "قديش التوصيل؟", quote: "بدك تكمل الطلب ولا أفرجيك بوت شتوي بيلبق معه؟",
+    bot: [{
+      text: "رسوم التوصيل حسب المنطقة 🚚\n• الضفة (جنين، نابلس، طولكرم، قلقيلية، رام الله، الخليل، بيت لحم…): *20 ₪*\n• القدس: *30 ₪*\n• القدس الغربية، أبو غوش، عين نقوبا: *45 ₪*\n• الداخل 48: *70 ₪*\nالتوصيل عادة خلال 3 أيام عمل، ومندوب التوصيل بيتصل فيك قبل ما يوصل.",
+      buttons: ["كمل الطلب", "سياسة التبديل"],
+      cart: { item_count: 1, subtotal: 100 },
+    }],
+  },
+  {
+    user: "كمل الطلب", quote: "رسوم التوصيل حسب المنطقة 🚚",
+    bot: [{
+      text: "عشان أجهز طلبك، ابعتلي برسالة وحدة:\n• الاسم\n• رقم الموبايل\n• المدينة أو البلد\n• العنوان بالتفصيل\nمثال: أحمد، 0599xxxxxx، جنين، عرابة قرب البلدية",
+    }],
+  },
+  {
+    user: "أحمد يوسف، 0599123456، جنين، عرابة الشارع الرئيسي قرب البلدية",
+    bot: [{
+      text: "هاد ملخص طلبك 🧾\n• ترنج كبيورا · أسود سادة · قياس XL\nالكمية: 1 — السعر: 100 ₪\nالتوصيل لجنين: 20 ₪\n*المجموع: 120 ₪*\nالدفع: نقدًا عند الاستلام\nالتبديل: خلال 24 ساعة من الاستلام مع الفاتورة، وتكلفة توصيل التبديل على الزبون.\nالاسم: أحمد يوسف · الموبايل: 059****456\nالعنوان: جنين، عرابة الشارع الرئيسي قرب البلدية\nبدك أبعت الطلب للفريق؟",
+      buttons: ["نعم، ابعت الطلب", "بدي أعدّل"],
+      cart: { item_count: 1, subtotal: 100 },
+    }],
+  },
+  {
+    user: "نعم، ابعت الطلب", quote: "بدك أبعت الطلب للفريق؟",
+    bot: [{
+      text: "وصل طلبك لفريق عرابة سنتر ✅\nرقم الطلب: *AC-20261109-4F7K2*\nالفريق بيتواصل معك لتأكيد الطلب وموعد التوصيل قبل ما ينبعت.\nشكرًا إنك اخترتنا 🤍",
+      buttons: ["كمل تسوق", "احكي مع موظف"],
+    }],
+  },
+];
+
+const ORDINALS = ["الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس"];
+const els = {
+  thread: document.getElementById("thread"),
+  form: document.getElementById("composer"),
+  input: document.getElementById("msg"),
+  send: document.getElementById("send"),
+  demoBar: document.getElementById("demo-bar"),
+  play: document.getElementById("play"),
+  status: document.getElementById("status"),
+  dialog: document.getElementById("settings-dialog"),
+  webhook: document.getElementById("webhook"),
+  sheet: document.getElementById("sheet"),
+  sheetTitle: document.getElementById("sheet-title"),
+  sheetList: document.getElementById("sheet-list"),
+  sheetSend: document.getElementById("sheet-send"),
+};
+
+const store = {
+  get(key) { try { return localStorage.getItem(key); } catch { return null; } },
+  set(key, value) { try { localStorage.setItem(key, value); } catch { /* storage blocked */ } },
+};
+
+function validChatUrl(value) {
+  try {
+    const url = new URL(String(value));
+    if (url.protocol === "https:" || (url.protocol === "http:" && ["localhost", "127.0.0.1"].includes(url.hostname))) return url.href;
+  } catch { /* not a URL */ }
+  return "";
+}
+
+let chatUrl = validChatUrl(store.get("arraba.chatUrl") ?? DEFAULT_CHAT_URL);
+let sessionId = newSessionId();
+let busy = false;
+let demoRun = 0;
+let lastSide = null;
+let lastUserTicks = null;
+
+function newSessionId() {
+  return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+}
+function safeUrl(value) {
+  try {
+    const url = new URL(String(value));
+    return url.protocol === "https:" ? url.href : null;
+  } catch { return null; }
+}
+function el(tag, attrs = {}, text) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function now() {
+  return new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+}
+function scrollDown() { els.thread.scrollTop = els.thread.scrollHeight; }
+
+// WhatsApp text formatting: *bold*, _italic_, ~strike~ — built as DOM nodes, never as HTML.
+function waText(text) {
+  const frag = document.createDocumentFragment();
+  const re = /\*([^*\n]+)\*|_([^_\n]+)_|~([^~\n]+)~/g;
+  let last = 0;
+  let m;
+  const s = String(text || "");
+  while ((m = re.exec(s))) {
+    if (m.index > last) frag.append(s.slice(last, m.index));
+    if (m[1] !== undefined) frag.append(el("strong", {}, m[1]));
+    else if (m[2] !== undefined) frag.append(el("em", {}, m[2]));
+    else frag.append(el("s", { class: "old" }, m[3]));
+    last = re.lastIndex;
+  }
+  if (last < s.length) frag.append(s.slice(last));
+  return frag;
+}
+
+function meta(out) {
+  const m = el("span", { class: "meta" });
+  m.append(el("span", {}, now()));
+  if (out) {
+    const ticks = el("span", { class: "ticks", "aria-label": "تم الإرسال" });
+    ticks.innerHTML = '<svg width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3 3 6-7"/><path d="M6 9l1 1 7-8"/></svg>';
+    m.append(ticks);
+    lastUserTicks = ticks;
+  }
+  return m;
+}
+
+function startMsg(side) {
+  const wrap = el("div", { class: `msg ${side}${lastSide !== side ? " first" : ""}` });
+  lastSide = side;
+  return wrap;
+}
+
+function addUser(text, quote) {
+  const wrap = startMsg("out");
+  const bubble = el("div", { class: "bubble" });
+  if (quote) {
+    const q = el("div", { class: "quote" });
+    q.append(el("b", {}, "عرابة سنتر"), el("span", {}, quote));
+    bubble.append(q);
+  }
+  const t = el("span", { class: "text", dir: "auto" }, text);
+  bubble.append(t, meta(true));
+  wrap.append(bubble);
+  els.thread.append(wrap);
+  scrollDown();
+}
+
+function markRead() { if (lastUserTicks) lastUserTicks.classList.add("read"); }
+
+function showTyping() {
+  markRead();
+  els.status.textContent = "يكتب…";
+  const wrap = startMsg("in");
+  wrap.id = "typing";
+  const b = el("div", { class: "bubble typing", "aria-label": "يكتب…" });
+  b.append(el("i"), el("i"), el("i"));
+  wrap.append(b);
+  els.thread.append(wrap);
+  scrollDown();
+}
+function hideTyping() {
+  const t = document.getElementById("typing");
+  if (t) { t.remove(); lastSide = els.thread.lastElementChild?.classList.contains("in") ? "in" : els.thread.lastElementChild?.classList.contains("out") ? "out" : null; }
+  els.status.textContent = "حساب تجاري";
+}
+
+function imageEl(url) {
+  const src = safeUrl(url);
+  if (!src) return null;
+  const img = el("img", { alt: "", loading: "lazy" });
+  img.addEventListener("error", () => img.replaceWith(el("div", { class: "no-img", "aria-hidden": "true" })));
+  img.src = src;
+  return img;
+}
+
+function replyButtons(labels, interactive, quote) {
+  const box = el("div", { class: "wa-btns" });
+  for (const label of labels.slice(0, 3)) {
+    const b = el("button", { type: "button" });
+    b.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>';
+    b.append(label);
+    b.disabled = !interactive;
+    b.addEventListener("click", () => sendMessage(label, quote));
+    box.append(b);
+  }
+  return box;
+}
+
+function priceLine(p) {
+  if (p.price == null) return "السعر بيتأكد من الفريق";
+  let s = p.max_price ? `*${p.price} - ${p.max_price} ₪*` : `*${p.price} ₪*`;
+  if (p.original_price && !p.max_price) s += ` ~${p.original_price} ₪~`;
+  return s;
+}
+
+// one bot message: optional photo, text, a list button, reply buttons
+function addBotMessage(msg, interactive) {
+  const wrap = startMsg("in");
+  const photo = msg.image_url ? imageEl(msg.image_url) : null;
+  const bubble = el("div", { class: `bubble${photo ? " media" : ""}` });
+  if (photo) bubble.append(photo);
+  const text = String(msg.text || "").trim();
+  const firstLine = text.split("\n").pop().replace(/[*_~]/g, "");
+  if (text || !photo) {
+    const t = el("span", { class: "text", dir: "auto" });
+    t.append(waText(text));
+    bubble.append(t);
+  }
+  bubble.append(meta(false));
+  if (msg.list && Array.isArray(msg.list.rows) && msg.list.rows.length) {
+    const lb = el("div", { class: "list-btn" });
+    const b = el("button", { type: "button" });
+    b.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>';
+    b.append(msg.list.button || "الخيارات");
+    b.disabled = !interactive;
+    b.addEventListener("click", () => openSheet(msg.list));
+    lb.append(b);
+    bubble.append(lb);
+  }
+  wrap.append(bubble);
+  if (Array.isArray(msg.buttons) && msg.buttons.length) wrap.append(replyButtons(msg.buttons, interactive, firstLine));
+  if (msg.cart && msg.cart.item_count) wrap.append(el("div", { class: "cart-note" }, `🛒 بالسلة ${msg.cart.item_count} قطعة · ${msg.cart.subtotal} ₪`));
+  els.thread.append(wrap);
+  scrollDown();
+}
+
+// each product is its own WhatsApp image message with a caption and buttons
+function addProduct(p, i, total, interactive) {
+  const wrap = startMsg("in");
+  const bubble = el("div", { class: "bubble media" });
+  const img = imageEl(p.image_url);
+  bubble.append(img || el("div", { class: "no-img", "aria-hidden": "true" }));
+  const t = el("span", { class: "text", dir: "auto" });
+  t.append(waText([`*${p.name || ""}*`, priceLine(p), p.reason || ""].filter(Boolean).join("\n")));
+  bubble.append(t, meta(false));
+  wrap.append(bubble);
+  const btns = el("div", { class: "wa-btns" });
+  const pick = el("button", { type: "button" });
+  pick.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>';
+  pick.append("اختار اللون والقياس");
+  pick.disabled = !interactive;
+  const ask = total > 1 ? `${ORDINALS[i] || p.name} شو ألوانه وقياساته؟` : "شو ألوانه وقياساته؟";
+  pick.addEventListener("click", () => sendMessage(ask, p.name));
+  btns.append(pick);
+  const link = safeUrl(p.product_url);
+  if (link) {
+    const a = el("a", { target: "_blank", rel: "noopener noreferrer" });
+    a.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+    a.append("شوف على الموقع");
+    a.href = link;
+    btns.append(a);
+  }
+  wrap.append(btns);
+  els.thread.append(wrap);
+  scrollDown();
+}
+
+async function addBot(reply, { interactive = true, pace = 0 } = {}) {
+  const msgs = Array.isArray(reply) ? reply : [reply];
+  for (const msg of msgs) {
+    const products = Array.isArray(msg.products) ? msg.products : [];
+    if (!products.length) addBotMessage(msg, interactive);
+    else {
+      // WhatsApp order: intro → one photo message per product → the question with its buttons / list
+      const lines = String(msg.text || "").split("\n");
+      const question = lines.length && /[؟?]\s*$/.test(lines[lines.length - 1]) ? lines.pop() : null;
+      const intro = { text: lines.join("\n").trim(), image_url: msg.image_url };
+      if (intro.text || intro.image_url) addBotMessage(intro, interactive);
+      for (let i = 0; i < products.length; i++) {
+        if (pace) await wait(pace);
+        addProduct(products[i], i, products.length, interactive);
+      }
+      const hasChoices = (Array.isArray(msg.buttons) && msg.buttons.length) || msg.list;
+      if (question || hasChoices) addBotMessage({ text: question || "شو رأيك؟", buttons: msg.buttons, list: msg.list, cart: msg.cart }, interactive);
+    }
+    if (Array.isArray(msg.warnings) && msg.warnings.length) addError("⚠️ للتجربة فقط: البوت ما قدر يقرا أو يحفظ المحادثة في Supabase. افتح التنفيذ في n8n.");
+  }
+}
+
+function openSheet(list) {
+  els.sheetTitle.textContent = list.title || list.button || "الخيارات";
+  els.sheetList.replaceChildren();
+  els.sheetSend.disabled = true;
+  list.rows.slice(0, 10).forEach((row, i) => {
+    const li = el("li");
+    const label = el("label");
+    const t = el("span", { class: "t" });
+    t.append(el("b", {}, row.title));
+    if (row.description) t.append(el("span", {}, row.description));
+    const r = el("input", { type: "radio", name: "row", value: row.title, id: `row-${i}` });
+    r.addEventListener("change", () => { els.sheetSend.disabled = false; });
+    label.append(t, r);
+    li.append(label);
+    els.sheetList.append(li);
+  });
+  els.sheet.dataset.quote = list.button || "";
+  els.sheet.showModal();
+}
+document.getElementById("sheet-form").addEventListener("submit", (e) => {
+  if (!e.submitter || e.submitter.value !== "send") return;
+  const chosen = els.sheetList.querySelector("input:checked");
+  if (chosen) setTimeout(() => sendMessage(chosen.value, els.sheet.dataset.quote), 0);
+});
+
+function addError(text) {
+  els.thread.append(el("div", { class: "error", role: "alert" }, text));
+  scrollDown();
+}
+
+// n8n may answer {output, text, products, quick_replies, cart, image_url} or [{...}];
+// older workflows send only Markdown in `output`. More than 3 quick replies become a WhatsApp list.
+function normaliseReply(data) {
+  const r = Array.isArray(data) ? data[0] || {} : data || {};
+  const text = Array.isArray(r.products)
+    ? String(r.text || r.output || "")
+    : String(r.output || r.text || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
+  const qr = Array.isArray(r.quick_replies) ? r.quick_replies.filter(Boolean).map(String) : [];
+  const msg = { text: text.replace(/\*\*/g, "*"), image_url: r.image_url, products: Array.isArray(r.products) ? r.products : [], cart: r.cart, warnings: r.warnings };
+  if (r.list && Array.isArray(r.list.rows)) msg.list = r.list;
+  if (qr.length > 3) {
+    // the bot asks for a size or a colour: the list button says which
+    const ask = /قياس|مقاس/.test(text.split("\n").pop()) ? "القياس" : /لون/.test(text.split("\n").pop()) ? "اللون" : null;
+    msg.list = { button: ask ? `اختار ${ask}` : "الخيارات", title: ask ? `اختار ${ask}` : "اختار", rows: qr.slice(0, 10).map((t) => ({ title: t })) };
+  }
+  else if (qr.length) msg.buttons = qr;
+  return msg;
+}
+
+async function sendMessage(text, quote) {
+  const message = String(text || "").trim().slice(0, 500);
+  if (!message || busy) return;
+  if (!chatUrl) { els.dialog.showModal(); return; }
+  busy = true;
+  els.send.disabled = true;
+  addUser(message, quote);
+  await wait(350);
+  showTyping();
+  try {
+    const res = await fetch(chatUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "sendMessage", sessionId, chatInput: message }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    hideTyping();
+    await addBot(normaliseReply(data), { pace: 250 });
+  } catch (err) {
+    hideTyping();
+    addError("ما قدرنا نوصل للبوت. تأكد إن الـ workflow مفعّل وإن الرابط صح.");
+    console.error(err);
+  } finally {
+    busy = false;
+    els.send.disabled = false;
+    updateSendIcon();
+    els.input.focus();
+  }
+}
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function resetThread() {
+  els.thread.replaceChildren();
+  lastSide = null;
+  lastUserTicks = null;
+  els.thread.append(el("div", { class: "chip" }, "اليوم"));
+  els.thread.append(el("div", { class: "chip notice" }, "🔒 هاد الحساب التجاري بيستخدم مساعد ذكي بيرد فورًا على أسئلتك عن منتجات عرابة سنتر، والفريق بيأكد كل طلب."));
+}
+
+async function playDemo() {
+  const run = ++demoRun;
+  resetThread();
+  els.play.textContent = "⏸ شغّال…";
+  els.play.disabled = true;
+  for (const step of DEMO) {
+    await wait(1000);
+    if (run !== demoRun) return;
+    addUser(step.user, step.quote);
+    await wait(600);
+    if (run !== demoRun) return;
+    showTyping();
+    await wait(1300);
+    if (run !== demoRun) return;
+    hideTyping();
+    await addBot(step.bot, { interactive: false, pace: 450 });
+  }
+  if (run === demoRun) { els.play.textContent = "↺ أعد العرض"; els.play.disabled = false; }
+}
+
+function updateSendIcon() { els.send.classList.toggle("has-text", Boolean(els.input.value.trim())); }
+
+function applyMode() {
+  const live = Boolean(chatUrl);
+  els.demoBar.hidden = live;
+  els.input.disabled = !live;
+  els.send.disabled = !live;
+  els.input.placeholder = live ? "رسالة" : "محادثة توضيحية";
+}
+
+function restart() {
+  demoRun++;
+  sessionId = newSessionId();
+  resetThread();
+  hideTyping();
+  if (chatUrl) sendMessage("مرحبا");
+  else playDemo();
+}
+
+els.input.addEventListener("input", updateSendIcon);
+els.form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = els.input.value;
+  els.input.value = "";
+  updateSendIcon();
+  sendMessage(text);
+});
+els.play.addEventListener("click", playDemo);
+document.getElementById("restart").addEventListener("click", restart);
+document.getElementById("settings").addEventListener("click", () => {
+  els.webhook.value = chatUrl;
+  els.dialog.showModal();
+});
+document.getElementById("settings-form").addEventListener("submit", (e) => {
+  if (!e.submitter || e.submitter.value !== "save") return;
+  const value = els.webhook.value.trim();
+  if (value && !validChatUrl(value)) { e.preventDefault(); els.webhook.setCustomValidity("الرابط لازم يبدأ بـ https://"); els.webhook.reportValidity(); return; }
+  els.webhook.setCustomValidity("");
+  chatUrl = validChatUrl(value);
+  store.set("arraba.chatUrl", chatUrl);
+  applyMode();
+  restart();
+});
+document.getElementById("logo").addEventListener("error", (e) => { e.target.replaceWith("ع"); });
+
+// the n8n link button is for the team only: open the page with ?setup to see it
+if (!new URLSearchParams(location.search).has("setup")) document.getElementById("settings").hidden = true;
+applyMode();
+restart();
+</script>
+</body>
+</html>
