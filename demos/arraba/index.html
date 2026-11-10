@@ -749,6 +749,8 @@ document.getElementById("settings-form").addEventListener("submit", (e) => {
 });
 document.getElementById("logo").addEventListener("error", (e) => { e.target.replaceWith("ع"); });
 
+// the n8n link button is for the team only: open the page with ?setup to see it
+if (!new URLSearchParams(location.search).has("setup")) document.getElementById("settings").hidden = true;
 applyMode();
 restart();
 </script>
