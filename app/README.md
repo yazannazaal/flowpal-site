@@ -9,8 +9,11 @@ Design and rules: `agents/tech-lead/tasks/003-flowpal-hub.md` (ADR-002) and `ops
 | `index.html`, `app.css`, `shell.js`, `lib.js` | The shell: login (Supabase Auth), `rpc('hub_me')`, tab bar, hash router, logout |
 | `modules/<id>.js` | One file per area. Loaded with `import()` only when `hub_me()` returned that id and the person opened the tab |
 | `sw.js`, `manifest.webmanifest`, `offline.html`, `icons/` | Installable app (PWA) |
-| `demo/hub-me.js` | Fake `hub_me()` for the local mock mode. Never loaded on flowpal.co |
-| `flowpal-agency: ops/hub/tests/leakage-fadi.mjs` (kept out of the public site) | Playwright leakage check on the mock (tabs, DOM, module requests, SW cache, logout) |
+| `modules/sales.js` | Sales: analytics (same KPI formulas as `scripts/kpis.py`) + businesses list. Data: `rpc('hub_sales_board')` only, read only |
+| `modules/research.js` | Research summaries (`research_briefs`, read only; `source_path` never selected) |
+| `modules/content.js` | Content approval (`content_reviews` read; decisions only through `rpc('hub_content_decide')`) |
+| `demo/*.js` | Fake data for the local mock mode (`hub-me`, `sales-board`, `research-briefs`, `content-reviews`). Never loaded on flowpal.co, never cached by the SW |
+| `flowpal-agency: ops/hub/tests/leakage-fadi.mjs`, `phase2-fadi.mjs` (kept out of the public site) | Playwright checks on the mock: tabs, DOM, module requests, SW cache, logout; phase 2: every sales/research/content sub-page, banned words, KPI arithmetic, decision flow, `/subscribers/` redirect |
 
 ## Rules
 - The shell has no list of modules and no labels. Tabs come from `hub_me()` only.
@@ -29,7 +32,8 @@ http://127.0.0.1:8765/app/?mock=yazan      # admin: every module
 http://127.0.0.1:8765/app/?mock=stranger   # logged in but not in app_users
 node ../flowpal-agency/ops/hub/tests/leakage-fadi.mjs                 # needs the server above; screenshots to $OUT (default /tmp/hub-shots/)
 ```
-Mock data is fake and nothing is saved. Modules not built yet show «قيد البناء» (their file 404s).
+Mock data is fake and nothing is saved. A module without a file (today: `finance`) shows «قيد البناء».
+`/subscribers/` is now a redirect to `/app/#/subscribers` (keeps the query and `#/s/<id>`).
 
 ## Add a module
 1. Add a row to `app_modules` (id, label, icon, sort, roles). Icon names the shell knows: users, wrench, chart, book, image, wallet.
