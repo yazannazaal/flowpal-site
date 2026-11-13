@@ -128,7 +128,7 @@ dialog .row-btns{display:flex;gap:8px;margin-top:16px;padding-top:14px;border-to
 
 @media (min-width:760px){
   h1{font-size:28px}
-  .bar-in{min-height:60px}
+  .bar-in{min-height:60px;padding-block:0}
   .tabs{position:static;background:none;border:0;padding:0;gap:2px;align-self:stretch;margin-inline-start:12px}
   .tab{flex:0 0 auto;flex-direction:row;gap:7px;min-height:0;padding:0 12px;font-size:14px}
   .tab svg{width:18px;height:18px}
