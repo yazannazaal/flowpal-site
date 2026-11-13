@@ -12,6 +12,9 @@ const L = {
   contactRole: { owner: "المالك", manager: "المدير", staff: "موظف", tech: "تقني" },
 };
 
+// Explicit columns (never "*"): a column added later is not shown until someone adds it here on purpose.
+const SUB_COLS = "id,name,sector,city,address,contacts,channels,product,status,start_date,golive_date,end_date,contract_version,systems,links,health,health_note,health_at,notes,created_at,updated_at";
+
 const CSS = `
 .subs{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .sub{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
@@ -129,7 +132,7 @@ function supaStore(sb) {
       const open = ok(await sb.from("subscriber_notes").select("subscriber_id").in("status", ["open", "in_progress"]));
       return subs.map((s) => ({ ...s, open_count: open.filter((n) => n.subscriber_id === s.id).length }));
     },
-    async getSubscriber(id) { const r = ok(await sb.from("subscribers").select("*").eq("id", id).limit(1)); return r[0] || null; },
+    async getSubscriber(id) { const r = ok(await sb.from("subscribers").select(SUB_COLS).eq("id", id).limit(1)); return r[0] || null; },
     async listNotes(id) { return ok(await sb.from("subscriber_notes").select("*").eq("subscriber_id", id).order("at", { ascending: false }).limit(500)); },
     async addNote(n) { ok(await sb.from("subscriber_notes").insert(n)); },
     async setNoteStatus(id, status) {

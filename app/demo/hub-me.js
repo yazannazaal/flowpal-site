@@ -1,4 +1,4 @@
-// Demo only (?demo): a fake hub_me() so the app can be tried before ops/hub/001-roles.sql runs.
+// Local mock only (?mock= / ?demo on localhost): a fake hub_me() so the app can be tried before ops/hub/001-roles.sql runs.
 // Loaded ONLY in demo mode. It copies the seed of app_modules and filters it by role exactly like the
 // real hub_me() does in the database (admin = every module; a role sees modules whose roles include it).
 const SEED = [
@@ -11,9 +11,9 @@ const SEED = [
 ];
 
 const PEOPLE = {
-  admin:   { email: "admin@demo.invalid",   name: "مدير (تجريبي)",  is_admin: true,  roles: [] },
-  tech:    { email: "tech@demo.invalid",    name: "تقني (تجريبي)",  is_admin: false, roles: ["tech"] },
-  sales:   { email: "sales@demo.invalid",   name: "مبيعات (تجريبي)", is_admin: false, roles: ["sales", "content"] },
+  admin:   { email: "admin@demo.invalid",   name: "يزن (تجريبي)",   is_admin: true,  roles: [] },
+  tech:    { email: "tech@demo.invalid",    name: "أسماء (تجريبي)", is_admin: false, roles: ["tech"] },
+  sales:   { email: "sales@demo.invalid",   name: "دانيا (تجريبي)", is_admin: false, roles: ["sales", "content"] },
   content: { email: "content@demo.invalid", name: "محتوى (تجريبي)", is_admin: false, roles: ["content"] },
 };
 

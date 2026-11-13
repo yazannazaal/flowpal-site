@@ -5,7 +5,8 @@
      for those ids, and only when the person opens that tab.
    - The only key here is the Supabase publishable (anon) key. It is public by design; Row Level Security and
      the hub_* functions protect the data. Never put a service_role key in any file of this app.
-   - ?demo runs everything on fake data (no Supabase at all); &role=tech|admin|sales|content|none picks the person. */
+   - Mock mode runs everything on fake data (no Supabase at all), ONLY on localhost / 127.0.0.1 (for هبة's tests):
+     ?mock=yazan|asmaa|dania|stranger  (or ?demo&role=admin|tech|sales|content|none). On flowpal.co both are ignored. */
 import { $, esc, errText, toast } from "./lib.js";
 
 const SUPABASE_URL = "https://kltkjkraevxltmxfetng.supabase.co";
@@ -14,8 +15,10 @@ const SUPABASE_JS = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/d
 
 const ID_RE = /^[a-z][a-z0-9-]+$/;
 const params = new URLSearchParams(location.search);
-const DEMO = params.has("demo");
+const LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.hostname.endsWith(".localhost");
+const DEMO = LOCAL && (params.has("demo") || params.has("mock"));
 const DEMO_ROLES = [["tech", "تقني"], ["admin", "إدارة"], ["sales", "مبيعات"], ["content", "محتوى"], ["none", "بلا صلاحية"]];
+const MOCK_PEOPLE = { yazan: "admin", asmaa: "tech", dania: "sales", stranger: "none" };
 
 const app = $("#app");
 
@@ -57,7 +60,7 @@ function demoAuth() {
   const KEY = "hub.demoRole";
   const get = () => { try { return sessionStorage.getItem(KEY); } catch { return null; } };
   const set = (v) => { try { v ? sessionStorage.setItem(KEY, v) : sessionStorage.removeItem(KEY); } catch { /* private mode */ } };
-  const fromUrl = params.get("role");
+  const fromUrl = MOCK_PEOPLE[params.get("mock")] || params.get("role");
   if (fromUrl && DEMO_ROLES.some(([r]) => r === fromUrl)) set(fromUrl);
   return {
     sb: null,
@@ -81,14 +84,10 @@ let renderSeq = 0;
 function setDemoFlag() {
   const f = $("#demoFlag");
   if (!DEMO) return;
-  const cur = auth.role() || "";
-  f.innerHTML = `<span>وضع تجريبي: كل البيانات وهمية والتعديلات لا تُحفظ.</span>
-    <label>الدور <select id="demoRole">${DEMO_ROLES.map(([r, t]) => `<option value="${r}" ${r === cur ? "selected" : ""}>${t}</option>`).join("")}</select></label>`;
+  // Only this person's own mode is written here: no list of other roles or people, so the DOM of one role never
+  // names another. To switch person: log out, or open ?mock=<name> (same path as a real logout).
+  f.innerHTML = `<span>وضع تجريبي محلي: كل البيانات وهمية والتعديلات لا تُحفظ.</span>`;
   f.classList.remove("hidden");
-  $("#demoRole").addEventListener("change", (e) => {
-    // A new role = a new person: same path as a real logout, then log in as the chosen role.
-    logout(e.target.value);
-  });
 }
 
 function setChrome(person) {
@@ -258,12 +257,12 @@ async function clearDeviceData() {
   } catch { /* storage blocked */ }
 }
 
-async function logout(nextDemoRole) {
+async function logout() {
   $("#acctDlg").open && $("#acctDlg").close();
   await auth.signOut();
   await clearDeviceData();
   // Full reload: no module code or data stays in memory for the next person on this phone.
-  const q = DEMO ? (nextDemoRole ? `?demo&role=${encodeURIComponent(nextDemoRole)}` : "?demo") : "";
+  const q = DEMO ? "?demo" : "";
   location.replace(location.pathname + q + "#/");
 }
 
