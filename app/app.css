@@ -39,7 +39,7 @@ h2{font-size:17px;font-weight:600}
 .tabs{position:fixed;inset-inline:0;bottom:0;z-index:10;background:var(--ink);border-top:1px solid var(--ink-3);
   display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:var(--safe-b)}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:1 0 72px;min-height:var(--tabbar);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+.tab{flex:1 0 58px;min-height:var(--tabbar);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   padding:8px 4px 6px;text-decoration:none;color:var(--on-ink-2);font-size:11.5px;line-height:1.25;text-align:center;position:relative}
 .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:96px}

@@ -46,7 +46,8 @@ self.addEventListener("fetch", (event) => {
   if (!url.pathname.startsWith(scope.pathname)) return;
 
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).catch(async () => (await caches.match(OFFLINE_URL)) || Response.error()));
+    // no-cache: always ask the server, so an old copy from the browser cache never opens without a connection.
+    event.respondWith(fetch(request.url, { cache: "no-cache", credentials: "same-origin" }).catch(async () => (await caches.match(OFFLINE_URL)) || Response.error()));
     return;
   }
   const rel = url.pathname.slice(scope.pathname.length);
