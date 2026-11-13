@@ -10,7 +10,7 @@ Design and rules: `agents/tech-lead/tasks/003-flowpal-hub.md` (ADR-002) and `ops
 | `modules/<id>.js` | One file per area. Loaded with `import()` only when `hub_me()` returned that id and the person opened the tab |
 | `sw.js`, `manifest.webmanifest`, `offline.html`, `icons/` | Installable app (PWA) |
 | `demo/hub-me.js` | Fake `hub_me()` for the local mock mode. Never loaded on flowpal.co |
-| `tests/leakage.mjs` | Playwright leakage check on the mock (tabs, DOM, module requests, SW cache, logout) |
+| `flowpal-agency: ops/hub/tests/leakage-fadi.mjs` (kept out of the public site) | Playwright leakage check on the mock (tabs, DOM, module requests, SW cache, logout) |
 
 ## Rules
 - The shell has no list of modules and no labels. Tabs come from `hub_me()` only.
@@ -27,7 +27,7 @@ http://127.0.0.1:8765/app/?mock=asmaa      # tech: subscribers + tech-requests
 http://127.0.0.1:8765/app/?mock=dania      # sales + content: sales, research, content
 http://127.0.0.1:8765/app/?mock=yazan      # admin: every module
 http://127.0.0.1:8765/app/?mock=stranger   # logged in but not in app_users
-node app/tests/leakage.mjs                 # needs the server above; screenshots to $OUT (default /tmp/hub-shots/)
+node ../flowpal-agency/ops/hub/tests/leakage-fadi.mjs                 # needs the server above; screenshots to $OUT (default /tmp/hub-shots/)
 ```
 Mock data is fake and nothing is saved. Modules not built yet show «قيد البناء» (their file 404s).
 

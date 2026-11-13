@@ -11,9 +11,9 @@ const SEED = [
 ];
 
 const PEOPLE = {
-  admin:   { email: "admin@demo.invalid",   name: "يزن (تجريبي)",   is_admin: true,  roles: [] },
-  tech:    { email: "tech@demo.invalid",    name: "أسماء (تجريبي)", is_admin: false, roles: ["tech"] },
-  sales:   { email: "sales@demo.invalid",   name: "دانيا (تجريبي)", is_admin: false, roles: ["sales", "content"] },
+  admin:   { email: "admin@demo.invalid",   name: "مدير (تجريبي)",   is_admin: true,  roles: [] },
+  tech:    { email: "tech@demo.invalid",    name: "تقني (تجريبي)", is_admin: false, roles: ["tech"] },
+  sales:   { email: "sales@demo.invalid",   name: "مبيعات (تجريبي)", is_admin: false, roles: ["sales", "content"] },
   content: { email: "content@demo.invalid", name: "محتوى (تجريبي)", is_admin: false, roles: ["content"] },
 };
 
