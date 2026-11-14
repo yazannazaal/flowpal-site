@@ -163,6 +163,7 @@ export function api(ctx) {
     companiesAt: () => (companiesCache ? companiesCache.at : null),
     company: (id) => call("company", () => rpc("hub_company", { p_lead_id: id }), id),
     overview: () => call("overview", () => rpc("hub_overview")),
+    dailyList: () => call("dailyList", () => rpc("hub_daily_list")),
     create: (p) => write("leadCreate", () => rpc("hub_lead_create", { p }), p),
     update: (id, p) => write("leadUpdate", () => rpc("hub_lead_update", { p_lead_id: id, p }), id, p),
     setStatus: (id, product, status, note) => write("setStatus", () => rpc("hub_set_status", { p_lead_id: id, p_product: product, p_status: status, p_note: note || null }), id, product, status, note),

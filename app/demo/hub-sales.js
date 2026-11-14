@@ -428,6 +428,15 @@ export async function taskDone(taskId) {
   ev(k.lead_id, null, "task_done", { task_id: taskId }, actor());
 }
 
+export async function dailyList() {
+  need("home");
+  const s = st(), cs = await companies();
+  const pick = cs.slice(0, 3);
+  return { day: today(), member: member() || "dania", intro: "مرحبا، عمر هون (تجريبي). اليوم في 3 محلات جديدة. أول رسالة سلام بس، وبدون أسعار.",
+    items: pick.map((c, i) => ({ lead_id: c.lead_id, business_name: c.business_name, governorate: c.governorate, phone: c.phone,
+      status: ((c.products || [])[0] || {}).status || "new", line: `${c.business_name} - سبب تجريبي رقم ${i + 1}` })) };
+}
+
 export async function overview() {
   need("home");
   const t = today(), r = { today: t };

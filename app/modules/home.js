@@ -58,6 +58,14 @@ const CSS = P.CSS + `
 .hm-prod .row{display:flex;flex-wrap:wrap;gap:6px}
 .hm-prod .row .pl-st b{font-weight:700;margin-inline-start:4px}
 .hm-prod .pc + .pc{border-top:1px solid var(--soft);padding-top:10px}
+.hm-dl .intro{white-space:pre-wrap;font-size:14px;color:var(--ink-3);margin:0 0 8px;overflow-wrap:anywhere}
+.hm-dl .prog{font-size:13px;color:var(--muted);margin:0 0 6px}
+.hm-dl li{display:flex;gap:10px;align-items:flex-start}
+.hm-dl .no{flex:none;width:24px;height:24px;border-radius:50%;background:var(--soft);font:600 12px/24px var(--f-head);text-align:center}
+.hm-dl .tx{flex:1;min-width:0}
+.hm-dl .tx a,.hm-dl .tx b{font-weight:600}
+.hm-dl .ln{display:block;font-size:13.5px;color:var(--ink-3);overflow-wrap:anywhere}
+.hm-dl li.done .no{background:#E7F7F4;color:var(--teal-ink)}
 @media (min-width:900px){ .hm-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start} .hm-col{display:grid;gap:12px;align-content:start} }
 @media (max-width:899px){ .hm-col{display:contents} }`;
 
@@ -107,7 +115,25 @@ function updHTML(u, ctx) {
   return `<li class="hm-upd">${u.lead_id && ctx.hasModule("companies") ? `<a href="#/companies/${Number(u.lead_id)}">${body}</a>` : `<div>${body}</div>`}</li>`;
 }
 
-function render(ctx, d) {
+// Omar's daily list (ops/hub/005-daily-list.sql): replaces the Telegram list from 2026-11-15.
+function listPanel(ctx, dl, t) {
+  if (!dl || !Array.isArray(dl.items) || !dl.items.length) return "";
+  const done = dl.items.filter((i) => i.status && i.status !== "new").length;
+  const co = ctx.hasModule("companies");
+  const dayTxt = dl.day === t ? "اليوم" : esc(P.longDay(dl.day));
+  return `<section class="panel hm-dl"><h2>قائمة عمر ${dayTxt} <span class="n">${dl.items.length}</span></h2>
+    ${dl.intro ? `<p class="intro">${esc(dl.intro)}</p>` : ""}
+    <p class="prog">تواصلتي مع ${done} من ${dl.items.length}. افتحي الشركة وغيّري حالتها بعد ما تبعتي.</p>
+    <ol class="hm-list">${dl.items.map((i, n) => {
+      const st = i.status && i.status !== "new";
+      const name = i.business_name || "";
+      const title = i.lead_id && co ? `<a href="#/companies/${Number(i.lead_id)}">${esc(name || "الشركة")}</a>` : (name ? `<b>${esc(name)}</b>` : "");
+      const chip = i.status ? ` <span class="pl-st ${esc((P.STATUS[i.status] || {}).c || "")}">${esc((P.STATUS[i.status] || {}).t || i.status)}</span>` : "";
+      return `<li class="${st ? "done" : ""}"><span class="no">${st ? "✓" : n + 1}</span><span class="tx">${title}${chip}<span class="ln">${esc(i.line || "")}</span></span></li>`;
+    }).join("")}</ol></section>`;
+}
+
+function render(ctx, d, dl) {
   const t = d.today || P.today();
   const sales = Array.isArray(d.products);
   const content = Array.isArray(d.posts_today);
@@ -141,7 +167,7 @@ function render(ctx, d) {
 
   ctx.el.innerHTML = `<div class="hm-head page-head"><div><h1>${esc(greet(ctx.me.name))}</h1><span class="muted">${esc(P.longDay(t))}</span></div></div>
     ${due}
-    <div class="hm-grid"><div class="hm-col">${tasksPanel}${postsPanel}</div><div class="hm-col">${latestPanel}${sumPanel}</div></div>`;
+    <div class="hm-grid"><div class="hm-col">${sales ? listPanel(ctx, dl, t) : ""}${tasksPanel}${postsPanel}</div><div class="hm-col">${latestPanel}${sumPanel}</div></div>`;
 }
 
 export async function mount(ctx) {
@@ -149,9 +175,10 @@ export async function mount(ctx) {
   const el = ctx.el;
   const api = P.api(ctx);
   el.innerHTML = `<p class="muted">جارِ التحميل…</p>`;
-  let d = await api.overview();
+  const getList = () => (ctx.hasModule("companies") || ctx.hasModule("followups") ? api.dailyList().catch(() => null) : Promise.resolve(null));
+  let [d, dl] = await Promise.all([api.overview(), getList()]);
   if (!ctx.isCurrent()) return;
-  render(ctx, d || {});
+  render(ctx, d || {}, dl);
 
   el.addEventListener("click", async (e) => {
     const b = e.target.closest("button"); if (!b) return;
@@ -161,7 +188,7 @@ export async function mount(ctx) {
         await api.taskDone(Number(b.dataset.done));
         toast("تمام، المهمة خلصت");
         d = await api.overview();
-        if (ctx.isCurrent()) render(ctx, d || {});
+        if (ctx.isCurrent()) render(ctx, d || {}, dl);
       } catch (err) { b.disabled = false; toast("ما انحفظ: " + P.hubErr(err)); }
     } else if (b.hasAttribute("data-copy")) {
       const txt = b.parentElement.querySelector("span").textContent;
