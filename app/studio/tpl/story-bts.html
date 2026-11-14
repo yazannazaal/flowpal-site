@@ -1,0 +1,32 @@
+<!doctype html>
+<!-- Template: Story - behind the scenes ("من الورشة"), 1080x1920.
+     A real screenshot (photo = path to PNG/JPG, portrait or landscape) shown inside a device-style frame, with an
+     honesty label (e.g. "نسخة تجريبية لكافيه"). Empty photo = labelled placeholder until the real screen arrives.
+     For a screen recording: export this frame with an empty photo as the background card and lay the video on it in-app. -->
+<html lang="ar" dir="rtl" data-size="1080x1920">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .story-safe { justify-content: flex-start; gap: 40px; padding-top: 40px; bottom: 470px; }
+  .h1 { font-size: 70px; }
+  .screen { flex: 1; min-height: 0; border-radius: 44px; background: var(--ink-2); padding: 18px; display: flex; position: relative;
+    box-shadow: 0 24px 60px rgba(15,27,51,.18); }
+  .screen .photo { flex: 1; border-radius: 30px; background-size: contain; background-color: var(--paper); }
+  .screen .photo.empty::after { content: attr(data-label); inset: auto 40px 50% 40px; }
+  .label { position: absolute; left: 34px; bottom: 34px; display: inline-flex; align-items: center; gap: 12px;
+    background: rgba(15,27,51,.88); color: var(--paper); font-size: 24px; font-weight: 600; padding: 10px 20px; border-radius: 99px; }
+  .label::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--teal); }
+  .label:empty { display: none; }
+</style></head>
+<body class="{{theme}}" style="--guides:{{guides_display}}">
+  <div class="story-safe">
+    <span class="eyebrow teal" style="align-self:flex-start">{{eyebrow}}</span>
+    <h1 class="h1">{{headline}}</h1>
+    <div class="screen">
+      <div class="photo {{photo_class}}" style="{{photo_style}}" data-label="{{photo_label}}"></div>
+      <span class="label">{{label}}</span>
+    </div>
+  </div>
+  <div class="story-sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+  <div class="gz"><div style="top:0;left:0;right:0;height:250px"></div><div style="bottom:0;left:0;right:0;height:340px"></div></div>
+</body></html>

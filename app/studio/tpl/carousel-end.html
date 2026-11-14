@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- Template: carousel closing slide (last slide). Base 1080x1350; also 1080x1080 / 1200x1200.
+     Carries: one CTA headline, the WhatsApp placeholder ("whatsapp", Latin, e.g. +970 5X XXX XXXX or [WA_NUMBER]),
+     save/share prompts, and the official tagline lockup as the sign-off (the only place a post shows the tagline). -->
+<html lang="ar" dir="rtl" data-size="1080x1350">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .top { position: absolute; top: 72px; left: var(--m); right: var(--m); display: flex; justify-content: space-between; align-items: center; }
+  .top .series { font-size: 28px; font-weight: 600; color: var(--gray); }
+  .dark .top .series { color: #A6B1C4; }
+  .top .count { font: 600 28px 'IBM Plex Sans', sans-serif; color: var(--gray); direction: ltr; }
+  .main { position: absolute; top: 170px; left: var(--m); right: var(--m); bottom: 330px; display: flex; flex-direction: column; justify-content: center; gap: 36px; }
+  .h1 { font-size: 84px; }
+  .main .body { color: var(--gray); }
+  .dark .main .body { color: #C3CCD8; }
+  .wa { align-self: flex-start; display: flex; align-items: center; gap: 22px; background: var(--white); border-radius: 30px; padding: 22px 30px 22px 36px;
+    box-shadow: 0 2px 0 var(--line); }
+  .dark .wa { background: var(--ink-2); box-shadow: none; }
+  .wa .ic { width: 72px; height: 72px; border-radius: 50%; background: var(--teal); display: grid; place-items: center; flex: none; }
+  .wa .ic svg { width: 40px; height: 40px; }
+  .wa .lbl { font-size: 26px; font-weight: 500; color: var(--gray); }
+  .dark .wa .lbl { color: #A6B1C4; }
+  .wa .num { font: 700 40px 'IBM Plex Sans', sans-serif; direction: ltr; unicode-bidi: isolate; display: block; text-align: right; }
+  .acts { display: flex; gap: 16px; flex-wrap: wrap; }
+  .sign { position: absolute; left: 0; right: 0; bottom: 70px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .sign img { height: 150px; display: block; }
+  .sign .handle { font: 500 26px 'IBM Plex Sans', sans-serif; color: var(--gray); direction: ltr; unicode-bidi: isolate; }
+  .dark .sign .handle { color: #A6B1C4; }
+  .sep { position: absolute; left: var(--m); right: var(--m); bottom: 290px; height: 2px; background: var(--line); }
+  .dark .sep { background: #2A3B5C; }
+</style></head>
+<body class="{{theme}}">
+  <div class="top"><span class="series">{{series}}</span><span class="count">{{total}} / {{total}}</span></div>
+  <div class="main">
+    <h1 class="h1">{{headline}}</h1>
+    <p class="body">{{sub}}</p>
+    <div class="wa" style="display:{{wa_display}}">
+      <div class="ic"><svg viewBox="0 0 48 48"><path d="M12 9h18a6 6 0 0 1 6 6v8a6 6 0 0 1-6 6H20l-8 6v-6a6 6 0 0 1-6-6v-8a6 6 0 0 1 6-6z" fill="none" stroke="#0F1B33" stroke-width="3.4" stroke-linejoin="round"/><circle cx="15" cy="19" r="2.2" fill="#0F1B33"/><circle cx="21" cy="19" r="2.2" fill="#0F1B33"/><circle cx="27" cy="19" r="2.2" fill="#0F1B33"/></svg></div>
+      <div><span class="lbl">{{whatsapp_label}}</span><span class="num">{{whatsapp}}</span></div>
+    </div>
+    <div class="acts"><span class="pill line">{{save}}</span><span class="pill line">{{share}}</span></div>
+  </div>
+  <div class="sep"></div>
+  <div class="sign"><img src="{{logo_tagline}}" alt="FlowPal - خلّي الشغل المكرّر علينا"><span class="handle">{{handle}}</span></div>
+</body></html>

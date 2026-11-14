@@ -1,4 +1,4 @@
-// Local mock only (?mock= / ?demo on localhost): fake answers of the hub_* functions of ops/hub/002-dania-workspace.sql
+// Local mock only (?mock= / ?demo on localhost): fake answers of the hub_* database functions
 // for the home, companies, followups and sales modules. Same JSON shapes and the same rules as the SQL:
 // duplicate check (Instagram / Facebook / website / phone+name = refused; phone or name only = ask, then force),
 // status derived from Omar's stage with the same precedence, follow-up rules (no past dates), own tasks only.
@@ -139,7 +139,7 @@ function seed() {
       S.messages.push({ lead_id: r.lead_id, direction: "out", sender: r.assignee, body: "مرحبا، معك فريق Flowpal. مين المسؤول عن الرد على رسائل الصفحة عندكم؟", sent_at: r.first_sent_at });
     }
   });
-  // Yazan confirmed one client (won_at), Dania set her own status on a few AI-employee companies
+  // the admin confirmed one client (won_at), the sales person set her own status on a few AI-employee companies
   const byStage = (st) => board.filter((r) => r.stage === st).map((r) => r.lead_id);
   const won = byStage("interested")[0]; if (won) S.outreach.get(won).won_at = ago(24 * 3);
   const dm = byStage("decision_maker");
@@ -150,7 +150,7 @@ function seed() {
   const both = byStage("replied_staff")[0];
   if (both) S.pipe.set(pk(both, "online_store"), pipeRow(both, "online_store", { status: "interested", status_at: ago(5), status_by: "dania", next_follow_up: t, follow_up_set_at: ago(5) }));
 
-  // companies Dania added herself (not in Omar's outreach), mostly online stores
+  // companies the sales person added herself (not in Omar's outreach), mostly online stores
   const extra = [
     ["بوتيك ريتال (تجريبي)", "ecommerce", "ملابس", "نابلس", { instagram: "retal.boutique.demo" }, ["online_store"], "negotiation", t, "ريتال", "صاحبة المحل"],
     ["حلويات الشام (تجريبي)", "restaurants", "حلويات", "رام الله والبيرة", { phone_whatsapp: "970599000201" }, ["online_store"], "meeting", addDays(t, -2), "أبو سامر", "المالك"],
@@ -166,7 +166,7 @@ function seed() {
       id, source_key: links.instagram ? "instagram:" + links.instagram : links.website ? "web:" + normWeb(links.website) : "name:" + normName(name),
       business_name: name, sector, category, governorate: gov, phone_whatsapp: links.phone_whatsapp || null,
       instagram: links.instagram || null, facebook: links.facebook || null, website: links.website || null,
-      notes: "OFF-LIST: added in Flowpal Hub by dania", created_at: ago(24 * (10 - i)),
+      notes: "OFF-LIST: added in Flowpal Hub", created_at: ago(24 * (10 - i)),
     });
     S.profiles.set(id, { contact_person: person, contact_role: prole, preferred_channel: links.instagram ? "instagram" : "whatsapp", updated_at: ago(24 * (10 - i)) });
     prods.forEach((p) => S.pipe.set(pk(id, p), pipeRow(id, p, {
@@ -183,7 +183,7 @@ function seed() {
   ev(201, "online_store", "status", { from: "meeting", to: "negotiation" }, "dania", ago(26));
   ev(202, "online_store", "contacted", { channel: "visit", next: addDays(t, -2) }, "dania", ago(50));
 
-  // tasks (Omar's tasks table): two for Dania today, one overdue, one for Yazan (must never show for Dania)
+  // tasks (Omar's tasks table): two for the sales person today, one overdue, one for the admin (must never show to sales)
   const act = board.filter((r) => ["replied_staff", "decision_maker", "interested", "call"].includes(r.stage));
   const dTasks = act.filter((r) => r.assignee === "dania").slice(0, 3), yTask = act.find((r) => r.assignee === "yazan");
   dTasks.forEach((r, i) => S.tasks.push({
@@ -192,7 +192,7 @@ function seed() {
     suggested_message: i === 0 ? "أهلين، شكراً على الرد. بس حابين نعرف: الرسائل اللي بتيجي بالليل مين بيرد عليها عندكم؟" : null,
     on_hold_reason: null, due_date: i === 2 ? addDays(t, -1) : t, priority: i === 0 ? "high" : "normal", done: false,
   }));
-  if (yTask) S.tasks.push({ id: S.seq.task++, lead_id: yTask.lead_id, assignee: "yazan", type: "call", title: "مكالمة يزن (تجريبي)", goal: null, suggested_message: null, on_hold_reason: null, due_date: t, priority: "normal", done: false });
+  if (yTask) S.tasks.push({ id: S.seq.task++, lead_id: yTask.lead_id, assignee: "yazan", type: "call", title: "مكالمة المدير (تجريبي)", goal: null, suggested_message: null, on_hold_reason: null, due_date: t, priority: "normal", done: false });
 }
 function pipeRow(lead_id, product, x) {
   return { lead_id, product, active: true, status: null, status_at: null, status_by: null, next_follow_up: null, follow_up_set_at: null,

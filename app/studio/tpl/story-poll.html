@@ -1,0 +1,32 @@
+<!doctype html>
+<!-- Template: Story - "سؤال الأسبوع" poll / question box, 1080x1920.
+     The real poll or question sticker is added in the Instagram app on the sticker zone (guides=1 shows it).
+     Safe zone: top 250 px and bottom 340 px stay clear of Instagram UI. -->
+<html lang="ar" dir="rtl" data-size="1080x1920">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .story-safe { justify-content: flex-start; gap: 44px; padding-top: 70px; }
+  .display { font-size: 92px; }
+  .sub { font-size: 36px; color: var(--gray); line-height: 1.5; }
+  .dark .sub { color: #C3CCD8; }
+  .sticker { margin-top: 20px; height: 420px; border-radius: 40px; border: 4px dashed transparent; display: grid; place-items: center; }
+  .guides-on .sticker { border-color: var(--signal); background: rgba(255,90,60,.08); }
+  .sticker span { display: none; font-size: 30px; color: var(--signal-text); font-weight: 600; }
+  .guides-on .sticker span { display: block; }
+  .hint { display: flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 600; color: var(--teal-text); }
+  .dark .hint { color: var(--teal); }
+  .hint::before { content: ""; width: 18px; height: 18px; border-radius: 50%; background: var(--teal); }
+</style></head>
+<body class="{{theme}}" style="--guides:{{guides_display}}">
+  <div class="story-safe">
+    <span class="eyebrow teal" style="align-self:flex-start">{{eyebrow}}</span>
+    <h1 class="display">{{headline}}</h1>
+    <p class="sub">{{sub}}</p>
+    <div class="hint">{{hint}}</div>
+    <div class="sticker"><span>مكان ملصق الاستطلاع</span></div>
+  </div>
+  <div class="story-sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+  <div class="gz"><div style="top:0;left:0;right:0;height:250px"></div><div style="bottom:0;left:0;right:0;height:340px"></div></div>
+  <script>if (getComputedStyle(document.body).getPropertyValue('--guides').trim() === 'block') document.body.classList.add('guides-on');</script>
+</body></html>

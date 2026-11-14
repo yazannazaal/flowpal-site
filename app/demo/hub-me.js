@@ -1,7 +1,7 @@
-// Local mock only (?mock= / ?demo on localhost): a fake hub_me() so the app can be tried before ops/hub/001-roles.sql / 002-dania-workspace.sql run.
+// Local mock only (?mock= / ?demo on localhost): a fake hub_me() so the app can be tried without the database.
 // Loaded ONLY in demo mode. It copies the seed of app_modules and filters it by role exactly like the
 // real hub_me() does in the database (admin = every module; a role sees modules whose roles include it).
-const SEED = [   // after ops/hub/002-dania-workspace.sql section 17
+const SEED = [   // = the app_modules seed in the database
   { id: "home",          label: "الرئيسية",          icon: "home",           sort: 5,  roles: ["sales", "content"] },
   { id: "subscribers",   label: "المشتركين",        icon: "users",          sort: 10, roles: ["tech"] },
   { id: "tech-requests", label: "الطلبات والمشاكل", icon: "wrench",         sort: 20, roles: ["tech"] },
@@ -27,5 +27,8 @@ export function mockHubMe(role) {
     .filter((m) => p.is_admin || m.roles.some((r) => p.roles.includes(r)))
     .sort((a, b) => a.sort - b.sort || a.id.localeCompare(b.id))
     .map(({ id, label, icon }) => ({ id, label, icon }));
-  return { email: p.email, name: p.name, is_admin: p.is_admin, modules };
+  // member ids are the database's own ids (app_users.member_id); names are fake. people = who the caller may see by name
+  const member = { admin: "yazan", sales: "dania", content: "dania" }[role] || null;
+  const people = p.roles.includes("sales") || p.roles.includes("content") || p.is_admin ? { yazan: PEOPLE.admin.name, dania: PEOPLE.sales.name } : {};
+  return { email: p.email, name: p.name, is_admin: p.is_admin, member_id: member, people, modules };
 }

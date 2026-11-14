@@ -4,7 +4,7 @@
 //   #/companies/<id>         company page: contacts, status + follow-up per product, notes, Omar's summary, history
 //   #/companies/<id>/edit    edit contact fields (same duplicate check)
 // Data: rpc hub_companies / hub_company / hub_lead_create / hub_lead_update / hub_set_status / hub_set_products /
-// hub_add_note / hub_follow_up (ops/hub/002-dania-workspace.sql). Omar's stage is never written from here: every
+// hub_add_note / hub_follow_up (database functions). Omar's stage is never written from here: every
 // change is queued for him (hub_lead_events). ?demo: demo/hub-sales.js.
 import { $, esc, toast, useStyle } from "../lib.js";
 import * as P from "../shared/pipeline.js";
@@ -14,9 +14,10 @@ const MATCH = { instagram: "نفس Instagram", facebook: "نفس Facebook", webs
 const EVENT = {
   lead_created: "انضافت الشركة", lead_updated: "تعديل بيانات الشركة", status: "تغيير الحالة", note: "ملاحظة",
   contacted: "تواصل", postponed: "تأجيل المتابعة", follow_up_set: "موعد متابعة", products: "تعديل المنتجات",
-  task_done: "مهمة خلصت", possible_duplicate: "انضافت رغم شبهها بشركة ثانية (عمر بيراجع)", client_claimed: "سُجّلت عميل (بانتظار تأكيد يزن)",
+  task_done: "مهمة خلصت", possible_duplicate: "انضافت رغم شبهها بشركة ثانية (عمر بيراجع)", client_claimed: "سُجّلت عميل (بانتظار تأكيد الإدارة)",
 };
-const SENDER = { yazan: "يزن", dania: "دانيا", owner: "صاحب المحل", staff: "موظف" };
+const SENDER = { owner: "صاحب المحل", staff: "موظف" };
+const sender = (s) => SENDER[s] || P.who(s);
 
 const CSS = P.CSS + `
 .co-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
@@ -200,7 +201,7 @@ function companyHTML(ctx, c, products) {
     c.phone ? ["الرقم", `<a class="ltr" href="tel:+${esc(String(c.phone).replace(/\D/g, ""))}">${esc(P.localPhone(c.phone))}</a>`] : null,
     P.contactLinks(c).length ? ["الروابط", P.linksHTML(c)] : null,
     c.preferred_channel ? ["القناة المفضلة", esc(P.CHANNEL[c.preferred_channel] || c.preferred_channel)] : null,
-    c.assignee ? ["مع مين", esc(P.WHO[c.assignee] || c.assignee)] : null,
+    c.assignee ? ["مع مين", esc(P.who(c.assignee))] : null,
   ].filter(Boolean);
   const msgs = (c.messages || []).slice(0, 6).reverse();
   const tasks = c.open_tasks || [];
@@ -220,17 +221,17 @@ function companyHTML(ctx, c, products) {
           <textarea class="i" id="coNoteT" rows="2" maxlength="4000" placeholder="اكتبي ملاحظة عن آخر تواصل"></textarea>
           <div class="row"><label class="sr" for="coNoteP">عن أي منتج</label><select class="i" id="coNoteP"><option value="">عامة</option>${(c.products || []).map((p) => `<option value="${esc(p.product)}">${esc(p.label)}</option>`).join("")}</select><button class="btn" type="submit" id="coNoteB">إضافة</button></div>
           <div class="err" id="coNoteErr" role="alert"></div></form>
-        ${(c.notes || []).length ? `<ul class="co-notes">${c.notes.map((n) => `<li><p>${esc(n.body)}</p><span class="meta">${esc(P.WHO[n.author] || n.author || "")} · ${esc(P.when(n.at))}${n.product ? " · " + esc((products.find((x) => x.id === n.product) || {}).short || "") : ""}</span></li>`).join("")}</ul>` : `<p class="muted small" style="margin:8px 0 0">لسا ما في ملاحظات.</p>`}
+        ${(c.notes || []).length ? `<ul class="co-notes">${c.notes.map((n) => `<li><p>${esc(n.body)}</p><span class="meta">${esc(P.who(n.author))} · ${esc(P.when(n.at))}${n.product ? " · " + esc((products.find((x) => x.id === n.product) || {}).short || "") : ""}</span></li>`).join("")}</ul>` : `<p class="muted small" style="margin:8px 0 0">لسا ما في ملاحظات.</p>`}
       </section>
     </div><div class="co-col">
       <section class="panel o2"><h2>التواصل</h2>${contact.length ? `<dl class="co-kv">${contact.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>` : `<p class="muted small" style="margin:0">ما في بيانات تواصل.</p>`}</section>
       ${c.in_outreach ? `<section class="panel o3"><h2>ملخص عمر</h2>
         <p style="margin:0 0 4px" class="small"><span class="pl-st">${esc(P.OMAR_STAGE[c.omar_stage] || c.omar_stage || "")}</span></p>
         ${c.omar_summary ? `<p style="margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere">${esc(c.omar_summary)}</p>` : `<p class="muted small" style="margin:6px 0 0">لسا ما في ملخص.</p>`}
-        ${msgs.length ? `<h3 class="small muted" style="margin:12px 0 0;font-weight:600">آخر الرسائل</h3><ul class="co-msgs">${msgs.map((m) => `<li class="${m.direction === "out" ? "out" : "in"}"><span class="who">${m.direction === "out" ? "منا" : "منهم"} (${esc(SENDER[m.sender] || m.sender || "")}) · ${esc(P.when(m.sent_at))}</span>${esc(m.body)}</li>`).join("")}</ul>` : ""}
+        ${msgs.length ? `<h3 class="small muted" style="margin:12px 0 0;font-weight:600">آخر الرسائل</h3><ul class="co-msgs">${msgs.map((m) => `<li class="${m.direction === "out" ? "out" : "in"}"><span class="who">${m.direction === "out" ? "منا" : "منهم"} (${esc(sender(m.sender) || "")}) · ${esc(P.when(m.sent_at))}</span>${esc(m.body)}</li>`).join("")}</ul>` : ""}
       </section>` : ""}
-      ${tasks.length ? `<section class="panel"><h2>مهام مفتوحة</h2><ul class="co-hist">${tasks.map((k) => `<li><b>${esc(k.title)}</b><div class="meta">${esc(P.WHO[k.assignee] || k.assignee || "")} · ${esc(P.dueText(k.due_date))}${k.goal ? " · الهدف: " + esc(k.goal) : ""}</div></li>`).join("")}</ul></section>` : ""}
-      <section class="panel"><h2>تاريخ التغييرات</h2>${(c.history || []).length ? `<ul class="co-hist">${c.history.map((h) => `<li>${esc(eventText(h, products))}<div class="meta">${esc(P.WHO[h.actor] || h.actor || "")} · ${esc(P.when(h.at))}</div></li>`).join("")}</ul>` : `<p class="muted small" style="margin:0">لسا ما في تغييرات من هون.</p>`}
+      ${tasks.length ? `<section class="panel"><h2>مهام مفتوحة</h2><ul class="co-hist">${tasks.map((k) => `<li><b>${esc(k.title)}</b><div class="meta">${esc(P.who(k.assignee))} · ${esc(P.dueText(k.due_date))}${k.goal ? " · الهدف: " + esc(k.goal) : ""}</div></li>`).join("")}</ul></section>` : ""}
+      <section class="panel"><h2>تاريخ التغييرات</h2>${(c.history || []).length ? `<ul class="co-hist">${c.history.map((h) => `<li>${esc(eventText(h, products))}<div class="meta">${esc(P.who(h.actor))} · ${esc(P.when(h.at))}</div></li>`).join("")}</ul>` : `<p class="muted small" style="margin:0">لسا ما في تغييرات من هون.</p>`}
         <p class="muted small" style="margin:10px 0 0">كل تغيير هون بيوصل لعمر، وهو بيحدّث أرقامه.</p></section>
     </div></div>`;
 }
@@ -260,7 +261,7 @@ async function companyView(ctx, id, products) {
       const v = $(`#coSt-${prod}`, el).value;
       const n = $(`#coStN-${prod}`, el);
       b.disabled = true;
-      try { await api.setStatus(id, prod, v, n ? n.value.trim() : ""); await reload(v === "client" ? "انحفظت: عميل (بانتظار تأكيد يزن)" : "انحفظت الحالة"); }
+      try { await api.setStatus(id, prod, v, n ? n.value.trim() : ""); await reload(v === "client" ? "انحفظت: عميل (بانتظار تأكيد الإدارة)" : "انحفظت الحالة"); }
       catch (err) { b.disabled = false; toast("ما انحفظت: " + P.hubErr(err)); }
     } else if (b.dataset.fu) {
       const r = await P.followUpSheet(ctx, c, b.dataset.p, b.dataset.fu);

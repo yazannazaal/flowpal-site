@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- Template: LinkedIn cover 1584x396 (also usable as Facebook cover after re-crop).
+     LinkedIn places the logo/profile photo over the bottom-left, and mobile crops the sides:
+     keep text in the right-centre block, nothing important in the left 400 px. -->
+<html lang="ar" dir="rtl" data-size="1584x396">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .text { position: absolute; top: 0; bottom: 0; right: 120px; width: 820px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+  .text .h1 { font-size: 52px; }
+  .text .body { font-size: 27px; color: #C3CCD8; }
+  .flow { position: absolute; left: 250px; top: 0; bottom: 0; width: 300px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+  .flow .msg { font-size: 23px; padding: 11px 18px 9px; border-radius: 22px; max-width: 100%; color: var(--ink); }
+  .flow .msg time { font-size: 15px; } .flow .ticks { width: 22px; height: 13px; }
+</style></head>
+<body class="dark">
+  <div class="text">
+    <h1 class="h1">{{headline}}</h1>
+    <p class="body">{{sub}}</p>
+  </div>
+  <div class="flow">{{chat}}</div>
+</body></html>

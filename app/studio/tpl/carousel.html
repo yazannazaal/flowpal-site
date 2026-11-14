@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- Template: educational carousel slide. Base 1080x1350; also renders 1080x1080 / 1200x1200 (LinkedIn). -->
+<html lang="ar" dir="rtl" data-size="1080x1350">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .bar { position: absolute; top: 72px; left: var(--m); right: var(--m); display: flex; justify-content: space-between; align-items: center; }
+  .bar .series { font-size: 28px; font-weight: 600; color: var(--gray); }
+  .bar .count { font: 600 28px 'IBM Plex Sans', sans-serif; color: var(--gray); direction: ltr; }
+  .dots { position: absolute; top: 136px; left: var(--m); right: var(--m); display: flex; gap: 10px; }
+  .dots i { flex: 1; height: 6px; border-radius: 3px; background: var(--line); }
+  .dots i.on { background: var(--teal); }
+  .dark .dots i { background: var(--ink-2); } .dark .dots i.on { background: var(--teal); }
+  .main { position: absolute; top: 200px; left: var(--m); right: var(--m); bottom: 190px; display: flex; flex-direction: column; justify-content: center; gap: 40px; }
+  .num { width: 132px; height: 132px; border-radius: 50%; background: var(--mint); color: var(--teal-text);
+    display: grid; place-items: center; font: 700 68px 'IBM Plex Sans', sans-serif; }
+  .dark .num { background: var(--teal); color: var(--ink); }
+  .main .body { color: var(--gray); max-width: 900px; }
+  .stack { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
+  .stack:empty { display: none; }
+  .stack .msg { max-width: 86%; }
+  .dark .main .body { color: #C3CCD8; }
+  .swipe { position: absolute; bottom: 66px; right: var(--m); font-size: 28px; font-weight: 600; color: var(--teal-text); }
+  .dark .swipe { color: var(--teal); }
+  .sig { justify-content: flex-start; }
+  /* theme "single": stand-alone image (e.g. Facebook cut of a slide): no counter, progress or swipe */
+  .single .count, .single .dots, .single .swipe { display: none; }
+</style></head>
+<body class="{{theme}}">
+  <div class="bar"><span class="series">{{series}}</span><span class="count">{{index}} / {{total}}</span></div>
+  <div class="dots">{{dots}}</div>
+  <div class="main">
+    <div class="num">{{number}}</div>
+    <h2 class="h1">{{title}}</h2>
+    {{items_html}}
+    <p class="body">{{body}}</p>
+    <div class="stack">{{chat}}</div>
+  </div>
+  <div class="swipe">{{swipe}}</div>
+  <div class="sig"><img src="{{logo}}" alt="FlowPal"></div>
+</body></html>

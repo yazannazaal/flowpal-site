@@ -1,0 +1,20 @@
+<!doctype html>
+<!-- Template: one statement or one number. Base 1080x1080 (IG/FB square); LinkedIn 1200x1200 via --size. -->
+<html lang="ar" dir="rtl" data-size="1080x1080">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .main { position: absolute; top: 96px; left: var(--m); right: var(--m); bottom: 180px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 40px; }
+  .main .display { font-size: 90px; }
+  .main .body { color: var(--gray); max-width: 860px; }
+  .dark .main .body { color: #C3CCD8; }
+  .rule { width: 96px; height: 10px; border-radius: 5px; background: var(--teal); }
+</style></head>
+<body class="{{theme}}">
+  <div class="main">
+    <div class="rule"></div>
+    <h1 class="display">{{headline}}</h1>
+    <p class="body">{{sub}}</p>
+  </div>
+  <div class="sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+</body></html>

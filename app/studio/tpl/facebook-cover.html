@@ -1,0 +1,33 @@
+<!doctype html>
+<!-- Template: Facebook page cover, 1640x624.
+     Desktop shows the full width (820x312 at 1x); mobile shows only the centre ~1110 px. Keep everything inside the
+     centre safe box (guides=1 shows it). The page profile picture sits below the cover on the left on desktop. -->
+<html lang="ar" dir="rtl" data-size="1640x624">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .safe { position: absolute; top: 70px; bottom: 70px; left: 300px; right: 300px; display: flex; align-items: center; justify-content: space-between; gap: 50px; }
+  .text { display: flex; flex-direction: column; gap: 18px; flex: 1; }
+  .text .eyebrow { align-self: flex-start; font-size: 24px; }
+  .text .h1 { font-size: 72px; }
+  .text .body { font-size: 28px; color: #C3CCD8; line-height: 1.5; }
+  .flow { width: 360px; display: flex; flex-direction: column; gap: 14px; flex: none; }
+  .flow .msg { font-size: 25px; padding: 12px 20px 10px; border-radius: 24px; max-width: 100%; color: var(--ink); }
+  .flow .msg time { font-size: 16px; } .flow .ticks { width: 22px; height: 13px; }
+  .flow .badge { font-size: 20px; padding: 8px 18px; }
+  .dot { position: absolute; border-radius: 50%; background: var(--teal); }
+  .gz div { background: transparent; outline: 3px dashed var(--signal); }
+</style></head>
+<body class="dark" style="--guides:{{guides_display}}">
+  <i class="dot" style="width:22px;height:22px;left:150px;top:120px;opacity:.9"></i>
+  <i class="dot" style="width:12px;height:12px;right:180px;bottom:120px;opacity:.6"></i>
+  <div class="safe">
+    <div class="text">
+      <span class="eyebrow teal">{{eyebrow}}</span>
+      <h1 class="h1">{{headline}}</h1>
+      <p class="body">{{sub}}</p>
+    </div>
+    <div class="flow">{{chat}}</div>
+  </div>
+  <div class="gz"><div style="top:0;bottom:0;left:265px;right:265px"></div></div>
+</body></html>

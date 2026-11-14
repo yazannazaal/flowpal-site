@@ -1,0 +1,25 @@
+<!doctype html>
+<!-- Template: Story - follow invitation, 1080x1920. Headline + one chat bubble + sub + CTA pill. -->
+<html lang="ar" dir="rtl" data-size="1080x1920">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .story-safe { justify-content: center; gap: 48px; }
+  .display { font-size: 96px; }
+  .stack { display: flex; flex-direction: column; gap: 18px; }
+  .stack .msg { max-width: 88%; }
+  .sub { font-size: 44px; font-weight: 600; line-height: 1.5; color: var(--gray); }
+  .dark .sub { color: #D5DCE6; }
+  .cta { align-self: flex-start; font-size: 38px; padding: 26px 48px; }
+</style></head>
+<body class="{{theme}}" style="--guides:{{guides_display}}">
+  <div class="story-safe">
+    <span class="eyebrow {{tone}}" style="align-self:flex-start">{{eyebrow}}</span>
+    <h1 class="display">{{headline}}</h1>
+    <div class="stack">{{chat}}</div>
+    <p class="sub">{{sub}}</p>
+    <span class="pill teal cta">{{cta}}</span>
+  </div>
+  <div class="story-sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+  <div class="gz"><div style="top:0;left:0;right:0;height:250px"></div><div style="bottom:0;left:0;right:0;height:340px"></div></div>
+</body></html>

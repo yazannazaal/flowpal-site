@@ -1,7 +1,7 @@
 // Shared by the sales-side modules (home, companies, followups, sales). No data, no keys.
 // Loaded only by those modules (so only after hub_me() gave one of them); the service worker caches it at runtime
 // like a module file, and logout deletes it with every hub-* cache.
-// Data: the hub_* functions of ops/hub/002-dania-workspace.sql (security definer, each checks hub_can()).
+// Data: the hub_* database functions (security definer, each checks hub_can()).
 // ?demo: the same calls answered by demo/hub-sales.js (same rules, fake companies, nothing saved).
 import { esc, safeUrl, ok, errText } from "../lib.js";
 
@@ -22,7 +22,7 @@ export const SECTOR = { ecommerce: "متاجر أونلاين", clinic: "عيا�
 export const NEW_SECTORS = ["ecommerce", "clinic", "restaurants"];   // the 3 approved sectors (DB check)
 export const CHANNEL = { whatsapp: "واتساب", instagram: "Instagram", facebook: "Facebook", call: "مكالمة", visit: "زيارة", email: "إيميل", other: "غير ذلك" };
 export const GOVS = ["نابلس", "رام الله والبيرة", "الخليل", "جنين", "بيت لحم", "طولكرم", "قلقيلية", "سلفيت", "طوباس", "أريحا", "القدس"];
-export const WHO = { yazan: "يزن", dania: "دانيا", omar: "عمر" };
+export { who } from "../lib.js";   // names of people come from hub_me(), never from the code
 
 /* ---------- dates (Asia/Hebron) ---------- */
 const dayFmt = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" });
@@ -55,7 +55,7 @@ export const dueClass = (day, t = today()) => !day ? "" : day < t ? "late" : day
 export function statusText(p) {
   if (!p) return "";
   const s = STATUS[p.status] || { t: p.status };
-  return p.status === "client" && !p.client_confirmed ? "عميل (بانتظار تأكيد يزن)" : s.t;
+  return p.status === "client" && !p.client_confirmed ? "عميل (بانتظار تأكيد الإدارة)" : s.t;
 }
 export const statusChip = (p) => `<span class="pl-st ${(STATUS[p.status] || {}).c || ""}">${esc(statusText(p))}</span>`;
 export const sectorText = (s) => SECTOR[s] || s || "";

@@ -101,8 +101,8 @@ function demoStore() {
     { id: 1, subscriber_id: "demo-store", kind: "change", title: "تسليم النظام وبدء الاشتراك", body: "Instagram + Messenger شغالين.", status: "done", ref: "contract v2", author: "نادر", at: day(18).toISOString(), closed_at: day(18).toISOString() },
     { id: 2, subscriber_id: "demo-store", kind: "change", title: "فهم الرسائل الصوتية", body: null, status: "done", ref: "changelog", author: "نادر", at: day(9).toISOString(), closed_at: day(9).toISOString() },
     { id: 3, subscriber_id: "demo-store", kind: "issue", title: "رقم لحاله ينقرأ كرقم منتج", body: "الزبون كتب رقماً في رسالته، والبوت أرسل صورة منتج غلط.", status: "in_progress", ref: "exec 0000", author: "هبة", at: day(1).toISOString(), closed_at: null },
-    { id: 4, subscriber_id: "demo-store", kind: "request", title: "الرد على الستوري", body: "صاحب المتجر طلب أن يرد البوت على ردود الستوري.", status: "open", ref: null, author: "أسماء", at: day(0).toISOString(), closed_at: null },
-    { id: 5, subscriber_id: "demo-store", kind: "note", title: "ساعات الذروة مساءً", body: "أغلب الرسائل بين 8 و 11 مساءً.", status: "done", ref: null, author: "أسماء", at: day(5).toISOString(), closed_at: day(5).toISOString() },
+    { id: 4, subscriber_id: "demo-store", kind: "request", title: "الرد على الستوري", body: "صاحب المتجر طلب أن يرد البوت على ردود الستوري.", status: "open", ref: null, author: "الفريق التقني (تجريبي)", at: day(0).toISOString(), closed_at: null },
+    { id: 5, subscriber_id: "demo-store", kind: "note", title: "ساعات الذروة مساءً", body: "أغلب الرسائل بين 8 و 11 مساءً.", status: "done", ref: null, author: "الفريق التقني (تجريبي)", at: day(5).toISOString(), closed_at: day(5).toISOString() },
     { id: 6, subscriber_id: "demo-clinic", kind: "request", title: "تجهيز رقم WhatsApp", body: null, status: "open", ref: null, author: "نادر", at: day(2).toISOString(), closed_at: null },
     { id: 7, subscriber_id: "demo-cafe", kind: "change", title: "تحديث قائمة المشروبات", body: null, status: "done", ref: null, author: "طارق", at: day(6).toISOString(), closed_at: day(6).toISOString() },
   ];

@@ -2,11 +2,11 @@
 // Data: rpc('hub_sales_board') only (security definer, checks hub_can('sales'), fixed field list, no money fields).
 // KPI formulas are the same as the board and scripts/kpis.py (kpi-definitions.md): unit = the business,
 // no reply is never a refusal, interest is never a subscription, «—» under 5 businesses or under 70% data.
-// Read only. Product switcher (task 004 decision 9): the AI employee = Omar's KPIs as before + Dania's 8 statuses;
+// Read only. Product switcher (task 004 decision 9): the AI employee = Omar's KPIs as before + the 8 sales statuses;
 // other products (online stores) = the 8-status funnel and follow-ups only (Omar has no outreach KPIs for them yet);
 // «مقارنة» = products side by side. Those parts come from rpc('hub_companies') and rpc('hub_products').
 // ?demo: fake data from demo/sales-board.js and demo/hub-sales.js.
-import { $, esc, safeUrl, toast, useStyle, errText } from "../lib.js";
+import { $, esc, safeUrl, toast, useStyle, errText, who as WHO_NAME } from "../lib.js";
 import * as P from "../shared/pipeline.js";
 
 const TZ = "Asia/Hebron";
@@ -21,9 +21,10 @@ const LEVEL = {
   weak: { label: "ضعيف", cls: "weak", rank: 2 }, negative: { label: "سلبي", cls: "neg", rank: 4 },
 };
 const SECTOR = { ecommerce: "متاجر أونلاين", clinic: "عيادات", clinics: "عيادات", real_estate: "عقارات", restaurants: "مطاعم وكافيهات", cafes: "كافيهات", other: "أخرى", unclassified: "غير مصنّف" };
-const WHO = { yazan: "يزن", dania: "دانيا" };
+// people names come from hub_me() (lib.js who()), never from the code
 const ACCOUNT = { company: "رقم الشركة", personal: "حساب شخصي" };
-const SENDER = { yazan: "يزن", dania: "دانيا", owner: "صاحب المحل", staff: "موظف" };
+const SENDER = { owner: "صاحب المحل", staff: "موظف" };
+const sender = (s) => SENDER[s] || WHO_NAME(s);
 const CHANNEL = { whatsapp: "واتساب", instagram: "Instagram", facebook: "Facebook" };
 const ACTIVE = ["sent", "replied_staff", "decision_maker", "call", "interested"];
 const DM_STAGES = ["decision_maker", "call", "interested"];
@@ -148,7 +149,7 @@ function skipGroup(t) {
   if (/duplicate|مكرر/.test(t)) return null;   // duplicates are not real businesses
   if (/whatsapp|واتس|dead|ما بفتح|ما في طريقة|no channel|link/.test(t)) return "ما في قناة تواصل شغالة";
   if (/follower|متابعين/.test(t)) return "متابعين قليل";
-  if (/removed|yazan/.test(t)) return "شالها يزن من القائمة";
+  if (/removed|yazan/.test(t)) return "انشالت من القائمة";
   if (/مناسب|عميل محتمل|ما بدها|جديد|fit/.test(t)) return "مش مناسب لنا";
   return "أسباب أخرى";
 }
@@ -253,7 +254,7 @@ function analyticsHTML(list, who) {
     kpi("احتياجات مذكورة", String(s.pain), "جهات حكت عن مشكلة حقيقية", "جهات إلها ملاحظة فيها مشكلة موصوفة"),
     kpi("وقت أول رد (الوسيط)", mins(s.resp), `من ${s.respN} محادثة`, "بين أول رسالة منا وأول رد منهم"),
     kpi("رسائل", `${s.msgOut} / ${s.msgIn}`, "صادرة / واردة", "عدد رسائل مش جهات، للمعلومة بس"),
-    kpi("اشتراكات", "-", "لسا ما في حقل للاشتراك", "يزن بيأكد كل اشتراك"),
+    kpi("اشتراكات", "-", "لسا ما في حقل للاشتراك", "الإدارة بتأكد كل اشتراك"),
   ].join("");
 
   const steps = [["جهات تواصلنا معها", s.c], ["ردّ شخص حقيقي", s.rep], ["وصلنا لصاحب القرار", s.dm], ["مهتمين", s.interest]];
@@ -288,7 +289,7 @@ function analyticsHTML(list, who) {
     <div class="sx-grid">
       ${breakdown("حسب القطاع", list, (x) => x.l.sector || "unclassified", (k) => SECTOR[k] || k)}
       ${breakdown("حسب القناة", list, (x) => x.r.channel, (k) => CHANNEL[k] || k)}
-      ${who === "all" ? breakdown("حسب الشخص", list, (x) => x.r.assignee, (k) => WHO[k] || k) : ""}
+      ${who === "all" ? breakdown("حسب الشخص", list, (x) => x.r.assignee, (k) => WHO_NAME(k)) : ""}
       ${breakdown("حسب المحافظة", list, (x) => x.l.governorate || "غير محدد", (k) => k)}
       ${breakdown("حسب المجموعة", list, (x) => String(x.r.batch), (k) => k === "0" ? "خارج المجموعات" : "مجموعة " + k)}
       ${breakdown("حسب رسالة الافتتاح", list, (x) => x.r.opener_variant || null, (k) => k === "G" ? "G (تحية فقط، المعتمدة)" : k)}
@@ -315,7 +316,7 @@ function leadHTML(x) {
 
   let msgCell = `<span class="mut">ما في رسائل</span>`;
   if (msg) {
-    const who = msg.direction === "out" ? `منا (${esc(SENDER[msg.sender] || msg.sender)})` : `منهم (${esc(SENDER[msg.sender] || msg.sender || "المحل")})`;
+    const who = msg.direction === "out" ? `منا (${esc(sender(msg.sender))})` : `منهم (${esc(msg.sender ? sender(msg.sender) : "المحل")})`;
     msgCell = `<div class="mut">${who} · <span class="ltr">${fmt(msg.sent_at)}</span></div><div>${esc(cut(msg.body, 140))}</div>`;
   }
   let summary = "";
@@ -333,14 +334,14 @@ function leadHTML(x) {
   if (task) {
     taskCell = `<div><b>${esc(task.title)}</b></div>` +
       (task.goal ? `<div><span class="mut">الهدف:</span> ${esc(task.goal)}</div>` : "") +
-      `<div class="mut">${esc(WHO[task.assignee] || task.assignee || "")}${task.due_date ? ` · لغاية <span class="ltr">${fmt(task.due_date + "T12:00:00Z", false)}</span>` : ""}</div>` +
-      (task.on_hold_reason ? `<div class="sx-hold">مستنية موافقة يزن: ${esc(task.on_hold_reason)}</div>` : "");
+      `<div class="mut">${esc(WHO_NAME(task.assignee))}${task.due_date ? ` · لغاية <span class="ltr">${fmt(task.due_date + "T12:00:00Z", false)}</span>` : ""}</div>` +
+      (task.on_hold_reason ? `<div class="sx-hold">مستنية موافقة الإدارة: ${esc(task.on_hold_reason)}</div>` : "");
   }
   return `<li class="sx-lead">
     <div class="hd"><div><div class="nm">${esc(l.business_name || "بدون اسم")}</div>${where ? `<div class="where">${esc(where)}</div>` : ""}</div><span class="id">#${esc(r.lead_id)}</span></div>
     <div class="tags"><span class="sx-st ${stCls}">${esc(STAGE[r.stage] || r.stage)}</span>${lv ? `<span class="sx-lv ${lv.cls}">${lv.label}</span>` : ""}${dm ? `<span class="sx-dm">وصلنا لصاحب القرار</span>` : ""}</div>
     <dl class="sx-kv">
-      <dt>التواصل</dt><dd><div class="sx-links">${links.join("")}${phone}</div><div class="mut">${esc(WHO[r.assignee] || r.assignee || "")}${r.sending_account ? " · " + esc(ACCOUNT[r.sending_account] || r.sending_account) : ""}${r.first_sent_at ? ` · أول رسالة <span class="ltr">${fmt(r.first_sent_at, false)}</span>` : ""}</div></dd>
+      <dt>التواصل</dt><dd><div class="sx-links">${links.join("")}${phone}</div><div class="mut">${esc(WHO_NAME(r.assignee))}${r.sending_account ? " · " + esc(ACCOUNT[r.sending_account] || r.sending_account) : ""}${r.first_sent_at ? ` · أول رسالة <span class="ltr">${fmt(r.first_sent_at, false)}</span>` : ""}</div></dd>
       <dt>آخر رسالة</dt><dd>${msgCell}</dd>
       ${summary ? `<dt>الملخص</dt><dd>${summary}</dd>` : ""}
       ${taskCell ? `<dt>المهمة المفتوحة</dt><dd>${taskCell}</dd>` : ""}
@@ -365,8 +366,8 @@ function prodCounts(companies, prod) {
 }
 function statusFunnel(k, title) {
   const max = Math.max(0, ...P.STATUS_ORDER.map((s) => k.by[s] || 0));
-  return `<div class="sx-card" id="sxDania"><h3>${title}</h3>${P.STATUS_ORDER.map((s) => bar(P.STATUS[s].t, k.by[s] || 0, max, k.n ? pv(k.by[s] || 0, k.n) : "")).join("")}
-    ${k.wonWait ? `<p class="muted small" style="margin:6px 0 0">منها ${k.wonWait} «عميل» بانتظار تأكيد يزن.</p>` : ""}</div>`;
+  return `<div class="sx-card" id="sxStatus"><h3>${title}</h3>${P.STATUS_ORDER.map((s) => bar(P.STATUS[s].t, k.by[s] || 0, max, k.n ? pv(k.by[s] || 0, k.n) : "")).join("")}
+    ${k.wonWait ? `<p class="muted small" style="margin:6px 0 0">منها ${k.wonWait} «عميل» بانتظار تأكيد الإدارة.</p>` : ""}</div>`;
 }
 function productHTML(companies, prod, label, ctx) {
   const k = prodCounts(companies, prod);
@@ -377,7 +378,7 @@ function productHTML(companies, prod, label, ctx) {
       ${kpi("الشركات", String(k.n), label, "كل شركة مربوطة بهالمنتج (بدون المستبعدة)")}
       ${kpi("للتواصل اليوم", String(k.today), fu ? `<a href="#/followups/${esc(prod)}">افتحي المتابعات</a>` : "حسب موعد المتابعة", "شركات موعد متابعتها اليوم، وحالتها مش مسكّرة", k.today ? "warn" : "")}
       ${kpi("متأخرة", String(k.late), "موعدها فات", "موعد المتابعة قبل اليوم وحالتها مش مسكّرة", k.late ? "warn" : "")}
-      ${kpi("عملاء", String(k.won), k.wonWait ? `+ ${k.wonWait} بانتظار تأكيد يزن` : "أكّدهم يزن", "حالة «عميل» وأكّدها يزن", "q")}
+      ${kpi("عملاء", String(k.won), k.wonWait ? `+ ${k.wonWait} بانتظار تأكيد الإدارة` : "أكّدتهم الإدارة", "حالة «عميل» وأكّدتها الإدارة", "q")}
     </div>
     <div class="sx-grid">${statusFunnel(k, "حسب الحالة")}
       <div class="sx-card"><h3>المتابعات</h3>${bar("متأخرة", k.late, Math.max(k.late, k.today, k.week))}${bar("اليوم", k.today, Math.max(k.late, k.today, k.week))}${bar("الأيام السبعة الجاية", k.week, Math.max(k.late, k.today, k.week))}</div>
@@ -392,7 +393,7 @@ function compareHTML(companies, products) {
     ${row("الشركات", (k) => k.n, "sum")}
     ${P.STATUS_ORDER.map((s) => row(P.STATUS[s].t, (k) => k.by[s] || 0)).join("")}
     ${row("للتواصل اليوم", (k) => k.today, "sum")}${row("متأخرة", (k) => k.late)}
-    ${row("عملاء (أكّدهم يزن)", (k) => k.won)}${row("عملاء بانتظار التأكيد", (k) => k.wonWait)}
+    ${row("عملاء (أكّدتهم الإدارة)", (k) => k.won)}${row("عملاء بانتظار التأكيد", (k) => k.wonWait)}
     </tbody></table></div><p class="muted small" style="margin:6px 0 0">شركة وحدة ممكن تكون مهتمة بأكثر من منتج، فبتنحسب بكل واحد.</p></div>`;
 }
 
@@ -414,7 +415,7 @@ export async function mount(ctx) {
   if (!ctx.isCurrent()) return;
   let items = toItems(data.rows);
 
-  const persons = () => Object.keys(WHO).filter((w) => items.some((x) => x.r.assignee === w));
+  const persons = () => [...new Set(items.map((x) => x.r.assignee).filter(Boolean))].sort();
   const mine = () => state.who ? items.filter((x) => x.r.assignee === state.who) : items;
   const updated = () => new Intl.DateTimeFormat("en-GB", { timeZone: TZ, day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(data.at)).replace(",", "");
 
@@ -433,7 +434,7 @@ export async function mount(ctx) {
 
   const fillWho = () => {
     const ps = persons();
-    $("#sxWho", el).innerHTML = `<option value="">الكل${ps.length ? ` (${ps.map((w) => WHO[w]).join(" و")})` : ""}</option>` + ps.map((w) => `<option value="${w}">${WHO[w]}</option>`).join("");
+    $("#sxWho", el).innerHTML = `<option value="">الكل${ps.length ? ` (${ps.map((w) => esc(WHO_NAME(w))).join(" و")})` : ""}</option>` + ps.map((w) => `<option value="${esc(w)}">${esc(WHO_NAME(w))}</option>`).join("");
     if (!ps.includes(state.who)) state.who = "";
     $("#sxWho", el).value = state.who;
     $("#sxAt", el).textContent = updated();
@@ -490,7 +491,7 @@ export async function mount(ctx) {
     el.querySelectorAll(".sx-seg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === state.view)));
     if (state.view === "db") { renderDB(); return; }
     $("#sxBody", el).innerHTML = analyticsHTML(mine(), state.who || "all");
-    if (state.who || !products.length) return;   // Dania's statuses are per company, not per person
+    if (state.who || !products.length) return;   // sales statuses are per company, not per person
     try {
       const cs = await papi.companies();
       if (my !== seq || !ctx.isCurrent()) return;

@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Template: Story - one quick tip, 1080x1920. Built to be shared ("share to your story"). -->
+<html lang="ar" dir="rtl" data-size="1080x1920">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .story-safe { justify-content: center; gap: 40px; }
+  .top { display: flex; align-items: center; justify-content: space-between; }
+  .no { font: 700 34px 'IBM Plex Sans', sans-serif; color: var(--gray); direction: ltr; }
+  .card { background: var(--white); border-radius: var(--radius); padding: 64px 56px; display: flex; flex-direction: column; gap: 32px;
+    box-shadow: 0 2px 0 var(--line), 0 24px 60px rgba(15,27,51,.08); }
+  .dark .card { background: var(--ink-2); box-shadow: none; }
+  .card .h1 { font-size: 72px; }
+  .card .body { color: var(--gray); }
+  .dark .card .body { color: #C3CCD8; }
+  .rule { width: 96px; height: 10px; border-radius: 5px; background: var(--teal); }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .stack:empty { display: none; }
+  .stack .msg { max-width: 90%; }
+  .share { align-self: flex-start; }
+</style></head>
+<body class="{{theme}}" style="--guides:{{guides_display}}">
+  <div class="story-safe">
+    <div class="top"><span class="eyebrow teal">{{eyebrow}}</span><span class="no">{{number}}</span></div>
+    <div class="card">
+      <div class="rule"></div>
+      <h1 class="h1">{{headline}}</h1>
+      {{items_html}}
+      <p class="body">{{sub}}</p>
+      <div class="stack">{{chat}}</div>
+    </div>
+    <span class="pill mint share">{{share}}</span>
+  </div>
+  <div class="story-sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+  <div class="gz"><div style="top:0;left:0;right:0;height:250px"></div><div style="bottom:0;left:0;right:0;height:340px"></div></div>
+</body></html>

@@ -3,13 +3,15 @@
 //   #/content/w/<day>      the week that contains <day>
 //   #/content/<review id>  one post to approve (existing page)
 //   #/content/p/<post id>  one calendar post (date, hour, type, platforms, status) with the same approval buttons
+//   #/content/e/<post slug> «تعديل»: the content role changes texts / brand colours / caption herself (task 005, studio/editor.mjs,
+//                          loaded only on this page; rpc hub_studio_targets / hub_studio_save / hub_studio_cancel)
 // Data: content_reviews (RLS: hub_can('content'), select only); rpc('hub_content_calendar', {p_from, p_to}) (read
 // only; the calendar is written by سلمى's sync, never from here). The only write is rpc('hub_content_decide')
 // (checks hub_can('content'); a change request needs a note; approved / withdrawn posts cannot be changed).
 // ?demo: demo/content-reviews.js + demo/content-calendar.js.
-import { $, esc, safeUrl, fmtDate, fmtDT, toast, useStyle, ok, errText } from "../lib.js";
+import { $, esc, safeUrl, fmtDate, fmtDT, toast, useStyle, ok, errText, who } from "../lib.js";
 
-const COLS = "id,post_slug,title,platforms,planned_for,caption,on_image_text,media,status,review_note,decided_at,created_at,updated_at";
+const COLS = "id,post_slug,title,platforms,planned_for,caption,on_image_text,media,status,review_note,decided_at,created_at,updated_at,edited_by,edited_at";
 const STATUS = {
   pending: { t: "بانتظار موافقتك", c: "wait" }, changes_requested: { t: "مطلوب تعديل", c: "chg" },
   approved: { t: "موافَق عليه", c: "ok" }, withdrawn: { t: "مسحوب", c: "off" },
@@ -28,6 +30,9 @@ const CSS = `
 .ct-st{font-size:12px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
 .ct-st.wait{background:#FBF1DC;color:#7A5605} .ct-st.chg{background:#FDECEA;color:#9B2C27}
 .ct-st.ok{background:#E2F4EA;color:#145C33} .ct-st.off{background:var(--soft);color:var(--muted)}
+.ct-st.edit{background:var(--ink);color:#fff}
+.ct-edit{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);font-weight:600;padding:8px 14px}
+.ct-edit svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ct-wrap{display:grid;gap:14px}
 .ct-side{display:grid;gap:12px;min-width:0}
 .ct-media{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--gutter) * -1);padding:0 var(--gutter) 6px}
@@ -58,6 +63,12 @@ const mediaOf = (r, demo) => (Array.isArray(r.media) ? r.media : [])
   .filter((m) => m.url);
 const platforms = (r) => (Array.isArray(r.platforms) ? r.platforms : []).map((p) => PLATFORM[p] || p);
 const canDecide = (r) => r.status === "pending" || r.status === "changes_requested";
+const editChip = (r) => (r && r.edited_by ? `<span class="ct-st edit">${esc(editedBy(r.edited_by, r.edited_by_name))}</span>` : "");
+const editedBy = (id, name) => `تعديل من ${name || who(id)}`;   // names come from the data / hub_me(), never from the code
+const SLUG_RE = /^[a-z0-9-]{1,120}$/;
+const canEdit = (r) => r && r.post_slug && SLUG_RE.test(r.post_slug) && r.status !== "withdrawn";
+const PEN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
+const editLink = (ctx, r) => (canEdit(r) ? `<a class="btn-line ct-edit" href="${ctx.base}/e/${encodeURIComponent(r.post_slug)}">${PEN}تعديل</a>` : "");
 const stChip = (s) => { const x = STATUS[s] || { t: s, c: "off" }; return `<span class="ct-st ${x.c}">${esc(x.t)}</span>`; };
 
 function store(ctx) {
@@ -106,7 +117,7 @@ function listHTML(ctx, rows) {
       return `<li class="ct-item"><a href="${ctx.base}/${Number(r.id)}">
         <span class="ct-thumb">${m && m.type === "image" ? `<img src="${esc(m.url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : m ? "فيديو" : "نص فقط"}</span>
         <span><h2>${esc(r.title)}</h2>
-          <span class="ct-meta">${stChip(r.status)}${r.planned_for ? `<span>للنشر ${esc(fmtDate(r.planned_for))}</span>` : ""}<span>${esc(platforms(r).join(" · "))}</span></span></span>
+          <span class="ct-meta">${stChip(r.status)}${editChip(r)}${r.planned_for ? `<span>للنشر ${esc(fmtDate(r.planned_for))}</span>` : ""}<span>${esc(platforms(r).join(" · "))}</span></span></span>
       </a></li>`;
     }).join("")}</ul>`
       : `<div class="empty">${filter.f === "todo" ? "ما في منشورات بانتظار موافقتك هلأ." : "ما في شي بهالفلتر."}</div>`}`;
@@ -141,8 +152,8 @@ function postHTML(ctx, r) {
   if (!r) return `<a class="back" href="${ctx.base}">→ كل المنشورات</a><div class="empty">هذا المنشور غير موجود أو انسحب.</div>`;
   const media = mediaOf(r, ctx.demo);
   return `<a class="back" href="${ctx.base}">→ كل المنشورات</a>
-    <div class="page-head"><h1>${esc(r.title)}</h1></div>
-    <div class="ct-meta" style="margin:-6px 0 14px">${stChip(r.status)}${r.planned_for ? `<span>للنشر ${esc(fmtDate(r.planned_for))}</span>` : `<span>بدون موعد نشر</span>`}<span>${esc(platforms(r).join(" · "))}</span></div>
+    <div class="page-head"><h1>${esc(r.title)}</h1>${editLink(ctx, r)}</div>
+    <div class="ct-meta" style="margin:-6px 0 14px">${stChip(r.status)}${editChip(r)}${r.planned_for ? `<span>للنشر ${esc(fmtDate(r.planned_for))}</span>` : `<span>بدون موعد نشر</span>`}<span>${esc(platforms(r).join(" · "))}</span></div>
     <div class="ct-wrap">
       <div>
         ${media.length ? `<div class="ct-media ${media.length === 1 ? "one" : ""}">${media.map((m, i) => `<figure>${m.type === "video"
@@ -225,8 +236,8 @@ function calPostHTML(ctx, c, r, back) {
   const caption = c.caption || (r && r.caption) || "";
   const link = safeUrl(c.published_url);
   return `<a class="back" href="${back}">→ المحتوى</a>
-    <div class="page-head"><h1>${esc(c.title)}</h1></div>
-    <div class="ct-meta" style="margin:-6px 0 14px">${cStChip(c.status)}${reviewChip(c.review)}<span>${c.scheduled_at ? esc(longFmt.format(new Date(c.scheduled_at))) + " · الساعة <span class=\"ltr\">" + esc(hmFmt.format(new Date(c.scheduled_at))) + "</span>" : "بدون موعد"}</span></div>
+    <div class="page-head"><h1>${esc(c.title)}</h1>${editLink(ctx, r)}</div>
+    <div class="ct-meta" style="margin:-6px 0 14px">${cStChip(c.status)}${reviewChip(c.review)}${editChip(r)}<span>${c.scheduled_at ? esc(longFmt.format(new Date(c.scheduled_at))) + " · الساعة <span class=\"ltr\">" + esc(hmFmt.format(new Date(c.scheduled_at))) + "</span>" : "بدون موعد"}</span></div>
     <div class="ct-wrap"><div>
       <section class="panel" style="margin-bottom:12px"><dl class="cc-kv"><dt>النوع</dt><dd>${esc(TYPE[c.content_type] || c.content_type)}</dd>
         <dt>المنصات</dt><dd>${esc((c.platforms || []).map((p) => CPLATFORM[p] || p).join("، ")) || "—"}</dd>
@@ -311,6 +322,21 @@ export async function mount(ctx) {
     el.addEventListener("change", (e) => {
       const k = { ccType: "type", ccPlat: "plat", ccStat: "stat" }[e.target.id];
       if (k) { cal[k] = e.target.value; drawCal(); }
+    });
+    return;
+  }
+
+  // ---- «تعديل»: the studio page of one post
+  const ed = path.match(/^e\/([^/]+)$/);
+  if (ed) {
+    let slug = ""; try { slug = decodeURIComponent(ed[1]); } catch { /* bad escape */ }
+    if (!SLUG_RE.test(slug)) { el.innerHTML = `<a class="back" href="${ctx.base}">→ المحتوى</a><div class="empty">هذا المنشور غير موجود.</div>`; return; }
+    const review = rows.find((x) => x.post_slug === slug) || null;
+    const { mountEditor } = await import("../studio/editor.mjs");
+    if (!ctx.isCurrent()) return;
+    await mountEditor(ctx, el, slug, {
+      review, title: review ? review.title : slug, backHref: review ? `${ctx.base}/${Number(review.id)}` : ctx.base,
+      async onSaved() { try { const fresh = (await st.list()).find((x) => x.post_slug === slug); if (fresh && review) Object.assign(review, fresh); calCache = new Map(); } catch { /* the page still works */ } },
     });
     return;
   }

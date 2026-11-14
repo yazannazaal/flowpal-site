@@ -1,0 +1,32 @@
+<!doctype html>
+<!-- Template: carousel cover (slide 1). Base 1080x1350; also 1080x1080 / 1200x1200 (LinkedIn PDF).
+     One hook headline, optional sub and optional chat proof; swipe pill bottom-right, logo bottom-left. -->
+<html lang="ar" dir="rtl" data-size="1080x1350">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .top { position: absolute; top: 72px; left: var(--m); right: var(--m); display: flex; justify-content: space-between; align-items: center; }
+  .top .count { font: 600 28px 'IBM Plex Sans', sans-serif; color: var(--gray); direction: ltr; }
+  .main { position: absolute; top: 180px; left: var(--m); right: var(--m); bottom: 190px; display: flex; flex-direction: column; justify-content: center; gap: 40px; }
+  .display { font-size: 100px; }
+  .main .body { color: var(--gray); max-width: 880px; }
+  .dark .main .body { color: #C3CCD8; }
+  .rule { width: 96px; height: 10px; border-radius: 5px; background: var(--teal); }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .stack:empty { display: none; }
+  .stack .msg { max-width: 82%; color: var(--ink); }
+  .swipe { position: absolute; bottom: 56px; right: var(--m); }
+  .sig { justify-content: flex-start; }
+  @media (max-aspect-ratio: 1/1.1) {} /* square sizes use the same layout */
+</style></head>
+<body class="{{theme}}">
+  <div class="top"><span class="eyebrow {{tone}}">{{eyebrow}}</span><span class="count">1 / {{total}}</span></div>
+  <div class="main">
+    <div class="rule"></div>
+    <h1 class="display">{{headline}}</h1>
+    <p class="body">{{sub}}</p>
+    <div class="stack">{{chat}}</div>
+  </div>
+  <span class="pill teal swipe">{{swipe}}</span>
+  <div class="sig"><img src="{{logo}}" alt="FlowPal"></div>
+</body></html>

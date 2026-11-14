@@ -1,5 +1,5 @@
 // Local mock only: fake answer of rpc('hub_content_calendar', {p_from, p_to}) for modules/content.js and the home page.
-// Same JSON shape as ops/hub/002-dania-workspace.sql section 13: rows of content_calendar between two days
+// Same JSON shape as the database function: rows of content_calendar between two days
 // (Asia/Hebron) plus undated ideas, each with the approval state of the linked content_reviews row (by post_slug).
 // Three posts link to the reviews of demo/content-reviews.js, so approving here shows on the calendar at once.
 // Posts are invented. Loaded ONLY in demo mode; the service worker never caches demo/.
@@ -71,4 +71,11 @@ export async function mockContentCalendar(from, to) {
       const r = c.post_slug && reviews.find((x) => x.post_slug === c.post_slug);
       return JSON.parse(JSON.stringify({ ...c, review: r ? { id: r.id, status: r.status, note: r.review_note, decided_at: r.decided_at } : null }));
     });
+}
+
+// Studio mock (task 005): the lock rule needs the calendar row of a post. Test hook: move a post's time.
+export function mockCalendarBySlug(slug) { if (!rows) seed(); return rows.filter((c) => c.post_slug === slug).map((c) => ({ ...c })); }
+export function mockSetSchedule(slug, iso, status) {
+  if (!rows) seed();
+  for (const c of rows) if (c.post_slug === slug) { c.scheduled_at = iso; if (status) c.status = status; }
 }
