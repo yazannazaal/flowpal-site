@@ -3,7 +3,7 @@
 // - Never touches Supabase or any other origin: data is always live and never stored here.
 // - Never precaches modules/*.js, shared/*.js (code shared by some modules) or studio/ (the content editor and its brand templates). A module file is cached only after this person opened it (runtime),
 //   and logout deletes every hub-* cache.
-const VERSION = "v4";
+const VERSION = "v5";
 const SHELL_CACHE = `hub-shell-${VERSION}`;
 const MOD_CACHE = `hub-modules-${VERSION}`;
 const OFFLINE_URL = "./offline.html";

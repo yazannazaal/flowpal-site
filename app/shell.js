@@ -295,8 +295,11 @@ async function logout() {
   await auth.signOut();
   await clearDeviceData();
   // Full reload: no module code or data stays in memory for the next person on this phone.
+  // Only the hash would change with location.replace(path + "#/"), which does NOT reload the page: the old
+  // person's tabs and modules stayed in memory and asked for data without a session (401). Reset the URL, then reload.
   const q = DEMO ? "?demo" : "";
-  location.replace(location.pathname + q + "#/");
+  try { history.replaceState(null, "", location.pathname + q + "#/"); } catch { /* ignore */ }
+  location.reload();
 }
 
 /* ---------- account dialog ---------- */
