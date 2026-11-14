@@ -44,3 +44,6 @@ export async function mockContentDecide(id, decision, note, email) {
   if (!r) throw Object.assign(new Error("not found or already decided"), { code: "P0002" });
   Object.assign(r, { status: decision, review_note: n, decided_by: email, decided_at: new Date().toISOString() });
 }
+
+// Studio mock (task 005): hub_studio_save / finish update the approval card of the post (by post_slug).
+export function mockReviewBySlug(slug) { if (!rows) seed(); return rows.find((r) => r.post_slug === slug) || null; }

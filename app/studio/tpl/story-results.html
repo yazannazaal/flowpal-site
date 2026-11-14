@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Template: Story - results of the week's poll, 1080x1920. "bars": [{"label": "...", "pct": 40}, ...]; the top answer is teal.
+     REAL NUMBERS ONLY. Until "verified": "1" is set, an "example numbers" stamp is printed on the image. -->
+<html lang="ar" dir="rtl" data-size="1080x1920">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .story-safe { justify-content: center; gap: 44px; }
+  .h1 { font-size: 66px; }
+  .bars { display: flex; flex-direction: column; gap: 22px; }
+  .bar { position: relative; height: 112px; border-radius: 28px; background: var(--white); overflow: hidden; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 36px; box-shadow: 0 2px 0 var(--line); }
+  .dark .bar { background: var(--ink-2); box-shadow: none; }
+  .bar i { position: absolute; top: 0; bottom: 0; right: 0; background: var(--mint); }
+  .dark .bar i { background: #1A4A5C; }
+  .bar.on i { background: var(--teal); }
+  .bar .lbl, .bar .pct { position: relative; font-size: 38px; font-weight: 600; }
+  .bar .pct { font-weight: 700; }
+  .dark .bar.on .lbl, .dark .bar.on .pct { color: var(--ink); }
+  .note { font-size: 34px; color: var(--gray); line-height: 1.5; }
+  .dark .note { color: #C3CCD8; }
+  .stamp { display: {{stamp_display}}; position: absolute; top: 1060px; left: 50%; transform: translateX(-50%) rotate(-6deg); z-index: 40;
+    border: 6px solid var(--signal); color: var(--signal-text); background: rgba(255,255,255,.94); border-radius: 18px; padding: 14px 30px;
+    font-size: 38px; font-weight: 700; white-space: nowrap; }
+</style></head>
+<body class="{{theme}}" style="--guides:{{guides_display}}">
+  <div class="story-safe">
+    <span class="eyebrow teal" style="align-self:flex-start">{{eyebrow}}</span>
+    <h1 class="h1">{{headline}}</h1>
+    <div class="bars">{{bars_html}}</div>
+    <p class="note">{{sub}}</p>
+  </div>
+  <div class="stamp">أرقام للتجربة فقط · غيّرها بالنتيجة الحقيقية</div>
+  <div class="story-sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+  <div class="gz"><div style="top:0;left:0;right:0;height:250px"></div><div style="bottom:0;left:0;right:0;height:340px"></div></div>
+</body></html>

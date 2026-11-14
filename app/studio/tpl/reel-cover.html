@@ -1,0 +1,26 @@
+<!doctype html>
+<!-- Template: reel / story / TikTok cover, 1080x1920. All content sits inside the safe zone:
+     top 250 px, bottom 400 px (TikTok caption area) and right 140 px stay clear of app UI. Set guides=1 to see the zones. -->
+<html lang="ar" dir="rtl" data-size="1080x1920">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .safe { position: absolute; top: 250px; bottom: 500px; left: var(--m); right: 140px; display: flex; flex-direction: column; justify-content: center; gap: 56px; }
+  .safe .display { font-size: 108px; }
+  .stack { display: flex; flex-direction: column; gap: 18px; }
+  .stack .msg { max-width: 92%; }
+  .stack .msg.out { color: var(--ink); }
+  .sig { bottom: 430px; right: 140px; }
+  .sig img { height: 50px; }
+  .gz { position: absolute; inset: 0; pointer-events: none; display: {{guides_display}}; }
+  .gz div { position: absolute; background: rgba(255,90,60,.22); outline: 3px dashed var(--signal); outline-offset: -3px; }
+</style></head>
+<body class="{{theme}}">
+  <div class="safe">
+    <span class="eyebrow {{tone}}" style="align-self:flex-start">{{eyebrow}}</span>
+    <h1 class="display">{{headline}}</h1>
+    <div class="stack">{{chat}}</div>
+  </div>
+  <div class="sig"><img src="{{logo}}" alt="FlowPal"></div>
+  <div class="gz"><div style="top:0;left:0;right:0;height:250px"></div><div style="bottom:0;left:0;right:0;height:400px"></div><div style="top:250px;bottom:400px;right:0;width:140px"></div></div>
+</body></html>

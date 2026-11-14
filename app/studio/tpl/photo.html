@@ -1,0 +1,26 @@
+<!doctype html>
+<!-- Template: headline + photo slot (real shop photo or a text-free Higgsfield scene). Base 1080x1350. -->
+<html lang="ar" dir="rtl" data-size="1080x1350">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; }
+  .photo { position: absolute; top: 0; left: 0; right: 0; height: 58%; }
+  .note { position: absolute; top: calc(58% - 80px); right: var(--m); max-width: 72%; z-index: 2;
+    background: var(--white); border-radius: 30px; border-start-start-radius: 8px; padding: 18px 26px 14px;
+    font-size: var(--t-chat); line-height: 1.45; box-shadow: 0 18px 50px rgba(15,27,51,.18); color: var(--ink); }
+  .note time { display: flex; gap: 10px; align-items: center; justify-content: flex-end;
+    font: 500 21px 'IBM Plex Sans Arabic', sans-serif; color: var(--gray); margin-top: 4px; }
+  .note time::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--signal); }
+  .text { position: absolute; top: calc(58% + 104px); left: var(--m); right: var(--m); display: flex; flex-direction: column; gap: 22px; }
+  .text .body { color: var(--gray); }
+  .dark .text .body { color: #C3CCD8; }
+</style></head>
+<body class="{{theme}}">
+  <div class="photo {{photo_class}}" style="{{photo_style}}" data-label="{{photo_label}}"></div>
+  <div class="note"><p>{{note}}</p><time>{{note_time}}</time></div>
+  <div class="text">
+    <h1 class="h1">{{headline}}</h1>
+    <p class="body">{{sub}}</p>
+  </div>
+  <div class="sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+</body></html>

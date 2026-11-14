@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- Template: landscape 1200x627 (LinkedIn / Facebook single-image and link posts, landscape ads). -->
+<html lang="ar" dir="rtl" data-size="1200x627">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  :root { --m: 64px; }
+  body { position: relative; }
+  .text { position: absolute; top: 56px; bottom: 120px; right: var(--m); width: 580px; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .text .h1 { font-size: 56px; }
+  .text .body { font-size: 28px; color: var(--gray); }
+  .dark .text .body { color: #C3CCD8; }
+  .side { position: absolute; top: 52px; bottom: 52px; left: var(--m); width: 440px; }
+  .side .chat { height: 100%; border-radius: 30px; }
+  .side .chat-head { padding: 16px 22px; gap: 14px; } .side .chat-head .av { width: 46px; height: 46px; font-size: 22px; }
+  .side .chat-head b { font-size: 23px; } .side .chat-head span { font-size: 18px; }
+  .side .msgs { padding: 18px 20px; gap: 12px; justify-content: flex-end; }
+  .side .msg { font-size: 24px; padding: 12px 18px 10px; border-radius: 22px; max-width: 88%; }
+  .side .msg time { font-size: 16px; } .side .ticks { width: 22px; height: 13px; }
+  .side .badge { font-size: 19px; padding: 7px 16px; }
+  .sig { left: auto; right: var(--m); bottom: 52px; width: 580px; }
+  .sig img { height: 38px; } .sig .handle { font-size: 22px; }
+</style></head>
+<body class="{{theme}}">
+  <div class="text">
+    <span class="eyebrow {{tone}}" style="align-self:flex-start;font-size:22px">{{eyebrow}}</span>
+    <h1 class="h1">{{headline}}</h1>
+    <p class="body">{{sub}}</p>
+  </div>
+  <div class="side"><div class="chat">
+    <div class="chat-head"><div class="av">{{contact_initial}}</div><div><b>{{contact}}</b><span class="{{status_class}}">{{channel}}</span></div></div>
+    <div class="msgs">{{chat}}</div>
+  </div></div>
+  <div class="sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">{{handle}}</span></div>
+</body></html>

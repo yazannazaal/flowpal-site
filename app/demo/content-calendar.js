@@ -72,3 +72,10 @@ export async function mockContentCalendar(from, to) {
       return JSON.parse(JSON.stringify({ ...c, review: r ? { id: r.id, status: r.status, note: r.review_note, decided_at: r.decided_at } : null }));
     });
 }
+
+// Studio mock (task 005): the lock rule needs the calendar row of a post. Test hook: move a post's time.
+export function mockCalendarBySlug(slug) { if (!rows) seed(); return rows.filter((c) => c.post_slug === slug).map((c) => ({ ...c })); }
+export function mockSetSchedule(slug, iso, status) {
+  if (!rows) seed();
+  for (const c of rows) if (c.post_slug === slug) { c.scheduled_at = iso; if (status) c.status = status; }
+}

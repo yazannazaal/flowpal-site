@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- Template: Instagram highlight story (1080x1920), H01 2026-11-12, owner Ziad.
+     Slots: {{theme}} (""=light Paper | "dark" Ink, add "cta" for the centred CTA layout, "faq" for the question-bubble layout),
+     {{eyebrow}} + {{tone}} (teal | signal), {{progress}} (e.g. 2/5, empty = hidden), {{question}} (FAQ bubble),
+     {{headline}} (one <em>), {{sub}}, {{visual}} (HTML for the hero slot), {{pill}} + {{pill_note}} (CTA),
+     {{logo}} (lockup SVG path). Safe zones: content in y 250-1540, sig at bottom 380 px, CTA keeps y 1300-1500 clear.
+     Rendered by content/posts/2026-11-12-h01-instagram-highlights/assets/src/build.js (Playwright). -->
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  html, body { width: 1080px; height: 1920px; }
+  body { position: relative; }
+  .top { position: absolute; top: 270px; left: 72px; right: 72px; display: flex; align-items: center; justify-content: space-between; }
+  .top .eyebrow { font-size: 30px; }
+  .top .prog { font: 500 26px 'IBM Plex Sans', sans-serif; color: var(--gray); direction: ltr; }
+  .dark .top .prog { color: #A6B1C4; }
+  .main { position: absolute; top: 372px; left: 72px; right: 72px; bottom: 440px; display: flex; flex-direction: column; }
+  .hl { font-size: 84px; font-weight: 700; line-height: 1.2; text-wrap: balance; }
+  .sub { text-wrap: pretty; }
+  .sub { font-size: 39px; font-weight: 400; line-height: 1.5; color: var(--gray); margin-top: 26px; }
+  .dark .sub { color: #A6B1C4; }
+  .vis { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; padding-top: 40px; }
+  .vis > * { flex: none; }
+  /* CTA: centred block, ends before y 1280 so the link sticker zone (1300-1500) stays empty */
+  .cta .main { bottom: 640px; justify-content: center; text-align: center; align-items: center; }
+  .cta .hl { font-size: 88px; }
+  .cta .vis { flex: none; padding: 0 0 56px; }
+  .cta-pill { margin-top: 56px; min-width: 560px; height: 110px; padding: 0 56px; border-radius: 99px; background: var(--teal); color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 600; }
+  .pill-note { margin-top: 22px; font-size: 28px; color: #A6B1C4; }
+  .pill-note:empty, .cta-pill:empty, .sub:empty, .prog:empty, .q:empty { display: none; }
+  /* FAQ: question bubble above the answer */
+  .q { align-self: flex-start; max-width: 86%; background: var(--white); color: var(--ink); font-size: 44px; font-weight: 500; line-height: 1.4;
+    padding: 26px 36px; border-radius: 40px; border-start-start-radius: 10px; box-shadow: 0 1px 0 var(--line), 0 18px 44px rgba(15,27,51,.07); margin-bottom: 64px; }
+  .faq .main { justify-content: center; bottom: 470px; }
+  .faq.cta .q { align-self: center; }
+  .story-sig { bottom: 380px; }
+  .story-sig img { height: 44px; }
+</style></head>
+<body class="{{theme}}">
+  <div class="top"><span class="eyebrow {{tone}}">{{eyebrow}}</span><span class="prog">{{progress}}</span></div>
+  <div class="main">
+    {{pre}}
+    <div class="q">{{question}}</div>
+    <div class="hl">{{headline}}</div>
+    <div class="sub">{{sub}}</div>
+    <div class="vis">{{visual}}</div>
+    <div class="cta-pill">{{pill}}</div>
+    <div class="pill-note">{{pill_note}}</div>
+  </div>
+  <div class="story-sig"><img src="{{logo}}" alt="FlowPal"><span class="handle">@flowpal.co</span></div>
+</body></html>

@@ -1,0 +1,17 @@
+<!doctype html>
+<!-- Template: Instagram highlight cover. Base 1080x1920 (upload as a story, then pick it as the cover);
+     render --size 1080x1080 for a square copy. Instagram shows the centre as a circle, so the icon stays in the
+     middle ~400 px. No text on covers: the highlight name is typed in Instagram.
+     icon: about (the mark) | messages | tips | workshop | ask -->
+<html lang="ar" dir="rtl" data-size="1080x1920">
+<head><meta charset="utf-8"><link rel="stylesheet" href="brand.css">
+<style>
+  body { position: relative; display: grid; place-items: center; }
+  .ring { width: 560px; height: 560px; border-radius: 50%; background: var(--ink-2); display: grid; place-items: center; }
+  .ic { width: 330px; height: 330px; display: grid; place-items: center; }
+  .gz div { border-radius: 50%; background: transparent; }
+</style></head>
+<body class="dark" style="--guides:{{guides_display}}">
+  <div class="ring"><div class="ic">{{icon_html}}</div></div>
+  <div class="gz"><div style="width:1080px;height:1080px;left:0;top:calc(50% - 540px)"></div></div>
+</body></html>
