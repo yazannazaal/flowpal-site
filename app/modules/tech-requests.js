@@ -33,14 +33,14 @@ function demoStore() {
   const subs = [{ id: "demo-store", name: "متجر النخلة (تجريبي)" }, { id: "demo-clinic", name: "عيادة الريحان (تجريبي)" }, { id: "demo-cafe", name: "مقهى الزاوية (تجريبي)" }];
   let nid = 50;
   const reqs = [
-    { id: 1, title: "تنبيه عند توقف workflow", body: "أريد رسالة على Telegram إذا توقف أي workflow لمشترك أكثر من 10 دقائق.", kind: "request", status: "in_progress", priority: "high", subscriber_id: null, requested_by: "أسماء", assigned_to: "tarek", ref: "task 004", created_at: ago(2), closed_at: null },
-    { id: 2, title: "رسائل الستوري لا تصل للبوت", body: "ردود الستوري على Instagram لا تظهر في سجل المحادثات.", kind: "bug", status: "open", priority: "normal", subscriber_id: "demo-store", requested_by: "أسماء", assigned_to: null, ref: null, created_at: ago(0, 3), closed_at: null },
-    { id: 3, title: "أين أجد سجل الأخطاء اليومي؟", body: null, kind: "question", status: "open", priority: "low", subscriber_id: null, requested_by: "أسماء", assigned_to: "heba", ref: null, created_at: ago(1), closed_at: null },
+    { id: 1, title: "تنبيه عند توقف workflow", body: "أريد رسالة على Telegram إذا توقف أي workflow لمشترك أكثر من 10 دقائق.", kind: "request", status: "in_progress", priority: "high", subscriber_id: null, requested_by: "الفريق التقني (تجريبي)", assigned_to: "tarek", ref: "task 004", created_at: ago(2), closed_at: null },
+    { id: 2, title: "رسائل الستوري لا تصل للبوت", body: "ردود الستوري على Instagram لا تظهر في سجل المحادثات.", kind: "bug", status: "open", priority: "normal", subscriber_id: "demo-store", requested_by: "الفريق التقني (تجريبي)", assigned_to: null, ref: null, created_at: ago(0, 3), closed_at: null },
+    { id: 3, title: "أين أجد سجل الأخطاء اليومي؟", body: null, kind: "question", status: "open", priority: "low", subscriber_id: null, requested_by: "الفريق التقني (تجريبي)", assigned_to: "heba", ref: null, created_at: ago(1), closed_at: null },
     { id: 4, title: "نسخة اختبار لبوت العيادة", body: "نسخة TEST منفصلة قبل التشغيل.", kind: "request", status: "done", priority: "normal", subscriber_id: "demo-clinic", requested_by: "نادر", assigned_to: "tarek", ref: "changelog", created_at: ago(6), closed_at: ago(4) },
   ];
   const notes = [
     { id: 3, subscriber_id: "demo-store", kind: "issue", title: "رقم لحاله ينقرأ كرقم منتج", status: "in_progress", author: "هبة", at: ago(1), ref: "exec 0000" },
-    { id: 4, subscriber_id: "demo-store", kind: "request", title: "الرد على الستوري", status: "open", author: "أسماء", at: ago(0), ref: null },
+    { id: 4, subscriber_id: "demo-store", kind: "request", title: "الرد على الستوري", status: "open", author: "الفريق التقني (تجريبي)", at: ago(0), ref: null },
     { id: 6, subscriber_id: "demo-clinic", kind: "request", title: "تجهيز رقم WhatsApp", status: "open", author: "نادر", at: ago(2), ref: null },
   ];
   demo = {

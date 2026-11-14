@@ -1,13 +1,13 @@
 /* Flowpal Hub shell (flowpal.co/app/).
-   Rules (ADR-002, agents/tech-lead/tasks/003-flowpal-hub.md in the agency repo):
+   Rules (ADR-002 of the Hub design):
    - The shell has NO list of modules and NO module labels. After login it asks the database (rpc hub_me)
      which modules this person has, builds the tabs from that answer, and import()s only ./modules/<id>.js
      for those ids, and only when the person opens that tab.
    - The only key here is the Supabase publishable (anon) key. It is public by design; Row Level Security and
      the hub_* functions protect the data. Never put a service_role key in any file of this app.
    - Mock mode runs everything on fake data (no Supabase at all), ONLY on localhost / 127.0.0.1 (for هبة's tests):
-     ?mock=yazan|asmaa|dania|stranger  (or ?demo&role=admin|tech|sales|content|none). On flowpal.co both are ignored. */
-import { $, esc, errText, toast } from "./lib.js";
+     ?mock=admin|tech|sales|stranger  (or ?demo&role=admin|tech|sales|content|none). On flowpal.co both are ignored. */
+import { $, esc, errText, toast, setPeople } from "./lib.js";
 
 const SUPABASE_URL = "https://kltkjkraevxltmxfetng.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_YOUiGYUqctqUkB63MIkVmw_raLYKQ6v";
@@ -18,7 +18,7 @@ const params = new URLSearchParams(location.search);
 const LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.hostname.endsWith(".localhost");
 const DEMO = LOCAL && (params.has("demo") || params.has("mock"));
 const DEMO_ROLES = [["tech", "تقني"], ["admin", "إدارة"], ["sales", "مبيعات"], ["content", "محتوى"], ["none", "بلا صلاحية"]];
-const MOCK_PEOPLE = { yazan: "admin", asmaa: "tech", dania: "sales", stranger: "none" };
+const MOCK_PEOPLE = { admin: "admin", tech: "tech", sales: "sales", stranger: "none" };
 
 const app = $("#app");
 
@@ -152,7 +152,7 @@ function markTab(id) {
 
 /* ---------- full-page views ---------- */
 function viewLogin(msg = "") {
-  me = null; allowed = []; buildTabs(); setChrome(null);
+  me = null; setPeople(null); allowed = []; buildTabs(); setChrome(null);
   document.title = "تسجيل الدخول | Flowpal";
   app.innerHTML = `<section class="gate">
     <img class="mark" src="./icons/icon-192.png" alt="">
@@ -245,7 +245,7 @@ async function route() {
   try {
     await code.mount({
       el, path: rest, base: "#/" + mod.id, demo: DEMO, sb: auth.sb,
-      me: { email: me.email, name: me.name, is_admin: !!me.is_admin },
+      me: { email: me.email, name: me.name, is_admin: !!me.is_admin, member_id: me.member_id || null },
       hasModule: (x) => allowed.some((m) => m.id === x),
       isCurrent: () => seq === renderSeq,
     });
@@ -264,6 +264,7 @@ async function start() {
   try { answer = await auth.hubMe(); } catch (err) { return viewFatal(err); }
   if (!answer || !answer.email) return viewNoAccess(sess.email);
   me = answer;
+  setPeople(me && me.people);
   const seen = new Set();
   allowed = (Array.isArray(me.modules) ? me.modules : [])
     .filter((m) => m && typeof m.id === "string" && ID_RE.test(m.id) && !seen.has(m.id) && seen.add(m.id))

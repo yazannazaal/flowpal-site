@@ -1,11 +1,11 @@
-// Flowpal content studio: fill a brand template with values, exactly like content/brand/templates/render.py
+// Flowpal content studio: fill a brand template with values, exactly like the brand renderer (render.py)
 // (prepare() + the {{key}} fill + the size/zoom style). One implementation for the browser preview (Hub content
 // tab) and the render worker (node + a headless browser screenshot), so the preview is the file that gets made.
-// Keep it in step with render.py: the parity test (flowpal-agency ops/hub/tests/studio-parity.mjs) renders every
+// Keep it in step with render.py: the parity test (internal repo, studio-parity) renders every
 // sample both ways and fails on a pixel difference over 0.5 %.
 // No DOM, no network, no dependencies: plain string work that runs the same in node and in the browser.
 
-export const LOGO_DIR = "logo";   // in app/studio/tpl/ (render.py: ../assets/logo/final/svg)
+export const LOGO_DIR = "logo";   // in app/studio/tpl/ (the renderer uses the brand logo folder)
 
 const TICKS = '<svg class="ticks" viewBox="0 0 30 18"><path d="M1 10l5 5L15 4M11 13l2 2L24 4" fill="none" ' +
   'stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -197,7 +197,7 @@ export function getPath(values, key) {
 }
 
 /**
- * Does the filled page still fit its design? زياد's CHECK (agents/visual-designer/scripts/studio-manifest/srv.mjs),
+ * Does the filled page still fit its design? The design team's fit check (the measure behind the manifest lengths),
  * the same measure he used for the manifest lengths: no fixed box overflows, nothing is clipped (e.g. old chat bubbles
  * pushed out of the top of .msgs), no text leaves the canvas, no two blocks overlap (logo included).
  * Self-contained (no imports, no closures) so the worker can run it as page.evaluate(fitCheck, probe), and the

@@ -1,5 +1,5 @@
 // Local mock only: fake content_reviews rows and a fake hub_content_decide() for modules/content.js.
-// Same rules as the database function (ops/hub/001-roles.sql section 9). Posts are invented; images are
+// Same rules as the database function. Posts are invented; images are
 // drawn locally as SVG data URLs so the mock needs no network.
 const svg = (bg, fg, line1, line2) => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350"><rect width="1080" height="1350" fill="${bg}"/>` +

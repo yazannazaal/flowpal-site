@@ -3,13 +3,13 @@
 //   #/content/w/<day>      the week that contains <day>
 //   #/content/<review id>  one post to approve (existing page)
 //   #/content/p/<post id>  one calendar post (date, hour, type, platforms, status) with the same approval buttons
-//   #/content/e/<post slug> «تعديل»: Dania changes texts / brand colours / caption herself (task 005, studio/editor.mjs,
+//   #/content/e/<post slug> «تعديل»: the content role changes texts / brand colours / caption herself (task 005, studio/editor.mjs,
 //                          loaded only on this page; rpc hub_studio_targets / hub_studio_save / hub_studio_cancel)
 // Data: content_reviews (RLS: hub_can('content'), select only); rpc('hub_content_calendar', {p_from, p_to}) (read
 // only; the calendar is written by سلمى's sync, never from here). The only write is rpc('hub_content_decide')
 // (checks hub_can('content'); a change request needs a note; approved / withdrawn posts cannot be changed).
 // ?demo: demo/content-reviews.js + demo/content-calendar.js.
-import { $, esc, safeUrl, fmtDate, fmtDT, toast, useStyle, ok, errText } from "../lib.js";
+import { $, esc, safeUrl, fmtDate, fmtDT, toast, useStyle, ok, errText, who } from "../lib.js";
 
 const COLS = "id,post_slug,title,platforms,planned_for,caption,on_image_text,media,status,review_note,decided_at,created_at,updated_at,edited_by,edited_at";
 const STATUS = {
@@ -63,9 +63,8 @@ const mediaOf = (r, demo) => (Array.isArray(r.media) ? r.media : [])
   .filter((m) => m.url);
 const platforms = (r) => (Array.isArray(r.platforms) ? r.platforms : []).map((p) => PLATFORM[p] || p);
 const canDecide = (r) => r.status === "pending" || r.status === "changes_requested";
-const editChip = (r) => (r && r.edited_by ? `<span class="ct-st edit">${esc(editedBy(r.edited_by))}</span>` : "");
-const WHO_EDIT = { dania: "دانيا", yazan: "يزن" };
-const editedBy = (who) => `تعديل من ${WHO_EDIT[who] || "الفريق"}`;
+const editChip = (r) => (r && r.edited_by ? `<span class="ct-st edit">${esc(editedBy(r.edited_by, r.edited_by_name))}</span>` : "");
+const editedBy = (id, name) => `تعديل من ${name || who(id)}`;   // names come from the data / hub_me(), never from the code
 const SLUG_RE = /^[a-z0-9-]{1,120}$/;
 const canEdit = (r) => r && r.post_slug && SLUG_RE.test(r.post_slug) && r.status !== "withdrawn";
 const PEN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';

@@ -1,5 +1,5 @@
 // Local mock only (?mock= / ?demo on localhost): fake answer of rpc('hub_sales_board') for modules/sales.js.
-// Same JSON shape as the real function (ops/hub/001-roles.sql + 001a-pain-fix.sql). Every business is invented.
+// Same JSON shape as the real function (database scripts 001 + 001a). Every business is invented.
 // Loaded ONLY in demo mode; the service worker never caches demo/.
 const NAMES = [
   "متجر الندى", "بيت الأناقة", "ركن الهدايا", "عطور الشرق", "أزياء ليلى", "عالم الأطفال", "مكتبة القلم", "حلويات السنابل",

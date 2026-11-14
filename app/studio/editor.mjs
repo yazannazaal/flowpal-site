@@ -3,12 +3,12 @@
 // caption) gets a form built from its manifest (Arabic labels, character counters, brand colour / background chips
 // from the manifest's options only) and a live preview: the same brand template and the same fill code
 // (studio/fill.mjs) that make the final file, in a scaled iframe that runs no script. After each change the preview
-// runs زياد's fit check (fill.mjs fitCheck): a text that no longer fits the design blocks the save.
+// runs the design fit check (fill.mjs fitCheck): a text that no longer fits the design blocks the save.
 // Field keys follow the sync: "headline", "chat.1.text" (bubble 1), "items.2"; manifest.values = the slide's full
 // values (bubbles, times...) the preview needs; base_values = the editable keys only.
-// Data: rpc hub_studio_targets / hub_studio_save / hub_studio_cancel (flowpal-agency ops/hub/003-content-edits.sql).
+// Data: rpc hub_studio_targets / hub_studio_save / hub_studio_cancel (database functions).
 // The database checks every value again; this page never sends a key that is not in the manifest.
-import { $, esc, safeUrl, fmtDT, toast, useStyle, ok, errText } from "../lib.js";
+import { $, esc, safeUrl, fmtDT, toast, useStyle, ok, errText, who } from "../lib.js";
 import { checkField, checkBudgets, maxOf, len, lenOf, optionLabel, optionSwatch } from "./fields.mjs";
 
 const TPL_BASE = new URL("./tpl/", import.meta.url).href;
@@ -26,8 +26,8 @@ const LOCK = {
   "مسحوب": "هذا المنشور انسحب، ما بينفع يتعدّل.",
   "قرب موعد النشر": "قرب موعد النشر، اكتبي لسلمى.",
 };
-const WHO = { dania: "دانيا", yazan: "يزن" };
-export const editedBy = (who) => (who ? `تعديل من ${WHO[who] || "الفريق"}` : "");
+// the name comes from the answer (…_name) or from hub_me().people, never from the code
+export const editedBy = (id, name) => (id || name ? `تعديل من ${name || who(id)}` : "");
 
 const STUDIO_CSS = `
 .sd-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:-6px 0 14px;font-size:13px;color:var(--muted)}
@@ -134,6 +134,12 @@ function store(ctx) {
   };
 }
 
+// the database's Arabic messages name the tags; she sees what they do instead
+const untag = (m) => String(m)
+  .replace("مسموح تمييز واحد بس (<em>)", "مسموح كلمة ملوّنة وحدة بس")
+  .replace("مسموح بس <em> و <b> و <br>", "مسموح بس كلمة ملوّنة أو عريضة أو سطر جديد، بدون رموز < >")
+  .replace("مسموح بس <em> و <b>", "مسموح بس كلمة ملوّنة أو عريضة، بدون سطر جديد ولا رموز < >")
+  .replace("ممنوع وسوم بهالنص", "ممنوع الرموز < > بهالنص");
 function saveErr(err) {
   const m = String((err && err.message) || ""), code = err && err.code;
   if (code === "40001" || /^changed/.test(m)) return { t: "سلمى غيّرت المنشور، افتحيه من جديد.", reload: true };
@@ -142,7 +148,7 @@ function saveErr(err) {
   if (/field not editable/.test(m)) return { t: "في خانة مش مسموح تتعدّل. افتحي الصفحة من جديد.", reload: true };
   if (/note too long/.test(m)) return { t: "الملاحظة أطول من 500 حرف." };
   if (code === "P0002") return { t: "هالجزء من المنشور مش موجود أو تغيّر. افتحي الصفحة من جديد.", reload: true };
-  if (code === "22023" && /[؀-ۿ]/.test(m)) return { t: m };   // the database's own Arabic message ("العنوان: النص أطول من 60 حرف")
+  if (code === "22023" && /[؀-ۿ]/.test(m)) return { t: untag(m) };   // the database's own Arabic message ("العنوان: النص أطول من 60 حرف")
   return { t: errText(err) };
 }
 
@@ -153,7 +159,7 @@ const startValues = (t) => {
   return { ...(t.base_values || {}), ...(carry || {}) };
 };
 const fieldsOf = (t) => (t.manifest && Array.isArray(t.manifest.fields) ? t.manifest.fields : []);
-// story-highlight is built with raw HTML by its own builder: not editable here (زياد: studio_ready false)
+// story-highlight is built with raw HTML by its own builder: not editable here (studio_ready false)
 const imageOk = (t) => t && t.kind === "image" && t.manifest && t.manifest.studio_ready !== false && t.manifest.template !== "story-highlight";
 const plain = (s) => String(s ?? "").replace(/<br\s*\/?>/gi, " ").replace(/<\/?(em|b)>/gi, "");
 const short = (s, n = 60) => { const x = plain(s); return len(x) > n ? [...x].slice(0, n).join("") + "…" : x; };
@@ -215,7 +221,7 @@ export async function mountEditor(ctx, el, slug, opts = {}) {
     return `<div class="sd-f ${n > mx ? "bad" : ""}" data-key="${esc(f.key)}"><div class="lab"><label for="${id}">${esc(f.label || f.key)}</label><span class="sd-cnt ${n > mx ? "over" : ""}" data-cnt="${esc(f.key)}" aria-live="polite">${n}/${mx}</span></div>
       ${long ? `<textarea class="i ${f.type === "caption" ? "cap" : ""}" id="${id}" data-key="${esc(f.key)}" ${f.type === "hashtags" ? 'dir="auto"' : ""} ${dis}></textarea>`
         : `<input class="i" id="${id}" type="text" data-key="${esc(f.key)}" autocomplete="off" ${dis}>`}
-      <div class="sd-tools">${tags && !locked() ? `<button type="button" data-em="${esc(f.key)}">لوّني الكلام المحدّد</button>` : ""}
+      <div class="sd-tools">${tags && !locked() ? `<button type="button" data-em="${esc(f.key)}">لوّني الكلام المحدّد</button>` : ""}${f.type === "longtext" && !locked() ? `<button type="button" data-br="${esc(f.key)}">سطر جديد</button>` : ""}
         <button type="button" data-reset="${esc(f.key)}" class="${JSON.stringify(v ?? null) === JSON.stringify(d.start[f.key] ?? null) ? "hidden" : ""}">رجّعي النص الأصلي</button>
         <span class="msg" data-msg="${esc(f.key)}"></span></div></div>`;
   };
@@ -225,7 +231,7 @@ export async function mountEditor(ctx, el, slug, opts = {}) {
     for (const f of fieldsOf(t)) { const g = f.group || "التعديلات"; let x = groups.find((y) => y.g === g); if (!x) groups.push(x = { g, fs: [] }); x.fs.push(f); }
     if (!groups.length) return `<div class="empty">ما في شي بينفع يتعدّل بهالجزء.</div>`;
     return groups.map((x, gi) => `<section class="sd-group panel" role="group" aria-labelledby="sdG${gi}"><h2 id="sdG${gi}">${esc(x.g)}</h2>${x.fs.map((f) => fieldHTML(t, f)).join("")}
-      ${x.fs.some((f) => ["text", "longtext"].includes(f.type) && (f.em === true || /<em>/i.test(String(draftOf(t).start[f.key] ?? "")))) ? `<p class="small muted" style="margin:10px 0 0">الكلام بين &lt;em&gt; و &lt;/em&gt; بيطلع بلون مميّز، و &lt;br&gt; بتنزّل سطر.</p>` : ""}</section>`).join("");
+      ${x.fs.some((f) => ["text", "longtext"].includes(f.type) && (f.em === true || /<em>/i.test(String(draftOf(t).start[f.key] ?? "")))) ? `<p class="small muted" style="margin:10px 0 0">لتلوين كلمة: حدّديها واضغطي «لوّني الكلام المحدّد». لسطر جديد: «سطر جديد». العلامات اللي بتطلع بالنص حواليها هي اللي بتعمل اللون والسطر، خلّيها زي ما هي.</p>` : ""}</section>`).join("");
   };
 
   const statusHTML = (t) => {
@@ -244,7 +250,7 @@ export async function mountEditor(ctx, el, slug, opts = {}) {
     return `<section class="panel"><h2>التعديلات السابقة</h2><ul class="sd-hist">${list.slice(0, 12).map((e) => {
       const s = EDIT_ST[e.status] || { t: e.status };
       const vals = e.values && typeof e.values === "object" ? e.values : {};
-      return `<li><div class="top"><b>تعديل ${Number(e.edit_no) || ""}</b><span>${esc(editedBy(e.created_by))}</span><span>${esc(fmtDT(e.created_at))}</span><span class="chip">${esc(s.t)}</span></div>
+      return `<li><div class="top"><b>تعديل ${Number(e.edit_no) || ""}</b><span>${esc(editedBy(e.created_by, e.created_by_name))}</span><span>${esc(fmtDT(e.created_at))}</span><span class="chip">${esc(s.t)}</span></div>
         ${Object.keys(vals).map((k) => {
           const f = fieldsOf(t).find((x) => x.key === k);
           const shown = f && (f.type === "color" || f.type === "enum") ? optionLabel(f, vals[k]) : short(vals[k]);
@@ -264,7 +270,7 @@ export async function mountEditor(ctx, el, slug, opts = {}) {
     if (t.kind === "caption") return `<div class="sd-stage" id="sdStage"><div class="bar"><span class="live"><i></i><b>المعاينة</b></span><span>زي ما بيطلع تحت الصورة</span></div><div class="sd-cap" id="sdCapView"></div></div>`;
     if (!imageOk(t)) return `<div class="sd-stage"><div class="bar"><b>المعاينة</b></div><p style="margin:8px 0">تعديل هالنوع جاي قريباً. لهلأ اكتبي لسلمى.</p></div>`;
     const sz = String((t.manifest && t.manifest.size) || "");
-    return `<div class="sd-stage" id="sdStage"><div class="bar"><span class="live"><i></i><b>المعاينة</b><span class="ltr">${esc(sz.replace("x", " × "))}</span></span>
+    return `<div class="sd-stage" id="sdStage"><div class="bar"><span class="live"><i></i><b>المعاينة</b><bdi dir="ltr" class="sd-size">${esc(sz.replace("x", " × "))}</bdi></span>
       <button type="button" class="sd-zoom" id="sdZoom">تكبير</button></div><div class="sd-view" id="sdView"></div>
       <p class="sd-swarn hidden" id="sdFitStage">النص كتير طويل على هالتصميم، قصّري شوي</p></div>`;
   };
@@ -274,7 +280,7 @@ export async function mountEditor(ctx, el, slug, opts = {}) {
     const r = opts.review || null;
     el.innerHTML = `<a class="back" href="${esc(back)}">→ رجوع للمنشور</a>
       <div class="page-head"><h1>تعديل: ${esc(opts.title || slug)}</h1></div>
-      <div class="sd-head">${r && r.edited_by ? `<span class="ct-st edit">${esc(editedBy(r.edited_by))}</span>` : ""}<span>غيّري النص أو اللون، وشوفي النتيجة قبل ما تحفظي.</span></div>
+      <div class="sd-head">${r && r.edited_by ? `<span class="ct-st edit">${esc(editedBy(r.edited_by, r.edited_by_name))}</span>` : ""}<span>غيّري النص أو اللون، وشوفي النتيجة قبل ما تحفظي.</span></div>
       ${locked() ? `<div class="sd-lock" role="status">${esc(LOCK[locked()] || "المنشور مقفول للتعديل هلأ.")}</div>` : ""}
       ${targets().length ? assetsHTML() : ""}
       ${t ? `<div class="sd-wrap">${stageHTML(t)}
@@ -449,6 +455,12 @@ export async function mountEditor(ctx, el, slug, opts = {}) {
       if (a == null || a === z) { toast("حدّدي الكلام اللي بدك تلوّنيه أول"); inp.focus(); return; }
       inp.value = inp.value.slice(0, a) + "<em>" + inp.value.slice(a, z) + "</em>" + inp.value.slice(z);
       setVal(b.dataset.em, inp.value); inp.focus(); return;
+    }
+    if (b.dataset.br) {
+      const inp = el.querySelector(`.i[data-key="${CSS.escape(b.dataset.br)}"]`); if (!inp) return;
+      const a = inp.selectionStart ?? inp.value.length, z = inp.selectionEnd ?? a;
+      inp.value = inp.value.slice(0, a) + "<br>" + inp.value.slice(z);
+      setVal(b.dataset.br, inp.value); inp.focus(); inp.setSelectionRange(a + 4, a + 4); return;
     }
     if (b.id === "sdZoom") { openBig(); return; }
     if (b.id === "sdSaveOk" || b.id === "sdSave") { await save(b.id === "sdSaveOk", b); return; }

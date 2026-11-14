@@ -1,12 +1,17 @@
 // Flowpal content studio: the edit-form rules, shared by the Hub content tab and its local mock.
-// checkField() / checkBudgets() are the same checks as hub_studio_check() / hub_studio_budget() in flowpal-agency
-// ops/hub/003-content-edits.sql (rev. 2026-11-14, زياد's rules), so a value the form accepts is a value the database
-// accepts. The database still checks everything again.
+// checkField() / checkBudgets() are the same checks as the database's hub_studio_check() / hub_studio_budget()
+// (the design team's length rules), so a value the form accepts is a value the database accepts. The database still
+// checks everything again. Messages never show raw tags: «كلمة ملوّنة» / «كلمة عريضة» / «سطر جديد».
 // Brand options only: tone and theme come from the manifest's options; there is never a free colour.
 
+// Empty = nothing left after normal spaces, no-break spaces (U+00A0) and zero-width characters (U+200B-200D, 2060, FEFF).
+const blank = (v) => !String(v).replace(/[\s\u200B-\u200D\u2060\uFEFF]/g, "");
+// Hashtags: each tag starts with #, its body has no space of any kind (incl. U+00A0), no # and no comma, and tags are
+// separated by ordinary spaces / new lines. "#a,#b", "#a#b" and a no-break space between tags are refused.
+const HASHTAGS = /^[ \t\r\n]*(#[^\s\u200B#,،]+([ \t\r\n]+#[^\s\u200B#,،]+)*)?[ \t\r\n]*$/;
 const DEF_MAX = { text: 120, hashtags: 300, caption: 2200, longtext: 400 };
 export const len = (s) => [...String(s ?? "")].length;   // char_length() counts characters, not UTF-16 units
-/** زياد's visible length: <em>/<b> not counted, each <br> counts as 15 (it adds a line). = hub_studio_vlen() */
+/** visible length: <em>/<b> not counted, each <br> counts as 15 (it adds a line). = hub_studio_vlen() */
 export const vlen = (s) => len(String(s ?? "").replace(/<\/?(em|b)>/gi, "").replace(/<br *\/?>/gi, "x".repeat(15)));
 export const isText = (f) => ["text", "longtext", "caption", "hashtags"].includes(f.type);
 export const maxOf = (f) => (f.max != null ? Number(f.max) : DEF_MAX[f.type] ?? 400);
@@ -20,16 +25,16 @@ export function checkField(f, v) {
     if (typeof v !== "string") return "لازم يكون نص";
     const mx = maxOf(f);
     if (lenOf(f, v) > mx) return `النص أطول من ${mx} حرف`;
-    if (t === "text" && !v.trim() && f.required !== false) return "النص فاضي";
+    if (t === "text" && blank(v) && f.required !== false) return "النص فاضي";
     if (/[\x01-\x08\x0B\x0C\x0E-\x1F\x7F]/.test(v)) return "فيه رموز غير مسموحة";
     if (t === "text" || t === "longtext") {
       let rest = v.replace(/<(em|b)>[^<>]*<\/\1>/gi, "");
       if (t === "longtext") rest = rest.replace(/<br *\/?>/gi, "");
-      if (/[<>]/.test(rest)) return t === "text" ? "مسموح بس <em> و <b>" : "مسموح بس <em> و <b> و <br>";
-      if ((v.match(/<em>/gi) || []).length > 1) return "مسموح تمييز واحد بس (<em>)";
-    } else if (/[<>]/.test(v)) return "ممنوع وسوم بهالنص";
+      if (/[<>]/.test(rest)) return t === "text" ? "مسموح بس كلمة ملوّنة أو عريضة، بدون سطر جديد ولا رموز < >" : "مسموح بس كلمة ملوّنة أو عريضة أو سطر جديد، بدون رموز < >";
+      if ((v.match(/<em>/gi) || []).length > 1) return "مسموح كلمة ملوّنة وحدة بس";
+    } else if (/[<>]/.test(v)) return "ممنوع الرموز < > بهالنص";
     if (t === "hashtags") {
-      if (!/^\s*(#[^\s#]+\s*)*$/.test(v)) return "الهاشتاغات لازم تبدأ ب # ومفصولة بمسافة";
+      if (!HASHTAGS.test(v)) return "الهاشتاغات لازم تبدأ ب # ومفصولة بمسافة";
       const mc = Number(f.max_count) || 30;
       if ((v.match(/#/g) || []).length > mc) return `أكثر من ${mc} هاشتاغ`;
     }
@@ -47,7 +52,7 @@ export function checkField(f, v) {
   return "حقل غير معروف";
 }
 
-/** زياد's budgets: total visible length of the listed keys (chat[i].text = every bubble) per size. = hub_studio_budget() */
+/** budgets: total visible length of the listed keys (chat[i].text = every bubble) per size. = hub_studio_budget() */
 export function checkBudgets(manifest, base, values) {
   for (const b of (manifest && manifest.budgets) || []) {
     if (b.size && manifest.size && b.size !== manifest.size) continue;

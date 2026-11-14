@@ -12,7 +12,7 @@ const PLATFORM = { instagram: "Instagram", facebook: "Facebook", tiktok: "TikTok
 const EVENT = {
   lead_created: "شركة جديدة", lead_updated: "تعديل بيانات الشركة", status: "تغيير الحالة", note: "ملاحظة جديدة",
   contacted: "تواصل معهم", postponed: "تأجيل المتابعة", follow_up_set: "موعد متابعة", products: "تعديل المنتجات",
-  task_done: "مهمة خلصت", client_claimed: "عميل جديد (بانتظار تأكيد يزن)",
+  task_done: "مهمة خلصت", client_claimed: "عميل جديد (بانتظار تأكيد الإدارة)",
 };
 
 const CSS = P.CSS + `
@@ -82,7 +82,7 @@ function taskHTML(k, ctx, t) {
   return `<li class="hm-task" data-task="${Number(k.id)}"><div class="top"><div class="tt">
       <b>${esc(k.title)}${k.priority === "high" ? `<span class="hi">مستعجلة</span>` : ""}</b>${co}
       <div class="meta">${k.goal ? "الهدف: " + esc(k.goal) + " · " : ""}<span class="pl-due ${late ? "late" : "now"}">${late ? esc(P.dueText(k.due_date, t)) : "اليوم"}</span></div>
-      ${k.on_hold_reason ? `<div class="meta" style="color:#A8322C">لا تبعتي هلأ: بانتظار يزن (${esc(k.on_hold_reason)})</div>` : ""}
+      ${k.on_hold_reason ? `<div class="meta" style="color:#A8322C">لا تبعتي هلأ: بانتظار الإدارة (${esc(k.on_hold_reason)})</div>` : ""}
     </div><button class="btn" type="button" data-done="${Number(k.id)}">خلصت</button></div>
     ${k.suggested_message ? `<details><summary>الرسالة المقترحة</summary><div class="msg"><span>${esc(k.suggested_message)}</span><button class="btn-line" type="button" data-copy>نسخ</button></div></details>` : ""}
   </li>`;
@@ -95,7 +95,7 @@ function postHTML(c, ctx) {
 }
 
 function updHTML(u, ctx) {
-  const who = P.WHO[u.actor] || (u.type === "omar" ? "عمر" : "");
+  const who = u.actor ? P.who(u.actor) : (u.type === "omar" ? "عمر" : "");
   let what, sum = "";
   if (u.type === "omar") { what = "عمر: " + (P.OMAR_STAGE[u.stage] || u.stage); sum = u.summary || ""; }
   else {

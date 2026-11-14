@@ -1,15 +1,16 @@
 // Local mock only: fake hub_studio_targets / hub_studio_save / hub_studio_cancel for the «تعديل» page of
-// modules/content.js (task 005). Same rules as flowpal-agency ops/hub/003-content-edits.sql: only manifest keys,
+// modules/content.js (task 005). Same rules as the database functions: only manifest keys,
 // the same value check (studio/fields.mjs = hub_studio_check), stale version refused, lock 2 h before the post time /
 // published / withdrawn, a newer save supersedes a queued one and keeps the earlier changes, «احفظي ووافقي» approves
 // only once the new file is ready, the caption applies at once. The render is faked: queued -> rendering -> done.
-// Manifests are mocks until زياد's agents/visual-designer/output/studio-manifests.json exists. Posts are invented.
+// Manifests follow the design team's studio manifests. Posts are invented.
 // Loaded ONLY in demo mode; the service worker never caches demo/.
 import { checkField, checkBudgets, vlen } from "../studio/fields.mjs";
 import { mockReviewBySlug } from "./content-reviews.js";
 import { mockCalendarBySlug } from "./content-calendar.js";
 
 const role = () => { try { return sessionStorage.getItem("hub.demoRole"); } catch { return null; } };
+// member ids as the database stores them (app_users.member_id); display names come from hub_me().people
 const actor = () => ({ admin: "yazan", sales: "dania", content: "dania" }[role()] || role());
 const err = (msg, code) => Object.assign(new Error(msg), { code });
 const svg = (bg, fg, a, b, h = 1350) => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
@@ -17,8 +18,7 @@ const svg = (bg, fg, a, b, h = 1350) => "data:image/svg+xml;charset=utf-8," + en
   `<text x="540" y="${h / 2 - 40}" font-family="Tahoma, sans-serif" font-size="74" font-weight="700" fill="${fg}" text-anchor="middle" direction="rtl">${a}</text>` +
   `<text x="540" y="${h / 2 + 80}" font-family="Tahoma, sans-serif" font-size="46" fill="${fg}" fill-opacity=".75" text-anchor="middle" direction="rtl">${b}</text></svg>`);
 
-// manifest fields: the shape the sync (flowpal-agency ops/hub/studio_sync.py) writes from زياد's
-// agents/visual-designer/output/studio-manifests.json: one field per existing bubble ("chat.1.text"), effective max
+// manifest fields: the shape the studio sync writes from the design team's manifests: one field per existing bubble ("chat.1.text"), effective max
 // = max(size max, length of the approved text), theme keeps the post's modifiers, budgets per size.
 const TONE = { key: "tone", label: "لون العنوان الصغير", type: "enum", group: "الألوان", options: ["teal", "signal"],
   option_labels: { teal: "أخضر (الحل، إيجابي)", signal: "برتقالي (المشكلة، تنبيه)" } };
@@ -32,7 +32,7 @@ const pick = (vals, fields) => Object.fromEntries(fields.map((f) => [f.key, f.ke
 let T = null, E = [], nextId = 501;
 function target(id, label, sort, version, template, size, fields, values, media_url, extra = {}) {
   const base = pick(values, fields);
-  // زياد's base rule: an approved original always re-saves (effective max = max(max, its own visible length))
+  // base rule: an approved original always re-saves (effective max = max(max, its own visible length))
   fields = fields.map((f) => (["text", "longtext"].includes(f.type) && typeof base[f.key] === "string" ? { ...f, max: Math.max(f.max, vlen(base[f.key])) } : f));
   return { id, post_slug: id.split("/")[0], kind: "image", label, sort, version, media_url,
     manifest: { template, size, values, fields, budgets: extra.budgets || [] }, base_values: base };
@@ -190,7 +190,7 @@ export async function mockStudioCancel(editId) {
 // test hook: سلمى changed the post meanwhile (the sync raised the version)
 export function mockStudioBumpVersion(targetId) { if (!T) seed(); const t = T.find((x) => x.id === targetId); if (t) t.version += 1; }
 
-// test hook: a post with more text than زياد measured (the field max allows more than the design holds)
+// test hook: a post with more text than the design team measured (the field max allows more than the design holds)
 export function mockStudioLoosen(targetId, key, max) {
   if (!T) seed();
   const t = T.find((x) => x.id === targetId); if (!t) return;

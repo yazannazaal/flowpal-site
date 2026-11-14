@@ -48,3 +48,10 @@ export function errText(err) {
   if (/42501|not allowed|permission/i.test(m + (err && err.code))) return "ليس لحسابك صلاحية على هذا الجزء.";
   return m || "خطأ غير معروف";
 }
+
+// Names of people come from the database (hub_me().people: {member id: display name}), never from the code.
+// Without a name the id the database sent is shown as is; the AI analyst keeps his product name.
+let PEOPLE = {};
+export function setPeople(map) { PEOPLE = map && typeof map === "object" && !Array.isArray(map) ? { ...map } : {}; }
+export const who = (id) => (id == null || id === "" ? "" : PEOPLE[id] || (id === "omar" ? "عمر" : String(id)));
+export const peopleIds = () => Object.keys(PEOPLE);
