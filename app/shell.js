@@ -30,8 +30,13 @@ const ICONS = {
   book: '<path d="M5 4h9a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h9"/>',
   image: '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5.5-5 4 3.5 2.5-2 4 3.5"/>',
   wallet: '<rect x="3.5" y="6" width="17" height="13" rx="2"/><path d="M16 12.5h4.5M6 6l9-2.5 1 2.5"/>',
+  home: '<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10v9.5h12V10"/><path d="M10 19.5v-5h4v5"/>',
+  building: '<rect x="5" y="3.5" width="14" height="17" rx="1.5"/><path d="M9 7.5h2M13 7.5h2M9 11h2M13 11h2M9 14.5h2M13 14.5h2M10.5 20.5v-3h3v3"/>',
+  "calendar-check": '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="m9 14.5 2 2 4-4"/>',
+  more: '<circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/>',
   dot: '<circle cx="12" cy="12" r="4"/>',
 };
+const PHONE_TABS = 5;   // on a phone the bar shows 5 tabs; the rest go under «المزيد» (no module names here)
 const icon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ICONS.dot}</svg>`;
 
 /* ---------- auth + hub_me: live Supabase or demo ---------- */
@@ -105,17 +110,44 @@ function setChrome(person) {
 
 function buildTabs() {
   const nav = $("#tabs");
-  nav.innerHTML = allowed.map((m) =>
-    `<a class="tab" href="#/${m.id}" data-id="${m.id}">${icon(m.icon)}<span>${esc(m.label)}</span></a>`).join("");
+  const many = allowed.length > PHONE_TABS;
+  nav.innerHTML = allowed.map((m, i) =>
+    `<a class="tab${many && i >= PHONE_TABS ? " over" : ""}" href="#/${m.id}" data-id="${m.id}">${icon(m.icon)}<span>${esc(m.label)}</span></a>`).join("") +
+    (many ? `<button class="tab-more" type="button" id="tabMore" aria-haspopup="true" aria-expanded="false" aria-controls="moreMenu">${icon("more")}<span>المزيد</span></button>` : "");
+  const menu = $("#moreMenu");
+  menu.innerHTML = many ? allowed.slice(PHONE_TABS).map((m) =>
+    `<a class="more-item" href="#/${m.id}" data-more="${m.id}">${icon(m.icon)}<span>${esc(m.label)}</span></a>`).join("") : "";
+  menu.classList.add("hidden");
+  if (many) menu.setAttribute("aria-label", "المزيد"); else menu.removeAttribute("aria-label");
   const show = allowed.length > 0;
   nav.classList.toggle("hidden", !show);
+  nav.classList.toggle("many", many);
   document.body.classList.toggle("has-tabs", show);
 }
 
+function closeMore() {
+  $("#moreMenu").classList.add("hidden");
+  const b = $("#tabMore"); if (b) b.setAttribute("aria-expanded", "false");
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("#tabMore");
+  if (b) {
+    const m = $("#moreMenu"); const open = m.classList.contains("hidden");
+    m.classList.toggle("hidden", !open); b.setAttribute("aria-expanded", String(open));
+    if (open) { const f = m.querySelector("a"); if (f) f.focus(); }
+    return;
+  }
+  if (!e.target.closest("#moreMenu") || e.target.closest("a")) closeMore();
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMore(); });
+
 function markTab(id) {
-  document.querySelectorAll("#tabs .tab").forEach((a) => {
-    if (a.dataset.id === id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  document.querySelectorAll("#tabs .tab, #moreMenu .more-item").forEach((a) => {
+    if ((a.dataset.id || a.dataset.more) === id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
+  const b = $("#tabMore");
+  if (b) b.classList.toggle("on", allowed.findIndex((m) => m.id === id) >= PHONE_TABS);
+  closeMore();
 }
 
 /* ---------- full-page views ---------- */

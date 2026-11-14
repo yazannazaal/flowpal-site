@@ -2,8 +2,12 @@
 // Data: rpc('hub_sales_board') only (security definer, checks hub_can('sales'), fixed field list, no money fields).
 // KPI formulas are the same as the board and scripts/kpis.py (kpi-definitions.md): unit = the business,
 // no reply is never a refusal, interest is never a subscription, «—» under 5 businesses or under 70% data.
-// Read only: changes go to Omar on Telegram. ?demo: fake data from demo/sales-board.js.
+// Read only. Product switcher (task 004 decision 9): the AI employee = Omar's KPIs as before + Dania's 8 statuses;
+// other products (online stores) = the 8-status funnel and follow-ups only (Omar has no outreach KPIs for them yet);
+// «مقارنة» = products side by side. Those parts come from rpc('hub_companies') and rpc('hub_products').
+// ?demo: fake data from demo/sales-board.js and demo/hub-sales.js.
 import { $, esc, safeUrl, toast, useStyle, errText } from "../lib.js";
+import * as P from "../shared/pipeline.js";
 
 const TZ = "Asia/Hebron";
 const STAGE = {
@@ -105,6 +109,10 @@ table.sx-bd{border-collapse:collapse;width:100%;font-size:13.5px;min-width:440px
 .sx-links{display:flex;flex-wrap:wrap;gap:4px 12px}
 .sx-more{display:block;margin:14px auto 0}
 .sx-foot{margin-top:16px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);font-size:14px}
+.sx-prod{margin-bottom:12px}
+.sx-cmp th,.sx-cmp td{text-align:center}
+.sx-cmp td b{font-weight:600}
+.sx-cmp tr.sum td{border-top:2px solid var(--line);font-weight:600}
 @media (min-width:600px){ .sx-kpis{grid-template-columns:repeat(3,minmax(0,1fr))} .sx-tiles{grid-template-columns:repeat(7,minmax(0,1fr))} .sx-find{grid-template-columns:1fr 220px} }
 @media (min-width:900px){ .sx-kpis{grid-template-columns:repeat(4,minmax(0,1fr))} .sx-grid{grid-template-columns:repeat(2,minmax(0,1fr))} .sx-list{grid-template-columns:repeat(2,minmax(0,1fr))} }`;
 
@@ -340,14 +348,68 @@ function leadHTML(x) {
   </li>`;
 }
 
+/* ===== per product (hub_companies) ===== */
+function prodRows(companies, prod) {
+  const out = [];
+  companies.forEach((c) => { const p = P.productOf(c, prod); if (p) out.push([c, p]); });
+  return out;
+}
+function prodCounts(companies, prod) {
+  const t = P.today(), xs = prodRows(companies, prod).filter(([, p]) => p.status !== "skipped");
+  const by = {}; xs.forEach(([, p]) => { by[p.status] = (by[p.status] || 0) + 1; });
+  const open = xs.filter(([, p]) => P.openFollowUp(p));
+  return { n: xs.length, by, today: open.filter(([, p]) => p.next_follow_up === t).length, late: open.filter(([, p]) => p.next_follow_up < t).length,
+    week: open.filter(([, p]) => p.next_follow_up > t && p.next_follow_up <= P.addDays(t, 7)).length,
+    won: xs.filter(([, p]) => p.status === "client" && p.client_confirmed).length, wonWait: xs.filter(([, p]) => p.status === "client" && !p.client_confirmed).length,
+    rows: xs };
+}
+function statusFunnel(k, title) {
+  const max = Math.max(0, ...P.STATUS_ORDER.map((s) => k.by[s] || 0));
+  return `<div class="sx-card" id="sxDania"><h3>${title}</h3>${P.STATUS_ORDER.map((s) => bar(P.STATUS[s].t, k.by[s] || 0, max, k.n ? pv(k.by[s] || 0, k.n) : "")).join("")}
+    ${k.wonWait ? `<p class="muted small" style="margin:6px 0 0">منها ${k.wonWait} «عميل» بانتظار تأكيد يزن.</p>` : ""}</div>`;
+}
+function productHTML(companies, prod, label, ctx) {
+  const k = prodCounts(companies, prod);
+  const fu = ctx.hasModule("followups");
+  const sec = {}; k.rows.forEach(([c]) => { const x = c.sector || "other"; sec[x] = (sec[x] || 0) + 1; });
+  const sk = Object.keys(sec).sort((a, b) => sec[b] - sec[a]);
+  return `<div class="sx-kpis">
+      ${kpi("الشركات", String(k.n), label, "كل شركة مربوطة بهالمنتج (بدون المستبعدة)")}
+      ${kpi("للتواصل اليوم", String(k.today), fu ? `<a href="#/followups/${esc(prod)}">افتحي المتابعات</a>` : "حسب موعد المتابعة", "شركات موعد متابعتها اليوم، وحالتها مش مسكّرة", k.today ? "warn" : "")}
+      ${kpi("متأخرة", String(k.late), "موعدها فات", "موعد المتابعة قبل اليوم وحالتها مش مسكّرة", k.late ? "warn" : "")}
+      ${kpi("عملاء", String(k.won), k.wonWait ? `+ ${k.wonWait} بانتظار تأكيد يزن` : "أكّدهم يزن", "حالة «عميل» وأكّدها يزن", "q")}
+    </div>
+    <div class="sx-grid">${statusFunnel(k, "حسب الحالة")}
+      <div class="sx-card"><h3>المتابعات</h3>${bar("متأخرة", k.late, Math.max(k.late, k.today, k.week))}${bar("اليوم", k.today, Math.max(k.late, k.today, k.week))}${bar("الأيام السبعة الجاية", k.week, Math.max(k.late, k.today, k.week))}</div>
+      ${sk.length ? `<div class="sx-card"><h3>حسب القطاع</h3>${sk.map((x) => bar(esc(P.sectorText(x)), sec[x], sec[sk[0]])).join("")}</div>` : ""}
+    </div>
+    <p class="muted small">عمر لسا ما عنده أرقام تواصل (نسبة الرد وغيرها) لهالمنتج، فبنعرض الحالات والمتابعات بس. الأرقام بتبين لما يبدأ يسجّل التواصل.</p>`;
+}
+function compareHTML(companies, products) {
+  const ks = products.map((p) => [p, prodCounts(companies, p.id)]);
+  const row = (label, f, cls = "") => `<tr class="${cls}"><td>${label}</td>${ks.map(([, k]) => `<td><b>${f(k)}</b></td>`).join("")}</tr>`;
+  return `<div class="sx-card"><h3>المنتجات جنب بعض</h3><div class="sx-scroll"><table class="sx-bd sx-cmp" style="min-width:0"><thead><tr><th></th>${ks.map(([p]) => `<th>${esc(p.short)}</th>`).join("")}</tr></thead><tbody>
+    ${row("الشركات", (k) => k.n, "sum")}
+    ${P.STATUS_ORDER.map((s) => row(P.STATUS[s].t, (k) => k.by[s] || 0)).join("")}
+    ${row("للتواصل اليوم", (k) => k.today, "sum")}${row("متأخرة", (k) => k.late)}
+    ${row("عملاء (أكّدهم يزن)", (k) => k.won)}${row("عملاء بانتظار التأكيد", (k) => k.wonWait)}
+    </tbody></table></div><p class="muted small" style="margin:6px 0 0">شركة وحدة ممكن تكون مهتمة بأكثر من منتج، فبتنحسب بكل واحد.</p></div>`;
+}
+
 /* ===== mount ===== */
-const state = { view: "an", who: "", seg: "done", stage: "", q: "", shown: PAGE };
+const state = { view: "an", who: "", seg: "done", stage: "", q: "", shown: PAGE, prod: "ai_employee" };
 
 export async function mount(ctx) {
   useStyle("sales", CSS);
   const el = ctx.el;
   state.view = ctx.path.startsWith("db") ? "db" : "an";
+  const pm = String(ctx.path || "").match(/^p\/([a-z0-9_]+)/);
+  state.prod = pm ? pm[1] : "ai_employee";
   el.innerHTML = `<p class="muted">جارِ التحميل…</p>`;
+  const papi = P.api(ctx);
+  let products = [];
+  try { products = await papi.products(); } catch { products = []; }   // the switcher is extra: KPIs still show without it
+  if (state.prod !== "ai_employee" && state.prod !== "compare" && !products.some((p) => p.id === state.prod)) state.prod = "ai_employee";
   let data = await loadRows(ctx);
   if (!ctx.isCurrent()) return;
   let items = toItems(data.rows);
@@ -357,16 +419,17 @@ export async function mount(ctx) {
   const updated = () => new Intl.DateTimeFormat("en-GB", { timeZone: TZ, day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(data.at)).replace(",", "");
 
   el.innerHTML = `
-    <div class="page-head"><h1>المبيعات</h1>
+    <div class="page-head"><h1>التحليلات</h1>
       <div class="sx-upd"><span>آخر تحديث <span class="ltr" id="sxAt"></span> (توقيت فلسطين) · للقراءة فقط</span><button class="btn-line" type="button" id="sxReload">تحديث</button></div></div>
-    <div class="sx-views">
+    ${products.length > 1 ? `<div class="pl-seg sx-prod" role="group" aria-label="المنتج" id="sxProd">${products.map((p) => `<button type="button" data-prod="${esc(p.id)}">${esc(p.short)}</button>`).join("")}<button type="button" data-prod="compare">مقارنة</button></div>` : ""}
+    <div class="sx-views" id="sxAiBar">
       <div class="sx-seg" role="group" aria-label="العرض">
         <button type="button" data-view="an">التحليلات</button><button type="button" data-view="db">المحلات</button>
       </div>
       <label class="sr" for="sxWho">الشخص</label><select class="i" id="sxWho"></select>
     </div>
     <section id="sxBody"></section>
-    <div class="sx-foot">للتعديل ابعتي لعمر على تليجرام: رقم المحل + شو بدك تغيّري.</div>`;
+    <div class="sx-foot">${ctx.hasModule("companies") ? `للتعديل افتحي الشركة من <a href="#/companies">الشركات</a>. كل تعديل بيوصل لعمر.` : "للتعديل ابعتي لعمر على تليجرام: رقم المحل + شو بدك تغيّري."}</div>`;
 
   const fillWho = () => {
     const ps = persons();
@@ -409,10 +472,31 @@ export async function mount(ctx) {
     renderList();
   };
 
-  const render = () => {
+  let seq = 0;
+  const render = async () => {
+    const my = ++seq;
+    el.querySelectorAll("#sxProd button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.prod === state.prod)));
+    $("#sxAiBar", el).classList.toggle("hidden", state.prod !== "ai_employee");
+    if (state.prod !== "ai_employee") {
+      $("#sxBody", el).innerHTML = `<p class="muted">جارِ التحميل…</p>`;
+      try {
+        const cs = await papi.companies();
+        if (my !== seq || !ctx.isCurrent()) return;
+        const p = products.find((x) => x.id === state.prod);
+        $("#sxBody", el).innerHTML = state.prod === "compare" ? compareHTML(cs, products) : productHTML(cs, state.prod, p ? p.label : "", ctx);
+      } catch (err) { if (my === seq) $("#sxBody", el).innerHTML = `<p class="err">ما قدرنا نحمّل الشركات: ${esc(errText(err))}</p>`; }
+      return;
+    }
     el.querySelectorAll(".sx-seg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === state.view)));
-    if (state.view === "db") renderDB();
-    else $("#sxBody", el).innerHTML = analyticsHTML(mine(), state.who || "all");
+    if (state.view === "db") { renderDB(); return; }
+    $("#sxBody", el).innerHTML = analyticsHTML(mine(), state.who || "all");
+    if (state.who || !products.length) return;   // Dania's statuses are per company, not per person
+    try {
+      const cs = await papi.companies();
+      if (my !== seq || !ctx.isCurrent()) return;
+      const grid = $("#sxBody .sx-grid", el);
+      if (grid) grid.insertAdjacentHTML("afterbegin", statusFunnel(prodCounts(cs, "ai_employee"), "حسب حالات الشركات (من «الشركات»)"));
+    } catch { /* KPIs still show */ }
   };
 
   fillWho();
@@ -420,7 +504,12 @@ export async function mount(ctx) {
 
   el.addEventListener("click", async (e) => {
     const b = e.target.closest("button"); if (!b) return;
-    if (b.dataset.view && b.dataset.view !== state.view) {
+    if (b.dataset.prod && b.closest("#sxProd")) {
+      if (b.dataset.prod === state.prod) return;
+      state.prod = b.dataset.prod;
+      history.replaceState(null, "", ctx.base + (state.prod === "ai_employee" ? (state.view === "db" ? "/db" : "") : "/p/" + state.prod));
+      render();
+    } else if (b.dataset.view && b.dataset.view !== state.view) {
       state.view = b.dataset.view;
       // replaceState: keeps the view in the address (reload opens it) without a hashchange re-mount.
       history.replaceState(null, "", ctx.base + (state.view === "db" ? "/db" : ""));
@@ -431,7 +520,7 @@ export async function mount(ctx) {
       state.shown += PAGE; renderList();
     } else if (b.id === "sxReload") {
       b.disabled = true;
-      try { data = await loadRows(ctx, true); items = toItems(data.rows); fillWho(); render(); toast("تم التحديث"); }
+      try { data = await loadRows(ctx, true); P.forget(); items = toItems(data.rows); fillWho(); render(); toast("تم التحديث"); }
       catch (err) { toast("تعذّر التحديث: " + errText(err)); }
       b.disabled = false;
     }
