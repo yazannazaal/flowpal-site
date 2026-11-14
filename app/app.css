@@ -46,6 +46,19 @@ h2{font-size:17px;font-weight:600}
 .tab[aria-current="page"]{color:#fff}
 .tab[aria-current="page"] svg{stroke:var(--teal)}
 .tab[aria-current="page"]::before{content:"";position:absolute;top:0;inset-inline:22%;height:3px;border-radius:0 0 3px 3px;background:var(--teal)}
+.tab-more{flex:1 0 58px;min-height:var(--tabbar);display:none;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:8px 4px 6px;background:none;border:0;color:var(--on-ink-2);font-size:11.5px;line-height:1.25;cursor:pointer;position:relative}
+.tab-more svg{width:22px;height:22px;stroke:currentColor;fill:currentColor;stroke-width:0}
+.tab-more.on,.tab-more[aria-expanded="true"]{color:#fff}
+.tab-more.on::before{content:"";position:absolute;top:0;inset-inline:22%;height:3px;border-radius:0 0 3px 3px;background:var(--teal)}
+.tabs.many .tab.over{display:none}
+.tabs.many .tab-more{display:flex}
+.more-menu{position:fixed;z-index:11;inset-inline-end:8px;bottom:calc(var(--tabbar) + var(--safe-b) + 8px);background:var(--ink);border:1px solid var(--ink-3);
+  border-radius:12px;padding:6px;min-width:190px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.more-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;color:var(--on-ink);text-decoration:none;font-size:15px}
+.more-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.more-item:hover,.more-item[aria-current="page"]{background:var(--ink-2);color:#fff}
+.more-item[aria-current="page"] svg{stroke:var(--teal)}
 body.has-tabs main{padding-bottom:calc(var(--tabbar) + var(--safe-b) + 32px)}
 
 .demo-flag{background:#F3D27A;color:var(--ink);font-size:13px;padding:6px var(--gutter);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:center}
@@ -134,6 +147,8 @@ dialog .row-btns{display:flex;gap:8px;margin-top:16px;padding-top:14px;border-to
   .tab svg{width:18px;height:18px}
   .tab span{max-width:none;-webkit-line-clamp:1}
   .tab[aria-current="page"]::before{top:auto;bottom:0;inset-inline:10px;border-radius:3px 3px 0 0}
+  .tabs.many .tab.over{display:flex}
+  .tabs.many .tab-more,.more-menu{display:none !important}
   body.has-tabs main{padding-bottom:64px}
   .toast{bottom:20px}
 }

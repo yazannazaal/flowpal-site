@@ -1,9 +1,9 @@
 // Flowpal Hub service worker (scope /app/).
 // - Caches ONLY the app shell (and the offline page + icons) so the app installs and opens fast.
 // - Never touches Supabase or any other origin: data is always live and never stored here.
-// - Never precaches modules/*.js. A module file is cached only after this person opened it (runtime),
+// - Never precaches modules/*.js or shared/*.js (code shared by some modules). A module file is cached only after this person opened it (runtime),
 //   and logout deletes every hub-* cache.
-const VERSION = "v2";
+const VERSION = "v3";
 const SHELL_CACHE = `hub-shell-${VERSION}`;
 const MOD_CACHE = `hub-modules-${VERSION}`;
 const OFFLINE_URL = "./offline.html";
@@ -51,7 +51,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   const rel = url.pathname.slice(scope.pathname.length);
-  if (rel.startsWith("modules/")) { event.respondWith(networkFirst(request, MOD_CACHE)); return; }
+  if (rel.startsWith("modules/") || rel.startsWith("shared/")) { event.respondWith(networkFirst(request, MOD_CACHE)); return; }
   if (rel.startsWith("demo/")) return;                       // demo data: never cached
   event.respondWith(networkFirst(request, SHELL_CACHE));
 });
