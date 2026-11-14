@@ -61,6 +61,17 @@ dl.kv dd{margin:2px 0 0;overflow-wrap:anywhere}
 .mstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
 .mstats div{background:var(--paper);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--muted)}
 .mstats b{display:block;font:600 18px/1.3 var(--f-head);color:var(--ink)}
+.fix{margin:8px 0 4px;font-size:14px;display:grid;gap:6px}
+.fix.wait,.fix.done,.fix.bad,.fix.ok{border-radius:8px;padding:8px 10px;border:1px solid var(--line);background:var(--paper)}
+.fix.done{border-color:#9FD9CF;background:#E7F7F4}
+.fix.bad{border-color:#EBCF8F;background:#FBF1DC}
+.fix.ok{color:var(--teal-ink)}
+.fix .fsum{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+.fix .ref{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.fix .facts2{display:flex;flex-wrap:wrap;gap:8px}
+.fix .btn,.fix .btn-line{min-height:40px}
+.fix .fixbtn{justify-self:start}
+.fix .nok{display:grid;gap:6px}
 @media (min-width:760px){
   .sub a.row{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) 150px;grid-template-areas:"a b c";align-items:center;padding:16px 18px;padding-inline-start:26px}
   .sub a.row > div:first-child{grid-area:a} .sub .mid{grid-area:b;grid-column:auto} .sub .rt{grid-area:c}
@@ -121,6 +132,17 @@ function demoStore() {
     async addNote(n) { notes.push({ ...n, id: ++nid, at: new Date().toISOString(), closed_at: n.closed_at || null }); },
     async setNoteStatus(id, status) { const n = notes.find((x) => x.id === id); if (n) { n.status = status; n.closed_at = (status === "done" || status === "wont_do") ? new Date().toISOString() : null; } },
     async metrics(id) { return metrics.filter((m) => m.subscriber_id === id); },
+    async fixRequest(id) {
+      const n = notes.find((x) => x.id === id); if (!n) return;
+      Object.assign(n, { fix_state: "requested", fix_requested_by: "تجريبي", fix_requested_at: new Date().toISOString(), status: "in_progress", closed_at: null, fix_summary: null, fix_check_note: null });
+      // demo only: pretend the team fixed it a moment later so the check buttons can be tried
+      setTimeout(() => Object.assign(n, { fix_state: "fixed", fix_summary: "تصليح تجريبي: تعدّل الـprompt في workflow تجريبي. افحصي محادثة تجريبية.", fix_ref: "demo", fix_done_at: new Date().toISOString() }), 1500);
+    },
+    async fixCheck(id, ok, note) {
+      const n = notes.find((x) => x.id === id); if (!n || n.fix_state !== "fixed") return;
+      Object.assign(n, { fix_state: ok ? "checked" : "reopened", fix_checked_by: "تجريبي", fix_checked_at: new Date().toISOString(), fix_check_note: note || null,
+        status: ok ? "done" : "open", closed_at: ok ? new Date().toISOString() : null });
+    },
   };
   return demo;
 }
@@ -143,6 +165,8 @@ function supaStore(sb) {
       const from = new Date(); from.setDate(from.getDate() - 29);
       return ok(await sb.from("subscriber_metrics_daily").select("day,turns,conversations,bot_errors,unanswered,handoffs,orders,median_reply_sec,health").eq("subscriber_id", id).gte("day", isoDay(from)).order("day"));
     },
+    async fixRequest(id) { ok(await sb.rpc("hub_fix_request", { p_note_id: id })); },
+    async fixCheck(id, okd, note) { ok(await sb.rpc("hub_fix_check", { p_note_id: id, p_ok: okd, p_note: note || null })); },
   };
 }
 
@@ -207,6 +231,25 @@ function contactsHTML(s) {
 
 const noteFilter = { kind: "all", status: "active" };
 
+// «صلّحها» (ops/hub/004-fix-button.sql): request -> team fixes -> Asmaa gets it on Telegram -> she checks here.
+function fixHTML(n, closed) {
+  if (n.kind !== "issue" && n.kind !== "request") return "";
+  const id = Number(n.id);
+  const st = n.fix_state || "";
+  const btn = (t) => `<button class="btn fixbtn" type="button" data-fix="${id}">${t}</button>`;
+  if (st === "checked") return `<div class="fix ok">✓ انفحص التصليح${n.fix_checked_by ? " من " + esc(n.fix_checked_by) : ""}${n.fix_checked_at ? " · " + esc(fmtDT(n.fix_checked_at)) : ""}${n.fix_summary ? `<div class="fsum">${esc(n.fix_summary)}</div>` : ""}</div>`;
+  if (closed) return "";
+  if (st === "requested") return `<div class="fix wait">⏳ طلب تصليح${n.fix_requested_by ? " من " + esc(n.fix_requested_by) : ""} · الفريق التقني بيبلش عليه خلال دقائق</div>`;
+  if (st === "working") return `<div class="fix wait">🛠 الفريق التقني شغال على التصليح هلأ</div>`;
+  if (st === "fixed") return `<div class="fix done"><b>انصلح، بانتظار الفحص</b>${n.fix_summary ? `<div class="fsum">${esc(n.fix_summary)}</div>` : ""}${n.fix_ref ? `<div class="ref ltr">${esc(n.fix_ref)}</div>` : ""}
+      <div class="facts2"><button class="btn" type="button" data-chk="1" data-id="${id}">✓ الفحص تمام</button><button class="btn-line" type="button" data-nok="${id}">✗ لسا فيها مشكلة</button></div>
+      <div class="nok hidden" id="nok-${id}"><label class="f" for="nokt-${id}">شو اللي لسا مش زابط؟</label><textarea class="i" id="nokt-${id}" maxlength="1000"></textarea>
+        <button class="btn-line" type="button" data-chk="0" data-id="${id}">إرسال ورجوع للفريق</button></div></div>`;
+  if (st === "blocked") return `<div class="fix bad">الفريق ما قدر يصلحه لحاله${n.fix_summary ? `<div class="fsum">${esc(n.fix_summary)}</div>` : ""}${btn("🛠 اطلب التصليح مرة ثانية")}</div>`;
+  if (st === "reopened") return `<div class="fix bad">رجع للفريق بعد الفحص${n.fix_check_note ? `<div class="fsum">${esc(n.fix_checked_by || "")}: ${esc(n.fix_check_note)}</div>` : ""}${btn("🛠 صلّحها مرة ثانية")}</div>`;
+  return `<div class="fix">${btn("🛠 صلّحها")}</div>`;
+}
+
 function notesHTML(notes) {
   const list = notes.filter((n) =>
     (noteFilter.kind === "all" || n.kind === noteFilter.kind) &&
@@ -218,6 +261,7 @@ function notesHTML(notes) {
     return `<li class="note k-${esc(n.kind)} ${closed ? "closed" : ""}">
       <div class="top"><span class="kind">${esc(L.kind[n.kind] || n.kind)}</span><span class="title">${esc(n.title)}</span><span class="nstat ${esc(n.status)}">${esc(L.nstat[n.status] || n.status)}</span></div>
       ${n.body ? `<p class="body">${esc(n.body)}</p>` : ""}
+      ${fixHTML(n, closed)}
       <div class="foot"><span>${esc(fmtDT(n.at))}</span><span>${esc(n.author)}</span>${n.ref ? `<span class="ref ltr">${esc(n.ref)}</span>` : ""}
         <span class="acts">${closed
           ? `<button class="btn-line" data-st="open" data-id="${id}">إعادة فتح</button>`
@@ -313,6 +357,22 @@ async function viewSubscriber(el, store, base, id, me) {
     const b = e.target.closest("button"); if (!b) return;
     if (b.dataset.fk) { noteFilter.kind = b.dataset.fk; return refresh(); }
     if (b.dataset.fs) { noteFilter.status = b.dataset.fs; return refresh(); }
+    if (b.dataset.fix) {
+      b.disabled = true;
+      try { await store.fixRequest(Number(b.dataset.fix)); await refresh(); toast("انبعت للفريق التقني. لما يخلص بتوصل أسماء رسالة تفحصه"); }
+      catch (err) { b.disabled = false; toast("تعذّر الإرسال: " + errText(err)); }
+      return;
+    }
+    if (b.dataset.nok) { const box = $("#nok-" + b.dataset.nok, el); box.classList.remove("hidden"); $("textarea", box).focus(); return; }
+    if (b.dataset.chk) {
+      const okd = b.dataset.chk === "1";
+      const note = okd ? null : ($("#nokt-" + b.dataset.id, el).value || "").trim();
+      if (!okd && !note) { toast("اكتب شو اللي لسا مش زابط"); $("#nokt-" + b.dataset.id, el).focus(); return; }
+      b.disabled = true;
+      try { await store.fixCheck(Number(b.dataset.id), okd, note); await refresh(); toast(okd ? "تمام، انسكّر البند" : "رجع للفريق مع ملاحظتك"); }
+      catch (err) { b.disabled = false; toast("تعذّر الحفظ: " + errText(err)); }
+      return;
+    }
     if (b.dataset.st) {
       b.disabled = true;
       try { await store.setNoteStatus(Number(b.dataset.id), b.dataset.st); await refresh(); toast(b.dataset.st === "done" ? "أُغلق البند" : b.dataset.st === "open" ? "أُعيد فتح البند" : "البند قيد العمل"); }
