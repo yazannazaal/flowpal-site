@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0E1F26">
+<title>استبيان FlowPal</title>
+<link rel="icon" type="image/png" href="/app/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1F26; --ink-2:#1B323C; --teal:#14B8A6; --teal-ink:#0B7A6E; --paper:#F7F5F0; --card:#FFFFFF;
+  --line:#DDD8CC; --muted:#5A6A70; --soft:#EEEBE3; --err:#A8322C;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif; --f-head:"Readex Pro","IBM Plex Sans Arabic","Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.7 var(--f-body);overflow-x:hidden}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:4px}
+.hidden{display:none !important}
+header{background:var(--ink);color:#fff;padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top,0px))}
+header .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:10px;font:600 18px var(--f-head)}
+header img{border-radius:6px}
+main{max-width:720px;margin:0 auto;padding:18px 16px 120px}
+h1{font:700 23px/1.35 var(--f-head);margin:4px 0 8px}
+h2{font:600 18px/1.35 var(--f-head);margin:0 0 12px;display:flex;gap:8px;align-items:baseline}
+h2 .n{color:var(--teal-ink)}
+.intro{color:var(--ink-2);margin:0 0 6px}
+.note{font-size:14px;color:var(--muted);margin:0 0 18px}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 0 14px}
+.q{margin:0 0 16px}
+.q:last-child{margin-bottom:0}
+.q label{display:block;font-weight:500;margin-bottom:6px;overflow-wrap:anywhere}
+.q textarea{width:100%;min-height:76px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#FCFBF8;font:inherit;resize:vertical}
+.q textarea:focus{border-color:var(--teal);background:#fff}
+.bar{position:fixed;inset-inline:0;bottom:0;background:rgba(247,245,240,.97);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.bar .prog{flex:1;font-size:14px;color:var(--muted)}
+.btn{background:var(--teal-ink);color:#fff;border:0;border-radius:10px;padding:12px 22px;font:600 16px var(--f-head);cursor:pointer;min-height:48px}
+.btn[disabled]{opacity:.6;cursor:default}
+.err{color:var(--err);font-size:14px;margin-top:6px}
+.done{text-align:center;padding:40px 8px}
+.done .tick{width:64px;height:64px;border-radius:50%;background:#E7F7F4;color:var(--teal-ink);font:700 34px/64px var(--f-head);margin:0 auto 14px}
+.msg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;text-align:center;margin-top:30px}
+</style>
+</head>
+<body>
+<header><div class="in"><img src="/app/icons/icon-192.png" alt="" width="28" height="28"><span>FlowPal</span></div></header>
+<main id="main"><p class="muted">جارِ التحميل…</p></main>
+<div class="bar hidden" id="bar"><div class="in"><span class="prog" id="prog"></span><button class="btn" type="submit" form="qform" id="send">إرسال</button></div></div>
+<script type="module" src="./form.js"></script>
+</body>
+</html>

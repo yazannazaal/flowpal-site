@@ -2,3 +2,4 @@ User-agent: *
 Disallow: /demos/
 Disallow: /subscribers/
 Disallow: /app/
+Disallow: /q/
