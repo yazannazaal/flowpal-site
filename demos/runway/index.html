@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Try the Look — Halden Supply (demo)</title>
+<meta name="description" content="Six looks, styled head to toe. Explore the runway, isolate a look, and tap a pin to see the piece. A Flowpal demo store.">
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:light}
+html,body{margin:0;padding:0;max-width:100%;font-family:Helvetica,Arial,sans-serif;color:#151413;background:#fff}
+body{overflow-x:hidden}
+button,input,select{font:inherit}
+button{color:inherit}
+a{color:inherit;text-decoration:none}
+button,a{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible{outline:2px solid #151413;outline-offset:4px}
+[hidden]{display:none!important}
+
+/* ---------- header ---------- */
+.site-header{height:88px;padding:0 40px;display:flex;align-items:center;gap:32px;border-bottom:1px solid #e4e4e4;background:#fff;position:relative;z-index:50}
+.brand{margin-right:auto;display:inline-flex;align-items:center;gap:10px}
+.brand svg{display:block;width:26px;height:26px}
+.brand-word{font-size:15px;font-weight:700;letter-spacing:.28em;text-transform:uppercase}
+.demo-flag{font-size:9px;letter-spacing:.16em;text-transform:uppercase;border:1px solid #151413;padding:3px 6px;border-radius:2px}
+.site-header nav{display:flex;gap:28px;font-size:14px;font-weight:600}
+.site-header nav a{padding:12px 0}
+.site-header nav a:hover,.site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:4px}
+#open-bag{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:0;min-width:44px;min-height:44px;cursor:pointer}
+#open-bag span{font-size:10px}
+
+/* ---------- section ---------- */
+.rw{
+  --rw-text:#151413;--rw-muted:#66625c;--rw-accent:#0e0e0e;--rw-on-accent:#fff;--rw-line:#c8c8c8;
+  --rw-h:46px;--rw-sub:12px;--rw-label:10px;--rw-chip:17px;--rw-ph:18px;--rw-pt:13px;--rw-price:12px;--rw-thumb:92px;--rw-pad:32px;
+  --rw-ease:cubic-bezier(.16,1,.3,1);--rw-ease-silk:cubic-bezier(.65,0,.35,1);--rw-ease-spring:cubic-bezier(.34,1.56,.64,1);--rw-ease-sheet:cubic-bezier(.32,.72,0,1);
+  --rw-speed:5s;--rw-model-h:560px;--rw-progress:.167;
+  display:block;position:relative;color:var(--rw-text);background:#fff
+}
+.rw__sticky{height:var(--rw-frame-h,100svh);display:flex;flex-direction:column}
+.rw__grid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:minmax(0,1fr);width:100%}
+.rw__left{position:relative;display:flex;flex-direction:column;background:#fff;overflow:hidden;min-height:0}
+.rw__head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:44px 56px 0;z-index:5;position:relative}
+.rw__intro{display:flex;flex-direction:column;gap:12px;max-width:640px}
+.rw__title{margin:0;font-weight:400;font-size:var(--rw-h);line-height:1;letter-spacing:-.02em}
+.rw__sub{margin:0;font-size:var(--rw-sub);line-height:1.55;color:var(--rw-muted);max-width:46ch}
+.rw__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+/* stage */
+.rw__stage{position:relative;flex:1 1 auto;min-height:0;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;outline:none;overflow:hidden;z-index:0}
+.rw.is-dragging .rw__stage{cursor:grabbing}
+.rw__stage:focus-visible{box-shadow:inset 0 0 0 2px var(--rw-accent)}
+.rw__actors{position:absolute;inset:0;transition:opacity .7s var(--rw-ease) .2s}
+.rw__model{position:absolute;left:0;bottom:0;transform-origin:50% 100%;will-change:transform,opacity;opacity:0}
+.rw__figure{position:relative;height:var(--rw-model-h);aspect-ratio:.5625}
+.rw__figure svg{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.rw__hit{position:absolute;inset:0;z-index:1;background:transparent;border:0;border-radius:24px;cursor:pointer;padding:0}
+.rw__hit:focus-visible{outline:2px solid var(--rw-accent);outline-offset:6px}
+.rw__model.is-front .rw__hit{cursor:zoom-in}
+.rw__shadow{position:absolute;left:52%;bottom:0;width:150%;height:9%;min-height:14px;max-height:46px;transform:translate(-50%,50%);filter:blur(2px);
+  background:radial-gradient(closest-side,rgb(20 16 12/.30),rgb(20 16 12/.14) 45%,rgb(20 16 12/.04) 75%,rgb(20 16 12/0))}
+.rw__sweep{position:absolute;inset:0;z-index:1550;mix-blend-mode:soft-light;pointer-events:none;overflow:hidden}
+.rw__sweep::before{content:"";position:absolute;top:-20%;bottom:-20%;width:42%;opacity:0;transform:translateX(-130%) skewX(-12deg);
+  background:linear-gradient(100deg,transparent,rgb(255 255 255/.25) 42%,rgb(255 255 255/.55) 50%,rgb(255 255 255/.25) 58%,transparent)}
+.rw__stage.is-sweep .rw__sweep::before{animation:rw-sweep 1.5s var(--rw-ease-silk)}
+@keyframes rw-sweep{0%{transform:translateX(-130%) skewX(-12deg);opacity:0}18%{opacity:1}100%{transform:translateX(330%) skewX(-12deg);opacity:0}}
+
+/* cursor */
+.rw--cursor .rw__stage,.rw--cursor .rw__stage *{cursor:none!important}
+.rw__cursor{position:absolute;left:0;top:0;width:0;height:0;z-index:1700;pointer-events:none}
+.rw__cursor-in{position:absolute;left:-42px;top:-42px;width:84px;height:84px;border-radius:50%;display:grid;place-items:center;color:var(--rw-text);
+  border:1px solid color-mix(in srgb,#151413 28%,transparent);background:color-mix(in srgb,#fff 40%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;transform:scale(.3);transition:transform .6s var(--rw-ease),opacity .35s,background .35s,border-color .35s,color .35s}
+.rw__cursor-label{grid-area:1/1;font-size:10px;letter-spacing:.24em;padding-left:.24em;text-transform:uppercase;white-space:nowrap;transition:opacity .25s,letter-spacing .7s var(--rw-ease)}
+.rw__cursor-view{opacity:0}
+.rw__cursor.is-on .rw__cursor-in{opacity:1;transform:scale(1)}
+.rw__cursor.is-view .rw__cursor-drag{opacity:0}.rw__cursor.is-view .rw__cursor-view{opacity:1}
+.rw__cursor.is-link .rw__cursor-in{transform:scale(.2);background:var(--rw-accent);border-color:transparent}
+.rw__cursor.is-link .rw__cursor-label{opacity:0}
+.rw.is-dragging .rw__cursor-in{transform:scale(.74);background:var(--rw-accent);border-color:var(--rw-accent);color:#fff}
+.rw.is-dragging .rw__cursor-drag{opacity:1;letter-spacing:.42em}.rw.is-dragging .rw__cursor-view{opacity:0}
+
+/* phone walk line */
+.rw__walk{display:none;position:absolute;left:50%;bottom:8px;z-index:1600;width:min(140px,38%);transform:translateX(-50%)}
+.rw__walk-line{display:block;height:2px;background:color-mix(in srgb,#151413 14%,transparent);position:relative;overflow:hidden}
+.rw__walk-line::after{content:"";position:absolute;inset:0;background:var(--rw-accent);transform-origin:left;transform:scaleX(var(--rw-progress));transition:transform 1.1s var(--rw-ease)}
+
+/* controls */
+.rw__controls{display:flex;align-items:center;gap:20px;padding:6px 44px 30px;z-index:5;position:relative}
+.rw__icon{width:44px;height:44px;display:grid;place-items:center;border:0;background:none;color:var(--rw-text);position:relative;cursor:pointer;padding:0;flex:0 0 auto}
+.rw__icon::before{content:"";position:absolute;inset:2px;border-radius:50%;border:1px solid currentColor;opacity:0;transform:scale(.55);transition:transform .7s var(--rw-ease),opacity .4s}
+.rw__icon:hover::before{opacity:.22;transform:scale(1)}
+.rw__icon svg{transition:transform .5s cubic-bezier(.2,1.6,.4,1)}
+[data-rw-prev]:hover svg{transform:translateX(-4px)}[data-rw-next]:hover svg{transform:translateX(4px)}
+.rw__icon:active svg{transform:scale(.88)}
+.rw__icon:focus-visible{outline:2px solid var(--rw-accent);outline-offset:2px;border-radius:4px}
+.rw__auto .i-pause{display:none}.rw.is-playing .rw__auto .i-pause{display:block}.rw.is-playing .rw__auto .i-play{display:none}
+.rw__ticks{flex:1;display:flex;gap:6px;min-width:0}
+.rw__tick{flex:0 1 44px;min-width:14px;height:44px;display:flex;flex-direction:column;justify-content:center;gap:9px;color:var(--rw-muted);text-align:left;
+  background:none;border:0;padding:0;cursor:pointer;transition:flex-basis .8s cubic-bezier(.2,1.25,.3,1),color .3s}
+.rw__tick[aria-current="true"]{flex:0 0 190px;color:var(--rw-text)}
+.rw__tick:hover{color:var(--rw-text)}
+.rw__tick-bar{display:block;height:2px;width:100%;overflow:hidden;position:relative;background:color-mix(in srgb,#151413 14%,transparent);transition:transform .5s var(--rw-ease)}
+.rw__tick:hover .rw__tick-bar{transform:scaleY(1.5)}
+.rw__tick-bar::after{content:"";position:absolute;inset:0;background:#151413;transform:scaleX(0);transform-origin:left;transition:transform 1s var(--rw-ease),opacity .4s,background .4s}
+.rw__tick.is-past .rw__tick-bar::after{transform:scaleX(1);opacity:.35}
+.rw__tick[aria-current="true"] .rw__tick-bar::after{transform:scaleX(1);background:var(--rw-accent);opacity:1}
+.rw.is-playing .rw__tick[aria-current="true"] .rw__tick-bar::after{transform:scaleX(0);transition:none}
+.rw.is-playing .rw__tick.is-run .rw__tick-bar::after{animation:rw-fill var(--rw-speed) linear forwards}
+@keyframes rw-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.rw__tick-label{font-size:var(--rw-label);letter-spacing:.12em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.rw__tick-name{display:none}
+.rw__tick[aria-current="true"] .rw__tick-name{display:inline;animation:rw-name-in 1.1s var(--rw-ease) .1s backwards}
+@keyframes rw-name-in{from{opacity:0;letter-spacing:.34em}}
+
+/* panel */
+.rw__panel{position:relative;background:#fff;border-left:1px solid var(--rw-line);min-height:0}
+.rw__panel-inner{position:absolute;inset:0;display:flex;flex-direction:column}
+.rw__panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:44px var(--rw-pad) 18px}
+.rw__panel-title{margin:0;font-weight:400;font-size:var(--rw-ph);line-height:1.1}
+.rw__label{font-size:var(--rw-label);letter-spacing:.16em;text-transform:uppercase;color:var(--rw-muted);white-space:nowrap}
+.rw__label.is-swap{animation:rw-fade .8s var(--rw-ease)}
+@keyframes rw-fade{from{opacity:0;transform:translateY(6px)}}
+.rw__look-panel{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+.rw__mhead{display:none}
+.rw__items{list-style:none;margin:0;padding:6px var(--rw-pad) 20px;display:flex;flex-direction:column;overflow-y:auto;flex:1 1 auto;min-height:0;overscroll-behavior:contain;scrollbar-width:thin}
+.rw__item{position:relative;display:grid;grid-template-columns:var(--rw-thumb) minmax(0,1fr) 44px;column-gap:18px;align-items:center;padding:18px 0;border-top:1px solid var(--rw-line)}
+.rw__item:last-child{border-bottom:1px solid var(--rw-line)}
+.rw__item::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--rw-accent);transform:scaleX(0);transform-origin:left;transition:transform .9s var(--rw-ease)}
+.rw__item.is-hot::after{transform:scaleX(1)}
+.rw__media{position:relative;display:block;aspect-ratio:4/5;overflow:hidden;background:color-mix(in srgb,#151413 5%,#fff)}
+.rw__media svg{position:absolute;inset:0;width:100%;height:100%;transition:transform 1.4s var(--rw-ease)}
+.rw__num{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgb(255 255 255/.9);color:#151413;font-size:10px;font-weight:600;
+  transition:background .3s,color .3s,transform .45s cubic-bezier(.2,1.6,.4,1)}
+.rw__item.is-hot .rw__num{background:var(--rw-accent);color:#fff;transform:scale(1.12)}
+@media (hover:hover){.rw__item:hover::after{transform:scaleX(1)}.rw__item:hover .rw__media svg{transform:scale(1.07)}.rw__item:hover .rw__num{background:var(--rw-accent);color:#fff;transform:scale(1.12)}}
+.rw__tag{position:absolute;top:11px;left:8px;z-index:2;display:flex;flex-direction:column;transform-origin:10px 0;pointer-events:none}
+.rw__tag::before{content:"";width:1px;height:11px;margin-left:10px;background:color-mix(in srgb,#151413 50%,transparent)}
+.rw__tag-text{background:#151413;color:#fff;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:4px 6px;border-radius:2px}
+@media (hover:hover){.rw__item:hover .rw__tag{animation:rw-swing 1.4s cubic-bezier(.3,.7,.4,1)}}
+@keyframes rw-swing{0%{transform:rotate(-16deg)}25%{transform:rotate(11deg)}45%{transform:rotate(-7deg)}65%{transform:rotate(4deg)}82%{transform:rotate(-2deg)}100%{transform:rotate(0)}}
+.rw__info{display:flex;flex-direction:column;gap:5px;min-width:0}
+.rw__type{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--rw-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rw__name{font-size:var(--rw-pt);font-weight:500;line-height:1.3;align-self:flex-start;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .7s var(--rw-ease)}
+.rw__item:hover .rw__name{background-size:100% 1px}
+.rw__price{font-size:var(--rw-price);display:flex;gap:8px;color:var(--rw-text)}
+.rw__add{width:44px;height:44px;display:grid;place-items:center;border:0;background:none;align-self:end;position:relative;cursor:pointer;padding:0}
+.rw__add svg{grid-area:1/1;transition:transform .55s cubic-bezier(.2,1.6,.4,1),opacity .2s}
+.rw__add .i-check,.rw__add .i-spin{opacity:0}
+.rw__add::before{content:"";position:absolute;inset:4px;border-radius:20px;border:1px solid currentColor;opacity:0;transform:scale(.55);transition:transform .7s var(--rw-ease),opacity .4s}
+.rw__add:hover::before,.rw__item.is-picking .rw__add::before{opacity:.22;transform:scale(1)}
+.rw__item.is-picking .rw__add .i-plus{transform:rotate(45deg)}
+.rw__item.is-loading .rw__add .i-plus{opacity:0}
+.rw__item.is-loading .rw__add .i-spin{opacity:1;animation:rw-spin .8s linear infinite}
+@keyframes rw-spin{to{transform:rotate(360deg)}}
+.rw__item.is-loading .rw__media::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgb(255 255 255/.5) 50%,transparent 70%);animation:rw-shimmer 1.1s infinite}
+@keyframes rw-shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.rw__item.is-added .rw__add{cursor:default}
+.rw__item.is-added .rw__add .i-plus{opacity:0}
+.rw__item.is-added .rw__add .i-check{opacity:1;color:var(--rw-accent);animation:rw-pop .6s cubic-bezier(.2,1.6,.4,1)}
+.rw__item.is-added .rw__add .i-check path{stroke-dasharray:24;stroke-dashoffset:24;animation:rw-draw .7s var(--rw-ease) .1s forwards}
+.rw__item.is-added .rw__add::before{opacity:0}
+.rw__item.is-added .rw__add::after{content:"";position:absolute;inset:4px;border-radius:20px;border:1px solid var(--rw-accent);animation:rw-burst 1s var(--rw-ease) forwards}
+@keyframes rw-pop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes rw-draw{to{stroke-dashoffset:0}}
+@keyframes rw-burst{from{transform:scale(.55);opacity:.9}to{transform:scale(1.7);opacity:0}}
+
+/* picker */
+.rw__picker{grid-column:1/-1;display:flex;flex-direction:column;gap:14px;padding-top:16px;animation:rw-drop .7s var(--rw-ease)}
+@keyframes rw-drop{from{opacity:0;transform:translateY(-8px)}}
+.rw__picker-head{display:none}
+.rw__opt{border:0;padding:0;margin:0;animation:rw-rise .8s var(--rw-ease) backwards}
+.rw__opt-name{font-size:11px;margin-bottom:8px;padding:0}
+.rw__pills{display:flex;flex-wrap:wrap;gap:8px}
+.rw__pill{position:relative}
+.rw__pill input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.rw__pill span{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:40px;padding:0 14px;border-radius:30px;border:1px solid var(--rw-line);font-size:11px;
+  transition:background .3s,color .3s,border-color .3s,transform .45s var(--rw-ease-spring)}
+.rw__pill:hover span{border-color:#151413}
+.rw__pill input:checked+span{background:#151413;color:#fff;border-color:#151413}
+.rw__pill:active span{transform:scale(.94)}
+.rw__pill input:focus-visible+span{outline:2px solid var(--rw-accent);outline-offset:2px}
+.rw__confirm{min-height:46px;border:0;border-radius:0;background:#151413;color:#fff;font-size:11px;font-weight:500;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:10px;
+  position:relative;overflow:hidden;cursor:pointer;animation:rw-rise .8s var(--rw-ease) .16s backwards;transition:transform .4s cubic-bezier(.2,1.5,.4,1)}
+.rw__confirm:hover,.rw__cta:hover{transform:translateY(-1px)}
+.rw__confirm::before,.rw__cta::before{content:"";position:absolute;top:0;bottom:0;left:0;width:60%;transform:translateX(-140%) skewX(-18deg);background:linear-gradient(100deg,transparent,rgb(255 255 255/.26) 50%,transparent)}
+.rw__confirm:hover::before,.rw__cta:hover::before{transform:translateX(260%) skewX(-18deg);transition:transform 1.1s var(--rw-ease)}
+@keyframes rw-rise{from{opacity:0;transform:translateY(14px)}}
+.pick-scrim{display:none}
+
+/* bundle */
+.rw__bundle{padding:20px var(--rw-pad) 30px;display:flex;flex-direction:column;gap:16px;background:#fff;border-top:1px solid var(--rw-line)}
+.rw__msg{margin:0;font-size:11px;line-height:1.45;color:var(--rw-accent);animation:rw-rise .6s var(--rw-ease)}
+.rw__msg:empty{display:none}
+.rw__bundle-row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.rw__bundle-copy{display:flex;flex-direction:column;gap:3px}
+.rw__bundle-title{font-size:13px;font-weight:500}
+.rw__bundle-note{font-size:11px;color:var(--rw-muted)}
+.rw__bundle-price{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.rw__bundle-price s{font-size:11px;color:var(--rw-muted)}
+.rw__bundle-price strong{font-weight:400;font-size:16px}
+.rw__cta{position:relative;overflow:hidden;min-height:56px;width:100%;border:0;border-radius:0;background:#151413;color:#fff;font-size:13px;font-weight:500;letter-spacing:.02em;
+  display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:transform .6s var(--rw-ease),background .45s,color .45s,box-shadow .6s var(--rw-ease)}
+.rw__cta:hover{transform:translateY(-2px);box-shadow:0 18px 34px -22px color-mix(in srgb,#151413 80%,transparent)}
+.rw__cta:active{transform:scale(.985)}
+.rw__cta .i-arrow{transition:transform .5s cubic-bezier(.2,1.6,.4,1)}
+.rw__cta:hover .i-arrow{transform:translateX(4px)}
+.rw__cta-m,.rw__cta-done{display:none}
+.rw__look-panel.is-complete .rw__cta{background:var(--rw-accent);animation:rw-glow 1.8s var(--rw-ease);cursor:default}
+.rw__look-panel.is-complete .rw__cta-add,.rw__look-panel.is-complete .rw__cta-m,.rw__look-panel.is-complete .i-arrow{display:none!important}
+.rw__look-panel.is-complete .rw__cta-done{display:inline;animation:rw-rise .7s var(--rw-ease)}
+@keyframes rw-glow{from{box-shadow:0 0 0 0 color-mix(in srgb,#0e0e0e 55%,transparent)}to{box-shadow:0 0 0 16px transparent}}
+.demo-note{font-size:10px;letter-spacing:.06em;color:var(--rw-muted);margin:0}
+
+/* entrance per look */
+.rw__look-panel.is-in .rw__item{animation:rw-item-in 1.1s var(--rw-ease) backwards;animation-delay:calc(var(--i)*85ms + 140ms)}
+.rw__look-panel.is-in .rw__media{animation:rw-curtain 1.2s var(--rw-ease) backwards;animation-delay:calc(var(--i)*85ms + 200ms)}
+.rw__look-panel.is-in .rw__bundle-row{animation:rw-rise 1s var(--rw-ease) .38s backwards}
+@keyframes rw-item-in{from{opacity:0;transform:translateY(26px);filter:blur(8px)}}
+@keyframes rw-curtain{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
+
+/* popup */
+.rw__lb{position:absolute;inset:0;z-index:40;visibility:hidden;pointer-events:none;transition:visibility 0s linear .95s}
+.rw__lb::before{content:"";position:absolute;inset:0;background:#fff;opacity:0;transition:opacity .6s var(--rw-ease) .15s}
+.rw--zoom .rw__lb{visibility:visible;pointer-events:auto;transition:none}
+.rw--zoom .rw__lb::before{opacity:1;transition:opacity .45s}
+.rw--zoom .rw__actors,.rw--zoom .rw__head,.rw--zoom .rw__walk{opacity:0;pointer-events:none;transition:opacity .35s}
+.rw__head,.rw__walk{transition:opacity .7s var(--rw-ease) .2s}
+.rw__lb-stage{position:absolute;inset:88px 48px 48px;display:flex;align-items:flex-end;justify-content:center;cursor:zoom-out}
+.rw__lb-model{position:relative;flex:0 0 auto;cursor:default;transition:transform .95s var(--rw-ease)}
+.rw__lb-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:32px 32px 0 56px;opacity:0;transform:translateY(-10px)}
+.rw--zoom .rw__lb-top{opacity:1;transform:none;transition:opacity .8s .35s,transform 1s var(--rw-ease) .35s}
+.rw__lb-cap{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.rw__lb-kicker{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--rw-muted);font-variant-numeric:tabular-nums}
+.rw__lb-name{font-size:var(--rw-chip);line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rw__lb-close{width:48px;height:48px;border-radius:50%;border:1px solid color-mix(in srgb,#151413 22%,transparent);background:color-mix(in srgb,#fff 55%,transparent);backdrop-filter:blur(8px);
+  display:grid;place-items:center;cursor:pointer;transition:transform .6s var(--rw-ease),border-color .6s;flex:0 0 auto}
+.rw__lb-close:hover{transform:rotate(90deg);border-color:#151413}
+.rw__lb-close:focus-visible{outline:2px solid var(--rw-accent);outline-offset:3px}
+.rw__lb-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;margin:0;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--rw-muted);pointer-events:none;opacity:0}
+.rw--zoom .rw__lb-hint{opacity:1;transition:opacity 1s var(--rw-ease) 1.1s}
+.rw__pin{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;background:transparent;border:0;padding:0;display:grid;place-items:center;cursor:pointer;z-index:2}
+.rw__pin-dot{position:relative;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:rgb(255 255 255/.86);backdrop-filter:blur(6px);color:#151413;font-size:11px;font-weight:600;line-height:1;
+  box-shadow:0 4px 14px -4px rgb(0 0 0/.35);transition:transform .5s cubic-bezier(.2,1.6,.4,1),background .25s,color .25s;animation:rw-pin-in .9s var(--rw-ease-spring) backwards;animation-delay:calc(var(--pi)*110ms + .6s)}
+.rw__pin-dot::after,.rw__pin-dot::before{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid rgb(255 255 255/.8);animation:rw-ring 2.6s cubic-bezier(.2,.6,.3,1) infinite}
+.rw__pin-dot::before{border-color:rgb(255 255 255/.55);animation-delay:1.3s}
+@keyframes rw-ring{from{transform:scale(.8);opacity:.9}to{transform:scale(1.7);opacity:0}}
+@keyframes rw-pin-in{from{transform:scale(0);opacity:0}}
+.rw__pin:hover .rw__pin-dot,.rw__pin.is-hot .rw__pin-dot{transform:scale(1.3);background:var(--rw-accent);color:#fff;box-shadow:0 0 0 6px color-mix(in srgb,#0e0e0e 22%,transparent),0 8px 20px -6px rgb(0 0 0/.45)}
+.rw__pin:focus-visible{outline:none}.rw__pin:focus-visible .rw__pin-dot{box-shadow:0 0 0 2px #fff,0 0 0 4px #0e0e0e}
+.rw__pin::after{content:attr(data-tip);position:absolute;left:calc(100% - 6px);top:50%;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:7px 12px;border-radius:999px;
+  background:rgb(255 255 255/.88);backdrop-filter:blur(10px);color:#151413;font-size:11px;font-weight:500;letter-spacing:.04em;line-height:1;box-shadow:0 10px 26px -12px rgb(0 0 0/.4);
+  opacity:0;transform:translate(-8px,-50%) scale(.96);transform-origin:left;transition:opacity .35s,transform .6s var(--rw-ease);pointer-events:none}
+.rw__pin.is-hot::after,.rw__pin:focus-visible::after{opacity:1;transform:translate(0,-50%)}
+@media (hover:hover){.rw__pin:hover::after{opacity:1;transform:translate(0,-50%)}}
+
+/* bag + toast */
+#bag-status{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#151413;color:#fff;padding:12px 20px;font-size:12px;z-index:2147483002;opacity:0;transition:opacity .25s;pointer-events:none}
+#bag-status.is-on{opacity:1}
+#bag-dialog{border:1px solid #d9d9d9;background:#fff;color:#151413;padding:24px;width:min(560px,calc(100vw - 32px));max-height:85dvh;overflow:auto}
+#bag-dialog::backdrop{background:#0005;backdrop-filter:blur(4px)}
+.bag-heading{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.bag-heading h2{font-size:25px;font-weight:400;margin:0}
+#close-bag{font-size:28px;width:44px;height:44px;background:none;border:0;cursor:pointer}
+.bag-note{font-size:12px;color:#666;line-height:1.5}
+.bag-row{display:grid;grid-template-columns:60px 1fr auto;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid #ddd}
+.bag-row .thumb{width:60px;height:75px;background:color-mix(in srgb,#151413 5%,#fff);position:relative}
+.bag-row .thumb svg{position:absolute;inset:0;width:100%;height:100%}
+.bag-row h3{font-size:14px;font-weight:400;margin:0 0 8px}
+.bag-row p{font-size:12px;margin:0}
+.bag-row button{font-size:20px;padding:12px;background:none;border:0;cursor:pointer}
+#bag-total{text-align:right;font-size:15px;padding:12px 0;margin:0}
+#clear-bag{background:#151413;color:#fff;border:0;padding:16px 20px;width:100%;cursor:pointer}
+#clear-bag:disabled{opacity:.4;cursor:default}
+
+/* intro reveal */
+.rw--js .rw__title,.rw--js .rw__sub,.rw--js .rw__panel-head{opacity:0;transform:translateY(22px);filter:blur(8px)}
+.rw--js .rw__stage,.rw--js .rw__controls,.rw--js .rw__panel{opacity:0}
+.rw--js.is-revealed .rw__title,.rw--js.is-revealed .rw__sub,.rw--js.is-revealed .rw__panel-head{opacity:1;transform:none;filter:none;transition:opacity 1.1s var(--rw-ease),transform 1.4s var(--rw-ease),filter 1.1s var(--rw-ease)}
+.rw--js.is-revealed .rw__sub{transition-delay:.26s}.rw--js.is-revealed .rw__panel-head{transition-delay:.34s}.rw--js.is-revealed .rw__title{transition-delay:.12s}
+.rw--js.is-revealed .rw__stage{opacity:1;transition:opacity 1.6s .1s}
+.rw--js.is-revealed .rw__panel{opacity:1;transition:opacity 1.2s .25s}
+.rw--js.is-revealed .rw__controls{opacity:1;transition:opacity 1.2s .55s}
+
+/* ---------- breakpoints ---------- */
+@media (max-width:1099px) and (min-width:750px){
+  .rw__head{padding:36px 32px 0;flex-direction:column;align-items:flex-start}
+  .rw__controls{padding:6px 22px 26px}
+  .rw__tick[aria-current="true"]{flex-basis:130px}
+}
+@media (max-width:749px){
+  .site-header{height:68px;padding:0 20px;gap:18px}
+  .brand-word{font-size:12px;letter-spacing:.22em}
+  .brand svg{width:20px;height:20px}
+  .site-header nav{gap:14px;font-size:11px}
+  .site-header nav a{padding:15px 0}
+  .site-header nav a.hide-m{display:none}
+  .demo-flag{display:none}
+  .rw{--rw-h:24px;--rw-label:9px;--rw-chip:18px;--rw-ph:16px;--rw-pt:12px;--rw-thumb:62px;--rw-pad:20px}
+  .rw__grid{display:flex;flex-direction:column;position:relative;overflow:hidden}
+  .rw__left{flex:1 1 auto;z-index:1;padding-bottom:20px}
+  .rw__head{flex-direction:column;align-items:stretch;gap:18px;padding:30px 20px 0}
+  .rw__intro{gap:10px}
+  .rw__title{font-size:min(24px,11.5vw)}
+  .rw__controls{display:none}
+  .rw__walk{display:block}
+  .rw__panel{position:relative;z-index:2;flex:0 0 auto;margin-top:-20px;border-radius:20px 20px 0 0;border-left:0;box-shadow:0 -12px 30px -24px rgb(0 0 0/.35)}
+  .rw__panel-inner{position:static}
+  .rw__panel-head{display:none}
+  .rw__mhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 20px 6px}
+  .rw__mhead-title{font-size:16px;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rw__look-panel.is-in .rw__mhead{animation:rw-fade .8s var(--rw-ease)}
+  .rw__items{flex-direction:row;flex:0 0 auto;gap:0;padding:10px 20px 6px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:20px;overscroll-behavior-x:contain;scrollbar-width:none}
+  .rw__items::-webkit-scrollbar{display:none}
+  .rw__item{flex:0 0 calc(100% - 64px);scroll-snap-align:start;margin-right:16px;padding:6px 16px 6px 0;column-gap:14px;border:0!important;border-right:1px solid var(--rw-line)!important}
+  .rw__item:last-child{margin-right:0;border-right:0!important}
+  .rw__item::after{display:none}
+  .rw__add{align-self:center}
+  .rw__tag{left:6px;top:-1px}
+  .rw__look-panel.is-in .rw__item{animation:rw-card-in .9s var(--rw-ease) backwards;animation-delay:calc(var(--i)*80ms + 100ms)}
+  .rw__look-panel.is-in .rw__media{animation:none}
+  @keyframes rw-card-in{from{opacity:0;transform:translateY(10px)}}
+  .rw__bundle{padding:10px 20px calc(16px + env(safe-area-inset-bottom));gap:10px;border-top:0}
+  .rw__bundle-row{display:none}
+  .rw__cta{min-height:54px}.rw__cta-add,.rw__cta .i-arrow{display:none}.rw__cta-m{display:inline}
+  /* size picker becomes a bottom sheet */
+  .rw__picker{position:fixed;left:0;right:0;bottom:0;z-index:2147483001;max-height:min(82vh,640px);overflow:auto;overscroll-behavior:contain;gap:18px;padding:30px 20px calc(20px + env(safe-area-inset-bottom));
+    background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -24px 60px -24px rgb(0 0 0/.4);animation:rw-sheet-up .65s var(--rw-ease-sheet)}
+  .rw__picker::before{content:"";position:absolute;top:12px;left:50%;width:34px;height:4px;margin-left:-17px;border-radius:2px;background:color-mix(in srgb,#151413 16%,transparent)}
+  @keyframes rw-sheet-up{from{transform:translateY(100%)}}
+  .rw__picker-head{display:grid;grid-template-columns:52px 1fr 44px;gap:14px;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--rw-line)}
+  .rw__picker-head .ph-thumb{aspect-ratio:4/5;position:relative;background:color-mix(in srgb,#151413 5%,#fff)}
+  .rw__picker-head .ph-thumb svg{position:absolute;inset:0;width:100%;height:100%}
+  .rw__picker-head .ph-title{font-size:12px;font-weight:500;display:block}
+  .rw__picker-head .ph-price{font-size:12px;color:var(--rw-muted)}
+  .rw__picker-head button{width:44px;height:44px;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+  .rw__confirm{min-height:54px}
+  .pick-scrim{position:fixed;inset:0;z-index:2147483000;background:rgb(12 10 8/.38);border:0;padding:0}
+  .rw.rw--picking~.pick-scrim{display:block}
+  .rw.rw--picking .rw__panel{z-index:2147483001} /* panel is a stacking context: lift it above the scrim */
+  .rw__lb{bottom:20px}
+  .rw__lb-stage{inset:72px 16px 40px}
+  .rw__lb-top{padding:16px 12px 0 20px}
+  .rw__lb-close{width:44px;height:44px}
+  .rw__lb-hint{bottom:12px}
+  .rw__pin::after{max-width:150px}
+}
+@media (max-width:374px){
+  .rw__head{padding:22px 16px 0}
+  .rw__mhead,.rw__bundle{padding-left:16px;padding-right:16px}
+  .rw__items{padding-left:16px;padding-right:16px;scroll-padding-inline:16px}
+  .rw__item{flex-basis:calc(100% - 44px);column-gap:12px}
+}
+@media (max-height:520px) and (orientation:landscape){
+  .rw__head{padding-top:14px}.rw__sub{display:none}.rw__title{font-size:min(var(--rw-h),36px)}
+  .rw__panel-head{padding-top:18px;padding-bottom:10px}.rw__controls{padding-bottom:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<header class="site-header" data-header>
+  <a href="./" class="brand" aria-label="Home">
+    <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 6v14M18 6v14M8 13h10" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>
+    <span class="brand-word" data-t="brand"></span>
+  </a>
+  <span class="demo-flag" data-t="demoFlag"></span>
+  <nav aria-label="Main navigation">
+    <a href="./" data-t="navHome"></a>
+    <a href="#runway" class="hide-m" data-t="navNew"></a>
+    <a href="#runway" aria-current="page" data-t="navRunway"></a>
+  </nav>
+  <button id="open-bag" type="button" aria-label="Open styling bag">
+    <svg width="22" height="24" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 8h16l1 16H3L4 8zM8 8V6a4 4 0 0 1 8 0v2"/></svg>
+    <span data-cart-count>0</span>
+  </button>
+</header>
+
+<main id="runway">
+  <section class="rw" data-rw>
+    <div class="rw__sticky">
+      <div class="rw__grid">
+        <div class="rw__left">
+          <div class="rw__head">
+            <div class="rw__intro">
+              <h1 class="rw__title" data-t="title"></h1>
+              <p class="rw__sub" data-t="sub"></p>
+            </div>
+            <span class="rw__sr" aria-live="polite" aria-atomic="true" data-rw-live></span>
+          </div>
+          <div class="rw__stage" data-rw-stage tabindex="0" role="region" aria-roledescription="carousel">
+            <div class="rw__actors" data-rw-actors></div>
+            <span class="rw__sweep"></span>
+            <span class="rw__cursor" data-rw-cursor><span class="rw__cursor-in"><span class="rw__cursor-label rw__cursor-drag">Drag</span><span class="rw__cursor-label rw__cursor-view">View</span></span></span>
+            <span class="rw__walk"><span class="rw__walk-line"></span></span>
+          </div>
+          <div class="rw__controls">
+            <button class="rw__icon" type="button" data-rw-prev aria-label="Previous look"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M25 7H1M7 1L1 7l6 6"/></svg></button>
+            <div class="rw__ticks" data-rw-ticks></div>
+            <button class="rw__icon rw__auto" type="button" data-rw-auto aria-pressed="false" aria-label="Autoplay">
+              <svg class="i-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>
+              <svg class="i-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.5 4.5h3.5v15H6.5zM14 4.5h3.5v15H14z"/></svg>
+            </button>
+            <button class="rw__icon" type="button" data-rw-next aria-label="Next look"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+          </div>
+          <div class="rw__lb" data-rw-lb role="region" aria-label="View look" aria-hidden="true">
+            <div class="rw__lb-stage" data-rw-lb-stage></div>
+            <div class="rw__lb-top">
+              <p class="rw__lb-cap"><span class="rw__lb-kicker" data-rw-lb-kicker></span><span class="rw__lb-name" data-rw-lb-name></span></p>
+              <button class="rw__lb-close" type="button" data-rw-zoom-close aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+            </div>
+            <p class="rw__lb-hint" data-t="hint"></p>
+          </div>
+        </div>
+        <aside class="rw__panel" data-rw-panel-col>
+          <div class="rw__panel-inner">
+            <div class="rw__panel-head"><h2 class="rw__panel-title" data-t="panelTitle"></h2><span class="rw__label" data-rw-pieces></span></div>
+            <div data-rw-panels style="display:contents"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <button class="pick-scrim" type="button" data-rw-pick-close tabindex="-1" aria-hidden="true"></button>
+</main>
+
+<dialog id="bag-dialog" aria-labelledby="bag-title">
+  <div class="bag-heading"><h2 id="bag-title" data-t="bagTitle"></h2><button id="close-bag" type="button" aria-label="Close styling bag">×</button></div>
+  <p class="bag-note" data-t="bagNote"></p>
+  <div id="bag-items"></div>
+  <p id="bag-total"></p>
+  <button id="clear-bag" type="button" data-t="bagClear"></button>
+</dialog>
+<div id="bag-status" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   DATA — edit all copy, looks, products and demo prices here.
+   Everything is fictional: "Halden Supply" is an invented demo brand.
+   ===================================================================== */
+const DATA = {
+  text: {
+    brand: "Halden Supply",
+    demoFlag: "Demo store",
+    navHome: "Home", navNew: "New in", navRunway: "Runway",
+    title: "Try the Look.",
+    sub: "Six looks, styled head to toe. Tap a look, then a pin to see the piece.",
+    panelTitle: "In this look",
+    pieces: "{n} pieces",
+    lookWord: "Look",
+    hint: "Tap a dot to see the piece",
+    bundleTitle: "Complete the look",
+    bundleNote: "Bundle all {n} and save {p}%",
+    demoNote: "Demo prices · nothing is for sale",
+    cta: "Add full look to bag",
+    ctaMobile: "Add full look — {price}",
+    ctaDone: "Full look in your bag",
+    addToBag: "Add to bag",
+    pickSize: "Pick a size for: {items}",
+    toastOne: "Piece saved to your styling bag",
+    toastLook: "Look saved to your styling bag",
+    bagTitle: "Your styling bag",
+    bagNote: "A local outfit shortlist for this demo. No payment or order is collected, and the products are fictional.",
+    bagEmpty: "Your styling bag is empty. Choose a size beside a piece to save it.",
+    bagRow: "Size {size} · Quantity {qty} · {price}",
+    subtotal: "Demo subtotal {price}",
+    bagClear: "Clear bag",
+    stageLabel: "Try the Look — use arrow keys or swipe to change look"
+  },
+  locale: "en-US", currency: "USD",
+  bundleDiscount: 10,           // percent, display only
+  speed: 5000,                  // autoplay ms per look
+  products: {
+    "court-low":   { name: "Court Low Sneaker", type: "Halden · Footwear", price: 129, option: "Shoe size", values: ["40","41","42","43","44","45","46"], kind: "shoe", color: "#f2f0ea", trim: "#151413" },
+    "trail-mid":   { name: "Trail Mid Runner",  type: "Halden · Footwear", price: 139, option: "Shoe size", values: ["40","41","42","43","44","45","46"], kind: "shoe", color: "#8b8f8a", trim: "#efece6", tag: "New" },
+    "street-high": { name: "Street High Top",   type: "Halden · Footwear", price: 135, option: "Shoe size", values: ["40","41","42","43","44","45","46"], kind: "shoe", color: "#1d1c1a", trim: "#f2f0ea" },
+    "tee-white":   { name: "Heavy Tee — Chalk", type: "Halden · Essentials", price: 39, option: "Size", values: ["S","M","L","XL"], kind: "tee", color: "#f4f2ee" },
+    "tee-black":   { name: "Heavy Tee — Ink",   type: "Halden · Essentials", price: 39, option: "Size", values: ["S","M","L","XL"], kind: "tee", color: "#232220" },
+    "crew-ash":    { name: "Loop Crew — Ash",   type: "Halden · Fleece", price: 79, option: "Size", values: ["S","M","L","XL"], kind: "crew", color: "#9a9a96" },
+    "knit-olive":  { name: "Field Knit — Olive", type: "Halden · Knitwear", price: 95, option: "Size", values: ["S","M","L","XL"], kind: "crew", color: "#5f6446", tag: "New" },
+    "hood-black":  { name: "Studio Hoodie — Black", type: "Halden · Fleece", price: 89, option: "Size", values: ["S","M","L","XL"], kind: "hood", color: "#1f1e1c" },
+    "hood-wine":   { name: "Studio Hoodie — Wine",  type: "Halden · Fleece", price: 89, option: "Size", values: ["S","M","L","XL"], kind: "hood", color: "#6a2730" },
+    "denim-indigo":{ name: "Relaxed Denim — Indigo", type: "Halden · Denim", price: 99, option: "Waist", values: ["28","30","32","34","36"], kind: "pant", color: "#3a4a68" },
+    "denim-stone": { name: "Relaxed Denim — Stone",  type: "Halden · Denim", price: 99, option: "Waist", values: ["28","30","32","34","36"], kind: "pant", color: "#8193ad" },
+    "cargo-sand":  { name: "Easy Cargo — Sand",      type: "Halden · Trousers", price: 85, option: "Waist", values: ["28","30","32","34","36"], kind: "pant", color: "#b7a888" }
+  },
+  // items: [top, bottom, shoe] — the silhouette is coloured from these. Pins are % of the figure box.
+  looks: [
+    { name: "The City Edit",   skin: "#c9a589", items: ["crew-ash","denim-indigo","court-low"] },
+    { name: "Gallery Opening", skin: "#8d6248", items: ["tee-white","denim-stone","street-high"] },
+    { name: "Weekend Field",   skin: "#e0bfa3", items: ["knit-olive","cargo-sand","trail-mid"] },
+    { name: "Studio Day",      skin: "#6d4a37", items: ["hood-black","denim-stone","court-low"] },
+    { name: "After Hours",     skin: "#b98d6e", items: ["hood-wine","denim-indigo","street-high"] },
+    { name: "Off Duty",        skin: "#d7b193", items: ["tee-black","cargo-sand","trail-mid"] }
+  ],
+  pins: [[50,30],[44,62],[40,95]]
+};
+
+/* =====================================================================
+   Helpers
+   ===================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const T = DATA.text;
+const fmt = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k] ?? "");
+const money = v => new Intl.NumberFormat(DATA.locale, { style: "currency", currency: DATA.currency }).format(v);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const mod = (a, n) => ((a % n) + n) % n;
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const pad2 = n => String(n).padStart(2, "0");
+
+/* Silhouette (viewBox 90x160, 9:16) coloured from the look's products. */
+function figureSVG(look, i) {
+  const [top, bottom, shoe] = look.items.map(id => DATA.products[id]);
+  const sk = look.skin, lean = [0, 1.5, -1, 2, -1.5, 1][i % 6];
+  const hood = top.kind === "hood"
+    ? `<path d="M33 25c0-8 5-13 12-13s12 5 12 13l-3 3H36z" fill="${top.color}"/><path d="M41 27l4 8 4-8" fill="none" stroke="rgb(255 255 255/.35)" stroke-width=".8"/>` : "";
+  const sleeve = top.kind === "tee" ? 50 : 76;
+  const hem = top.kind === "tee" ? 74 : 79;
+  return `<svg viewBox="0 0 90 160" aria-hidden="true">
+  <g transform="rotate(${lean} 45 158)">
+    ${hood}
+    <rect x="41" y="20" width="8" height="8" rx="3" fill="${sk}"/>
+    <ellipse cx="45" cy="13" rx="8" ry="10" fill="${sk}"/>
+    <path d="M37 6c3-5 13-5 16 0c-2-1-14-1-16 0z" fill="#2a211b"/>
+    <path d="M30 76L28 150h14l3-58 3 58h14l-2-74z" fill="${bottom.color}"/>
+    <path d="M45 92v56" stroke="rgb(0 0 0/.18)" stroke-width=".8"/>
+    <path d="M24 31c3-4 9-5 21-5s18 1 21 5l2 ${hem - 31}H22z" fill="${top.color}"/>
+    <path d="M24 31c-4 2-7 6-8 12l-2 ${sleeve - 43}h8l3-${sleeve - 50}z" fill="${top.color}"/>
+    <path d="M66 31c4 2 7 6 8 12l2 ${sleeve - 43}h-8l-3-${sleeve - 50}z" fill="${top.color}"/>
+    ${top.kind === "tee" ? `<path d="M15 50l-1 30h7l1-30z" fill="${sk}"/><path d="M75 50l1 30h-7l-1-30z" fill="${sk}"/>` : ""}
+    <circle cx="18" cy="${top.kind === "tee" ? 82 : sleeve + 3}" r="3.6" fill="${sk}"/><circle cx="72" cy="${top.kind === "tee" ? 82 : sleeve + 3}" r="3.6" fill="${sk}"/>
+    <path d="M22 ${hem}h46" stroke="rgb(0 0 0/.12)" stroke-width="1.2"/>
+    <path d="M26 148h17v4c0 3-2 5-5 5H22c-2 0-3-2-1-4z" fill="${shoe.color}"/>
+    <path d="M47 148h17l5 5c2 2 1 4-1 4H52c-3 0-5-2-5-5z" fill="${shoe.color}"/>
+    <path d="M21 156h22M47 156h21" stroke="${shoe.trim}" stroke-width="1.6"/>
+    <path d="M28 33c6 3 28 3 34 0" fill="none" stroke="rgb(0 0 0/.08)" stroke-width="3" stroke-linecap="round"/>
+  </g></svg>`;
+}
+
+/* Flat product icon for thumbnails. */
+function productSVG(p) {
+  const c = p.color, s = "rgb(0 0 0/.14)";
+  const shapes = {
+    tee:  `<path d="M28 22l-14 8 5 12 8-3v35h26V39l8 3 5-12-14-8c-2 5-6 7-12 7s-10-2-12-7z" fill="${c}" stroke="${s}"/>`,
+    crew: `<path d="M28 20l-14 8-2 42h9l3-30v36h32V40l3 30h9l-2-42-14-8c-2 4-6 6-12 6s-10-2-12-6z" fill="${c}" stroke="${s}"/>`,
+    hood: `<path d="M27 22l-13 8-2 40h9l3-30v36h32V40l3 30h9l-2-40-13-8c0-8-6-12-13-12s-13 4-13 12z" fill="${c}" stroke="${s}"/><path d="M33 24c2 5 5 7 7 7s5-2 7-7" fill="none" stroke="rgb(255 255 255/.3)"/>`,
+    pant: `<path d="M24 14h32l4 66H46l-6-44-6 44H20z" fill="${c}" stroke="${s}"/><path d="M24 20h32" stroke="${s}"/>`,
+    shoe: `<path d="M10 58c0-6 2-12 6-16l8 3c6 2 10 6 22 8 10 1 22 3 24 11v4H10z" fill="${c}" stroke="${s}"/><path d="M10 64h60v4H10z" fill="${p.trim}"/>`
+  };
+  return `<svg viewBox="0 0 80 100" aria-hidden="true"><g transform="translate(0 ${p.kind === "shoe" ? 8 : 6})">${shapes[p.kind]}</g></svg>`;
+}
+
+/* =====================================================================
+   Bag (localStorage, per viewer)
+   ===================================================================== */
+const BAG_KEY = "halden-demo-bag-v1";
+const bag = {
+  items: [],
+  load() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(BAG_KEY) || "[]");
+      this.items = Array.isArray(raw) ? raw.filter(e => e && DATA.products[e.pid] && typeof e.size === "string" && Number.isInteger(e.qty) && e.qty >= 1 && e.qty <= 20).slice(0, 50) : [];
+    } catch { this.items = []; }
+  },
+  save() { try { localStorage.setItem(BAG_KEY, JSON.stringify(this.items)); } catch {} },
+  add(list) {
+    list.forEach(({ pid, size }) => {
+      const e = this.items.find(x => x.pid === pid && x.size === size);
+      if (e) e.qty = Math.min(20, e.qty + 1); else this.items.push({ pid, size, qty: 1 });
+    });
+    this.save(); this.render(); toast(list.length > 1 ? T.toastLook : T.toastOne);
+  },
+  render() {
+    const n = this.items.reduce((a, e) => a + e.qty, 0);
+    $$("[data-cart-count]").forEach(el => el.textContent = n);
+    const box = $("#bag-items");
+    if (!this.items.length) { box.innerHTML = `<p class="bag-note">${esc(T.bagEmpty)}</p>`; $("#bag-total").textContent = ""; $("#clear-bag").disabled = true; return; }
+    box.innerHTML = this.items.map((e, i) => { const p = DATA.products[e.pid]; return `<div class="bag-row"><div class="thumb">${productSVG(p)}</div>
+      <div><h3>${esc(p.name)}</h3><p>${esc(fmt(T.bagRow, { size: e.size, qty: e.qty, price: money(p.price) }))}</p></div>
+      <button type="button" data-remove="${i}" aria-label="Remove ${esc(p.name)}">×</button></div>`; }).join("");
+    $("#bag-total").textContent = fmt(T.subtotal, { price: money(this.items.reduce((a, e) => a + DATA.products[e.pid].price * e.qty, 0)) });
+    $("#clear-bag").disabled = false;
+  }
+};
+let toastTimer;
+function toast(msg) { const t = $("#bag-status"); t.textContent = msg; t.classList.add("is-on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("is-on"), 2500); }
+
+/* =====================================================================
+   Runway
+   ===================================================================== */
+(function runway() {
+  const sec = $("[data-rw]"), stage = $("[data-rw-stage]"), actors = $("[data-rw-actors]");
+  const n = DATA.looks.length, N = n * Math.ceil(8 / n), step = 2 * Math.PI / N;
+  const K = 95, C = 2 * Math.sqrt(K);
+
+  // static copy
+  $$("[data-t]").forEach(el => el.textContent = T[el.dataset.t] ?? "");
+  stage.setAttribute("aria-label", T.stageLabel);
+  const lookLabel = i => `${T.lookWord} ${i + 1}: ${DATA.looks[i].name}`;
+
+  // bodies
+  const bodies = [];
+  for (let a = 0; a < N; a++) {
+    const li = a % n, el = document.createElement("div");
+    el.className = "rw__model"; el.dataset.a = a; el.setAttribute("aria-hidden", "true");
+    el.innerHTML = `<span class="rw__shadow"></span><div class="rw__figure">${figureSVG(DATA.looks[li], li)}<button class="rw__hit" type="button" data-rw-go="${a}" aria-label="${esc(lookLabel(li))}" tabindex="-1"></button></div>`;
+    actors.appendChild(el);
+    bodies.push({ el, a, w: 0, blur: -1 });
+  }
+
+  // ticks
+  $("[data-rw-ticks]").innerHTML = DATA.looks.map((l, i) => `<button class="rw__tick" type="button" data-rw-tick="${i}" aria-current="false" aria-label="${esc(lookLabel(i))}"><span class="rw__tick-bar"></span><span class="rw__tick-label">${pad2(i + 1)}<span class="rw__tick-name">&nbsp;&nbsp;${esc(l.name)}</span></span></button>`).join("");
+  const ticks = $$(".rw__tick");
+
+  // panels
+  const plus = `<svg class="i-plus" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg><svg class="i-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7"/></svg><svg class="i-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3a9 9 0 1 1-9 9"/></svg>`;
+  $("[data-rw-panels]").innerHTML = DATA.looks.map((l, i) => {
+    const ps = l.items.map(id => DATA.products[id]);
+    const total = ps.reduce((a, p) => a + p.price, 0), deal = Math.round(total * (100 - DATA.bundleDiscount)) / 100;
+    const rows = l.items.map((id, k) => { const p = DATA.products[id], num = k + 1, pid = `pick-${i}-${num}`; return `
+      <li class="rw__item" data-rw-card="${num}" data-pid="${id}" style="--i:${num}">
+        ${p.tag ? `<span class="rw__tag"><span class="rw__tag-text">${esc(p.tag)}</span></span>` : ""}
+        <span class="rw__media" aria-hidden="true">${productSVG(p)}<span class="rw__num">${num}</span></span>
+        <div class="rw__info"><span class="rw__type">${esc(p.type)}</span><span class="rw__name">${esc(p.name)}</span><span class="rw__price"><span>${money(p.price)}</span></span></div>
+        <button class="rw__add" type="button" data-rw-add aria-expanded="false" aria-controls="${pid}" aria-label="Add to bag: ${esc(p.name)}">${plus}</button>
+        <div class="rw__picker" id="${pid}" data-rw-picker hidden>
+          <div class="rw__picker-head"><span class="ph-thumb">${productSVG(p)}</span><span><span class="ph-title">${esc(p.name)}</span><span class="ph-price">${money(p.price)}</span></span>
+            <button type="button" data-rw-pick-close aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
+          <fieldset class="rw__opt"><legend class="rw__opt-name">${esc(p.option)}</legend><div class="rw__pills">
+            ${p.values.map((v, j) => `<label class="rw__pill"><input type="radio" name="opt-${i}-${num}" value="${esc(v)}"${j === 0 ? " checked" : ""}><span>${esc(v)}</span></label>`).join("")}
+          </div></fieldset>
+          <button class="rw__confirm" type="button" data-rw-confirm>${esc(T.addToBag)}<span class="rw__sr"> — ${esc(p.name)}</span></button>
+        </div>
+      </li>`; }).join("");
+    return `<div class="rw__look-panel${i === 0 ? " is-in" : ""}" data-rw-panel="${i}"${i ? " hidden" : ""}>
+      <div class="rw__mhead"><span class="rw__mhead-title">${esc(l.name)}</span><span class="rw__label">${esc(fmt(T.pieces, { n: ps.length }))}</span></div>
+      <ul class="rw__items" role="list">${rows}</ul>
+      <div class="rw__bundle">
+        <p class="rw__msg" data-rw-msg role="status" aria-live="polite"></p>
+        <div class="rw__bundle-row"><span class="rw__bundle-copy"><span class="rw__bundle-title">${esc(T.bundleTitle)}</span><span class="rw__bundle-note">${esc(fmt(T.bundleNote, { n: ps.length, p: DATA.bundleDiscount }))}</span></span>
+          <span class="rw__bundle-price"><s>${money(total)}</s><strong>${money(deal)}</strong></span></div>
+        <button class="rw__cta" type="button" data-rw-all><span class="rw__cta-add">${esc(T.cta)}</span><span class="rw__cta-m">${esc(fmt(T.ctaMobile, { price: money(deal) }))}</span><span class="rw__cta-done">${esc(T.ctaDone)}</span>
+          <svg class="i-arrow" width="22" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+        <p class="demo-note">${esc(T.demoNote)}</p>
+      </div>
+    </div>`;
+  }).join("");
+  const panels = $$("[data-rw-panel]");
+
+  /* ---------- state ---------- */
+  let index = 0, target = 0, cur = reduced ? 0 : -1.15, vel = 0;
+  let W = 0, H = 0, mobile = false, fs = 1.08, unit = 120, vh = innerHeight, lastW = innerWidth;
+  let raf = 0, last = 0, visible = true, still = false, dragging = false;
+  let playing = false, engaged = false, panelHover = false, zoomed = false, timer = 0;
+
+  function measure() {
+    mobile = innerWidth <= 749;
+    if (mobile) { if (innerWidth !== lastW || Math.abs(innerHeight - vh) >= 160) vh = innerHeight; }
+    else vh = innerHeight;
+    lastW = innerWidth;
+    const headH = $("[data-header]").offsetHeight;
+    const frameH = mobile ? Math.round(vh * 1.09) : Math.max(380, innerHeight - headH);
+    sec.style.setProperty("--rw-frame-h", frameH + "px");
+    const r = stage.getBoundingClientRect(); W = r.width; H = r.height;
+    fs = mobile ? 1 : 1.08;
+    const modelH = mobile ? Math.max(200, Math.round(H - 24 - 18)) : Math.max(200, Math.round((H - 34 - 18) / 1.08));
+    stage.style.setProperty("--rw-model-h", modelH + "px");
+    unit = mobile ? Math.max(90, W * .32 * 1.6) : Math.max(120, W * .3);
+    bodies.forEach(b => b.w = b.el.offsetWidth || modelH * .5625);
+    if (!mobile) closeSheets();
+    render();
+  }
+
+  function put(b, x, bottom, scale, op, blur, z) {
+    const hw = b.w * scale / 2;
+    if (x + hw < -4 || x - hw > W + 4) op = 0;
+    const s = b.el.style;
+    s.transform = `translate3d(${x.toFixed(1)}px,${(-bottom).toFixed(1)}px,0) translateX(-50%) scale(${scale.toFixed(4)})`;
+    s.opacity = op.toFixed(3); s.zIndex = z;
+    s.visibility = op < .01 ? "hidden" : "visible";
+    s.pointerEvents = op < .5 ? "none" : "auto";
+    const bl = Math.round(blur * 10) / 10;
+    if (bl !== b.blur) { s.filter = bl > .05 ? `blur(${bl}px)` : ""; b.blur = bl; }
+  }
+
+  function render() {
+    if (!W) return;
+    const frontA = mod(Math.round(cur), N);
+    bodies.forEach(b => {
+      b.el.classList.toggle("is-front", b.a === frontA);
+      if (!mobile) {
+        const cx = .5 * W, R = .62 * W, P = 1.65 * W, floor = H - 34, horizon = .36 * H;
+        let phi = mod((b.a - cur) * step + Math.PI, 2 * Math.PI) - Math.PI;
+        const z = R * (1 - Math.cos(phi)), persp = P / (P + z), sl = Math.abs(phi) / step;
+        const scale = persp * (1 + (fs - 1) * clamp(1 - sl, 0, 1));
+        const x = cx + R * Math.sin(phi) * persp, feet = horizon + (floor - horizon) * persp;
+        const blur = sl <= 1 ? 1.8 * sl : Math.min(1.8 + (sl - 1) * 2, 6.5);
+        const op = clamp((Math.cos(phi) + .55) / .3, 0, 1);
+        put(b, x, H - feet, scale, op, blur, Math.round(scale * 1000));
+      } else {
+        const ax = .3, ay = 22, sx = .32, sy = 22, sr = .76, ex = .55;
+        let k = mod(b.a - cur, N); if (k > N - 2) k -= N;
+        if (k < 0) {
+          const e = Math.min(-k, 1.4);
+          put(b, W * (ax - ex * e), ay - 22 * e, 1 + .14 * e, Math.max(0, 1 - 1.05 * e), 4 * Math.min(e, 1), 1100);
+        } else {
+          const op = k <= 3 ? 1 - .13 * k : Math.max(0, .61 * (4 - k));
+          put(b, W * (ax + sx * k), ay + sy * k, Math.pow(sr, k), op, Math.min(.9 * k, 3.2), 1000 - Math.round(10 * k));
+        }
+      }
+    });
+  }
+
+  function frame(t) {
+    raf = 0;
+    const dt = last ? Math.min(.034, (t - last) / 1000) : 1 / 60; last = t;
+    if (reduced && !dragging) { cur = target; vel = 0; }
+    else { const h = dt / 3; for (let i = 0; i < 3; i++) { const acc = -K * (cur - target) - C * vel; vel += acc * h; cur += vel * h; } }
+    const settled = Math.abs(cur - target) <= .0005 && Math.abs(vel) <= .0005;
+    if (settled && !dragging) { cur = target; vel = 0; }
+    render();
+    if (!settled || dragging) kick(); else last = 0;
+  }
+  function kick() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame); }
+
+  /* ---------- index ---------- */
+  let first = true;
+  function setIndex(i) {
+    i = mod(i, n);
+    kick();
+    bodies.forEach(b => {
+      let k = mod(b.a - target, N); if (k >= N / 2) k -= N; k = Math.round(k);
+      const on = k !== 0 && Math.abs(k) <= (mobile ? 3 : 2);
+      $(".rw__hit", b.el).tabIndex = on || k === 0 ? 0 : -1;
+      b.el.setAttribute("aria-hidden", on || k === 0 ? "false" : "true");
+    });
+    if (i === index && !first) { restartBar(); return; }
+    const silent = first; first = false;
+    index = i;
+    if (zoomed) closeZoom();
+    closeSheets();
+    sec.style.setProperty("--rw-progress", ((i + 1) / n).toFixed(3));
+    if (!silent && !reduced) { stage.classList.remove("is-sweep"); void stage.offsetWidth; stage.classList.add("is-sweep"); }
+    if (!silent) $("[data-rw-live]").textContent = lookLabel(i);
+    ticks.forEach((t, j) => { t.setAttribute("aria-current", j === i ? "true" : "false"); t.classList.toggle("is-past", j < i); });
+    panels.forEach((p, j) => { p.hidden = j !== i; p.classList.remove("is-in"); });
+    void panels[i].offsetWidth; panels[i].classList.add("is-in");
+    const lab = $("[data-rw-pieces]");
+    lab.textContent = fmt(T.pieces, { n: DATA.looks[i].items.length });
+    lab.classList.remove("is-swap"); void lab.offsetWidth; if (!silent) lab.classList.add("is-swap");
+    hot(0);
+    restartBar();
+  }
+  function moveTo(t) { target = t; setIndex(mod(t, n)); }
+  const next = () => moveTo(Math.round(target) + 1);
+  const prev = () => moveTo(Math.round(target) - 1);
+  function go(i) { let d = mod(i - index, n); if (d > n / 2) d -= n; moveTo(Math.round(target) + d); }
+
+  /* ---------- autoplay ---------- */
+  function play(on) { playing = on; sec.classList.toggle("is-playing", on); $("[data-rw-auto]").setAttribute("aria-pressed", String(on)); restartBar(); }
+  function restartBar() {
+    clearTimeout(timer);
+    ticks.forEach(t => t.classList.remove("is-run"));
+    if (!playing) return;
+    void sec.offsetWidth; ticks[index].classList.add("is-run");
+    timer = setTimeout(() => {
+      if (playing && visible && !dragging && !document.hidden && !panelHover && !zoomed && !engaged) next(); else restartBar();
+    }, DATA.speed);
+  }
+  function engage() { engaged = true; if (playing) play(false); }
+
+  /* ---------- hot linking ---------- */
+  function hot(num, scroll) {
+    $$(".is-hot", sec).forEach(e => e.classList.remove("is-hot"));
+    if (!num) return;
+    $(`.rw__lb .rw__pin[data-rw-pin="${num}"]`)?.classList.add("is-hot");
+    const card = $(`[data-rw-card="${num}"]`, panels[index]); if (!card) return;
+    card.classList.add("is-hot");
+    if (scroll) {
+      const list = card.parentElement, beh = reduced ? "auto" : "smooth";
+      if (list.scrollWidth > list.clientWidth + 2) list.scrollTo({ left: card.offsetLeft - list.offsetLeft - 20, behavior: beh });
+      else if (list.scrollHeight > list.clientHeight + 2) list.scrollTo({ top: card.offsetTop - list.offsetTop - 12, behavior: beh });
+      else { const r = card.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight - 140) scrollBy({ top: r.top - .3 * innerHeight, behavior: beh }); }
+    }
+  }
+
+  /* ---------- popup ---------- */
+  const lb = $("[data-rw-lb]"), lbStage = $("[data-rw-lb-stage]");
+  let lbFrom = null, lbTimer = 0;
+  function frontBody() { const fa = mod(Math.round(target), N); return bodies[fa]; }
+  function openZoom() {
+    engage(); hot(0); clearTimeout(lbTimer);
+    const li = index, look = DATA.looks[li], src = $(".rw__figure", frontBody().el);
+    const pins = look.items.map((id, k) => { const p = DATA.products[id], [x, y] = DATA.pins[k];
+      return `<button class="rw__pin" type="button" data-rw-pin="${k + 1}" data-tip="${esc(p.name)}" style="left:${x}%;top:${y}%;--pi:${k + 1}" aria-label="${k + 1}: ${esc(p.name)}"><span class="rw__pin-dot">${k + 1}</span></button>`; }).join("");
+    lbStage.innerHTML = `<div class="rw__lb-model"><span class="rw__shadow"></span><div class="rw__figure">${figureSVG(look, li)}${pins}</div></div>`;
+    $("[data-rw-lb-kicker]").textContent = `${T.lookWord} ${pad2(li + 1)}`;
+    $("[data-rw-lb-name]").textContent = look.name;
+    const m = $(".rw__lb-model", lbStage), fig = $(".rw__figure", m);
+    const sr = lbStage.getBoundingClientRect();
+    const h = Math.max(160, Math.min(sr.height, sr.width / .5625));
+    m.style.setProperty("--rw-model-h", h + "px");
+    sec.classList.add("rw--zoom"); zoomed = true; lb.setAttribute("aria-hidden", "false");
+    if (!reduced) {
+      const a = src.getBoundingClientRect(), b = fig.getBoundingClientRect();
+      lbFrom = `translate3d(${a.left - b.left}px,${a.bottom - b.bottom}px,0) scale(${a.height / b.height})`;
+      m.style.transformOrigin = "0 100%"; m.style.transition = "none"; m.style.transform = lbFrom;
+      void m.offsetWidth; m.style.transition = ""; m.style.transform = "";
+    }
+    $("[data-rw-zoom-close]").focus({ preventScroll: true });
+  }
+  function closeZoom() {
+    if (!zoomed) return;
+    zoomed = false;
+    const m = $(".rw__lb-model", lbStage);
+    if (m && lbFrom && !reduced) m.style.transform = lbFrom;
+    const hadFocus = lb.contains(document.activeElement);
+    sec.classList.remove("rw--zoom"); lb.setAttribute("aria-hidden", "true"); hot(0);
+    lbTimer = setTimeout(() => { if (!zoomed) lbStage.innerHTML = ""; }, 950);
+    if (hadFocus) stage.focus({ preventScroll: true });
+    restartBar();
+  }
+
+  /* ---------- pickers ---------- */
+  function openPicker(card, open) {
+    const pk = $("[data-rw-picker]", card), btn = $("[data-rw-add]", card);
+    if (open && mobile) closeSheets();
+    pk.hidden = !open; card.classList.toggle("is-picking", open); btn.setAttribute("aria-expanded", String(open));
+    sec.classList.toggle("rw--picking", mobile && !!$(".rw__item.is-picking", sec));
+    if (open) { $("input:checked", pk)?.focus({ preventScroll: true }); if (!mobile) hot(+card.dataset.rwCard, true); }
+  }
+  function closeSheets() { $$(".rw__item.is-picking", sec).forEach(c => openPicker(c, false)); sec.classList.remove("rw--picking"); }
+  const sizeOf = card => $("input:checked", card)?.value;
+  function addCards(cards, done) {
+    cards.forEach(c => c.classList.add("is-loading"));
+    setTimeout(() => {           // simulated request so the loading state is visible
+      bag.add(cards.map(c => ({ pid: c.dataset.pid, size: sizeOf(c) })));
+      cards.forEach(c => {
+        c.classList.remove("is-loading"); c.classList.add("is-added");
+        openPicker(c, false);
+        const b = $("[data-rw-add]", c); b.removeAttribute("aria-expanded"); b.setAttribute("aria-label", "Added to bag: " + $(".rw__name", c).textContent);
+        if (mobile && !reduced && navigator.vibrate) try { navigator.vibrate(12); } catch {}
+      });
+      checkComplete(cards[0].closest("[data-rw-panel]")); done && done();
+    }, reduced ? 0 : 450);
+  }
+  function checkComplete(panel) {
+    const cards = $$(".rw__item", panel);
+    if (cards.length >= 2 && cards.every(c => c.classList.contains("is-added"))) { panel.classList.add("is-complete"); $("[data-rw-msg]", panel).textContent = ""; }
+  }
+  function addAll(panel) {
+    if (panel.classList.contains("is-complete")) return;
+    const cta = $("[data-rw-all]", panel), msg = $("[data-rw-msg]", panel);
+    if (cta.classList.contains("is-loading")) return;
+    msg.textContent = "";
+    const open = $$(".rw__item", panel).filter(c => !c.classList.contains("is-added"));
+    const ready = open.filter(c => c.dataset.touched), pending = open.filter(c => !c.dataset.touched);
+    if (ready.length) { cta.classList.add("is-loading"); addCards(ready, () => cta.classList.remove("is-loading")); }
+    if (pending.length) {
+      (mobile ? pending.slice(0, 1) : pending).forEach(c => openPicker(c, true));
+      msg.textContent = fmt(T.pickSize, { items: pending.map(c => $(".rw__name", c).textContent).join(", ") });
+    }
+  }
+
+  /* ---------- clicks ---------- */
+  let suppress = 0;
+  document.addEventListener("click", e => {
+    if (performance.now() < suppress && stage.contains(e.target)) { e.preventDefault(); e.stopPropagation(); return; }
+    const t = e.target.closest("button, [data-rw-lb-stage]"); if (!t) return;
+    if (t.matches("[data-rw-pick-close]")) return closeSheets();
+    if (!sec.contains(t)) return;
+    if (t.matches("[data-rw-zoom-close]")) return closeZoom();
+    if (t.matches("[data-rw-lb-stage]") && e.target === t) return closeZoom();
+    if (t.matches("[data-rw-next]")) return next();
+    if (t.matches("[data-rw-prev]")) return prev();
+    if (t.matches("[data-rw-tick]")) return go(+t.dataset.rwTick);
+    if (t.matches("[data-rw-auto]")) { if (!playing) engaged = false; return play(!playing); }
+    if (t.matches("[data-rw-pin]")) { engage(); return hot(+t.dataset.rwPin, true); }
+    if (t.matches("[data-rw-go]")) {
+      let k = mod(+t.dataset.rwGo - target, N); if (k >= N / 2) k -= N; k = Math.round(k);
+      return k === 0 ? openZoom() : moveTo(Math.round(target) + k);
+    }
+    const card = t.closest(".rw__item");
+    if (t.closest(".rw__panel")) engage();
+    if (t.matches("[data-rw-confirm]") && card) { card.dataset.touched = "1"; return addCards([card]); }
+    if (t.matches("[data-rw-add]") && card && !card.classList.contains("is-added") && !card.classList.contains("is-loading")) return openPicker(card, !card.classList.contains("is-picking"));
+    if (t.matches("[data-rw-all]")) return addAll(t.closest("[data-rw-panel]"));
+  }, true);
+  sec.addEventListener("change", e => { const c = e.target.closest(".rw__item"); if (c) { c.dataset.touched = "1"; engage(); } });
+
+  /* ---------- panel hover ---------- */
+  const col = $("[data-rw-panel-col]");
+  col.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") panelHover = true; });
+  col.addEventListener("pointerleave", () => { panelHover = false; restartBar(); });
+  col.addEventListener("pointerover", e => { if (e.pointerType !== "mouse") return; const c = e.target.closest(".rw__item"); if (c) hot(+c.dataset.rwCard); });
+  col.addEventListener("pointerout", e => { const c = e.target.closest(".rw__item"); if (c && !c.contains(e.relatedTarget)) hot(0); });
+
+  /* ---------- drag / swipe ---------- */
+  let ds = null;
+  stage.addEventListener("pointerdown", e => {
+    if (zoomed || (e.pointerType === "mouse" && e.button !== 0)) return;
+    ds = { x: e.clientX, y: e.clientY, t: target, id: e.pointerId, samples: [{ x: e.clientX, time: e.timeStamp }], on: false };
+  });
+  stage.addEventListener("pointermove", e => {
+    if (!ds || e.pointerId !== ds.id) return;
+    if (e.pointerType === "mouse" && !(e.buttons & 1)) return endDrag(e);
+    const dx = e.clientX - ds.x, dy = e.clientY - ds.y;
+    if (!ds.on) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) >= Math.abs(dx)) { ds = null; return; }
+      if (Math.abs(dx) > 8 && Math.abs(dx) > 1.2 * Math.abs(dy)) { ds.on = dragging = true; sec.classList.add("is-dragging"); try { stage.setPointerCapture(e.pointerId); } catch {} }
+      else return;
+    }
+    ds.samples.push({ x: e.clientX, time: e.timeStamp }); if (ds.samples.length > 6) ds.samples.shift();
+    target = ds.t - dx / unit; kick();
+  });
+  function endDrag(e) {
+    if (!ds) return;
+    const d = ds; ds = null;
+    if (!d.on) return;
+    dragging = false; sec.classList.remove("is-dragging"); suppress = performance.now() + 60;
+    const s0 = d.samples[0], s1 = d.samples[d.samples.length - 1];
+    const vx = s1.time > s0.time ? (s1.x - s0.x) / (s1.time - s0.time) : 0, dx = (e.clientX ?? s1.x) - d.x, from = Math.round(d.t);
+    if (mobile) moveTo(Math.abs(dx) > 30 || Math.abs(vx) > .3 ? from - (dx > 0 ? 1 : -1) : from);
+    else {
+      let i = Math.round(target - vx * 160 / unit);
+      if (i === from && Math.abs(vx) > .3) i = from - Math.sign(vx);
+      moveTo(clamp(i, from - 2, from + 2));
+    }
+  }
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+
+  let wAcc = 0, wLock = 0;
+  stage.addEventListener("wheel", e => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || zoomed) return;
+    e.preventDefault(); if (performance.now() < wLock) return;
+    wAcc += e.deltaX;
+    if (Math.abs(wAcc) > 45) { wAcc > 0 ? next() : prev(); wAcc = 0; wLock = performance.now() + 520; }
+  }, { passive: false });
+
+  stage.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    const open = $(".rw__item.is-picking", sec);
+    if (mobile && open) { closeSheets(); $("[data-rw-add]", open).focus(); }
+    else if (zoomed) closeZoom();
+  });
+
+  /* ---------- custom cursor ---------- */
+  const cur$ = $("[data-rw-cursor]");
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    sec.classList.add("rw--cursor");
+    let cx = 0, cy = 0, tx = 0, ty = 0, cRaf = 0, entered = false;
+    const loop = () => {
+      const f = reduced ? 1 : .18; cx += (tx - cx) * f; cy += (ty - cy) * f;
+      cur$.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+      cRaf = Math.hypot(tx - cx, ty - cy) > .2 ? requestAnimationFrame(loop) : 0;
+    };
+    stage.addEventListener("pointermove", e => {
+      if (e.pointerType !== "mouse") return;
+      const r = stage.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top;
+      if (!entered) { entered = true; cx = tx; cy = ty; cur$.classList.add("is-on"); }
+      const hit = e.target.closest(".rw__hit, .rw__pin"), front = hit && hit.closest(".rw__model.is-front");
+      cur$.classList.toggle("is-view", !dragging && !!front && !zoomed);
+      cur$.classList.toggle("is-link", !dragging && !!hit && !front);
+      if (!cRaf) cRaf = requestAnimationFrame(loop);
+    });
+    stage.addEventListener("pointerleave", () => { entered = false; cur$.classList.remove("is-on", "is-link", "is-view"); });
+  } else cur$.remove();
+
+  /* ---------- lifecycle ---------- */
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(measure, 120); });
+  if ("ResizeObserver" in window) new ResizeObserver(() => measure()).observe(stage);
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }, { threshold: 0 }).observe(sec);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { kick(); restartBar(); } });
+
+  sec.classList.add("rw--js");
+  measure();
+  setIndex(0);
+  if (reduced) sec.classList.add("is-revealed");
+  else requestAnimationFrame(() => requestAnimationFrame(() => sec.classList.add("is-revealed")));
+  kick();
+  if (!reduced) play(true);
+})();
+
+/* bag dialog */
+bag.load(); bag.render();
+const dlg = $("#bag-dialog");
+$("#open-bag").addEventListener("click", () => { bag.render(); dlg.showModal(); });
+$("#close-bag").addEventListener("click", () => dlg.close());
+$("#clear-bag").addEventListener("click", () => { bag.items = []; bag.save(); bag.render(); });
+dlg.addEventListener("click", e => {
+  const rm = e.target.closest("[data-remove]");
+  if (rm) { bag.items.splice(+rm.dataset.remove, 1); bag.save(); bag.render(); return; }
+  const r = dlg.getBoundingClientRect();
+  if (e.target === dlg && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) dlg.close();
+});
+</script>
+</body>
+</html>
