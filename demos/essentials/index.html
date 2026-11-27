@@ -435,6 +435,44 @@ body.has-mbar .kit-btn{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 .kit .accs button.on{border-color:var(--paper);outline:2px solid var(--ink)}
 .kit p{font-size:13px;color:var(--ink-2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* ---- fitting room ---- */
+.fit{display:grid;grid-template-columns:minmax(0,460px) minmax(0,1fr);gap:40px;align-items:start;padding-bottom:70px}
+.fit-stage{position:relative;aspect-ratio:2/3;background:var(--stone);border-radius:var(--r-lg);overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.fit-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+
+.fit-z,.fit-nxt{position:absolute;inset:0;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.zt{-webkit-mask-image:url(fit/zt.png);mask-image:url(fit/zt.png)}
+.zb{-webkit-mask-image:url(fit/zb.png);mask-image:url(fit/zb.png)}
+.fit-hij{z-index:3}
+.fit-cue{position:absolute;z-index:4;left:50%;transform:translateX(-50%);font-size:13px;letter-spacing:.04em;background:rgba(43,39,35,.84);color:#fff;padding:7px 16px;border-radius:99px;white-space:nowrap;pointer-events:none;animation:fitcue 1.6s ease-in-out infinite;transition:opacity .3s}
+.fit-cue.t{top:calc(31% - 40px)}.fit-cue.b{top:calc(70% - 40px)}.fit-cue.off{opacity:0;animation:none}
+@keyframes fitcue{0%,100%{transform:translateX(calc(-50% - 10px))}50%{transform:translateX(calc(-50% + 10px))}}
+.fit-arr{position:absolute;z-index:4;width:40px;height:40px;border-radius:50%;background:rgba(251,249,246,.92);border:1px solid var(--line);display:grid;place-items:center;transition:background .2s}
+.fit-arr:hover{background:#fff}
+.fit-arr .ico{width:17px;height:17px}
+.fit-arr.t{top:31%}.fit-arr.b{top:70%}
+.fit-arr.l{left:10px}.fit-arr.r{right:10px}
+.fit-tag{position:absolute;z-index:4;left:50%;transform:translateX(-50%);font-size:11.5px;background:rgba(251,249,246,.92);padding:3px 10px;border-radius:99px;white-space:nowrap;pointer-events:none}
+.fit-tag.t{top:calc(31% + 22px)}.fit-tag.b{top:calc(70% + 22px)}
+.fit-hint{position:absolute;z-index:4;inset:auto 0 12px 0;margin-inline:auto;width:max-content;max-width:90%;font-size:12.5px;background:rgba(43,39,35,.82);color:#fff;padding:6px 14px;border-radius:99px;transition:opacity .4s}
+.fit-hint.off{opacity:0}
+.fit-side h2{font-size:22px;margin:0 0 4px}
+.fit-grp{margin-top:22px}
+.fit-grp .lbl{font-size:13px;color:var(--mute);margin-bottom:10px}
+.fit-picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fit-pick{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center;text-align:start;padding:8px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);transition:border-color .2s}
+.fit-pick.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.fit-pick .im{width:72px;aspect-ratio:3/4;border-radius:3px;overflow:hidden;background:var(--stone)}
+.fit-pick .im img{width:100%;height:100%;object-fit:cover}
+.fit-pick b{font-weight:500;font-size:13.5px;display:block;line-height:1.35}
+.fit-sum{margin-top:26px;border-top:1px solid var(--line);padding-top:18px}
+.fit-line{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 0}
+.fit-line select{height:38px;border:1px solid var(--line);border-radius:var(--r);background:#fff;padding:0 8px}
+.fit-line .btn{height:38px;padding:0 14px;font-size:13px}
+.fit-total{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.fit-total strong{font-family:var(--f-display);font-size:28px;font-weight:500}
+@media (max-width:860px){.fit{grid-template-columns:minmax(0,1fr);gap:24px}.fit-stage{max-width:440px;margin-inline:auto;width:100%}.fit-picks{grid-template-columns:minmax(0,1fr)}.fit-line{grid-template-columns:minmax(0,1fr) auto}.fit-line .btn{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -511,7 +549,7 @@ const ACCENTS = [["#848e7c","Sage"],["#a8664b","Clay"],["#3e4a5c","Navy"],["#2b2
 /* ---------- copy (ar, en) ---------- */
 const T = {
   topbar: ["شحن مجاني للطلبات فوق 150$ · إرجاع سهل خلال 30 يوم · <b>متجر تجريبي من Flowpal</b>", "Free shipping on orders over $150 · Easy 30-day returns · <b>A Flowpal demo store</b>"],
-  nav: [["new","وصل حديثًا","New In"],["shop","تسوّق","Shop"],["collections","المجموعات","Collections"],["looks","إطلالات","Lookbook"],["about","من نحن","About"]],
+  nav: [["new","وصل حديثًا","New In"],["shop","تسوّق","Shop"],["collections","المجموعات","Collections"],["looks","إطلالات","Lookbook"],["fit","غرفة الغيار","Fitting Room"],["about","من نحن","About"]],
   h1: ["أساسيات عصرية.<br>أناقة كل يوم.", "Modern Essentials.<br>Effortless Every Day."],
   lead: ["قطع خالدة بتصميم مدروس، معمولة للحياة الحقيقية.", "Timeless pieces. Thoughtful design. Made for real life."],
   shopNow: ["تسوّق الآن", "Shop Now"], newArr: ["وصل حديثًا", "New Arrivals"],
@@ -678,7 +716,7 @@ V.home = () => {
     <div class="txt">
       <h1>${t("h1")}</h1>
       <p>${t("lead")}</p>
-      <div class="row"><a class="btn btn-sage" href="#shop">${t("shopNow")}</a><a class="lnk" href="#new">${t("newArr")} ${arrow()}</a></div>
+      <div class="row"><a class="btn btn-sage" href="#shop">${t("shopNow")}</a><a class="btn btn-line" href="#fit">${tx(["جرّبي في غرفة الغيار","Try the Fitting Room"])}</a><a class="lnk" href="#new">${t("newArr")} ${arrow()}</a></div>
     </div>
     <div class="ph"><img src="img/hero.webp" alt="${tx(["عارضة بحجاب بيج وبليزر جملي","Model in a beige hijab and camel blazer"])}" fetchpriority="high"></div>
   </div></section>
@@ -865,6 +903,68 @@ V.account = () => {
   if(accTab==="addr") body = `<div class="panel" style="max-width:420px"><h3 style="font-size:16px;margin-bottom:8px">${esc(user.name)}</h3><p class="mute">${esc(coState.info.ad||tx(["شارع الإرسال 14","14 Irsal Street"]))}<br>${esc(coState.info.ci||tx(BRAND.city))}</p></div>`;
   return `${pageHead(t("welcome").replace("{x}", esc(user.name)), esc(user.email), t("account"))}<div class="wrap"><div class="dash"><div class="side">${tabs.map(x=>`<button class="${accTab===x[0]?"on":""}" data-acc="${x[0]}">${x[1]}</button>`).join("")}<button data-act="signOut">${t("signOut")}</button></div><div style="min-width:0">${body}</div></div></div>`;
 };
+
+/* ---------- fitting room ---------- */
+const FIT = {top:["s4","s3"], bot:["t2","t1"], t:0, b:0, busy:false, hint:true, srcT:"fit/s11.webp", srcB:"fit/s11.webp"};
+const fitSrc = (t,b) => `fit/s${t+1}${b+1}.webp`;
+const FZ = {
+  top:"polygon(0 19.5%,100% 19.5%,100% 60%,67% 60%,67% 40%,33% 40%,33% 60%,0 60%)",
+  bot:"polygon(33% 40%,67% 40%,67% 60%,100% 60%,100% 98%,0 98%,0 60%,33% 60%)"};
+const fitIds = () => [FIT.top[FIT.t], FIT.bot[FIT.b]];
+function fitPicks(){
+  const g = (z, lbl) => `<div class="fit-grp"><div class="lbl">${lbl}</div><div class="fit-picks">${FIT[z].map((id,i)=>{ const p = byId(id); return `<button class="fit-pick ${(z==="top"?FIT.t:FIT.b)===i?"on":""}" data-fitpick="${z}:${i}"><span class="im"><img src="${img(id)}" alt="" style="${z==="top"?"object-position:50% 25%;transform:scale(1.5);transform-origin:50% 25%":"object-position:50% 85%;transform:scale(1.6);transform-origin:50% 85%"}"></span><span><b>${esc(tx(p.n))}</b>${priceHTML(p)}</span></button>` }).join("")}</div></div>`;
+  return g("top", tx(["القطعة العلوية","Top"])) + g("bot", tx(["القطعة السفلية","Bottom"]));
+}
+function fitSummary(){
+  const ids = fitIds(), tot = ids.reduce((a,id)=>a+byId(id).p, 0);
+  return ids.map(id => { const p = byId(id); return `<div class="fit-line"><span><b style="font-weight:500">${esc(tx(p.n))}</b><br>${priceHTML(p)}</span><select id="fz_${id}" aria-label="${t("size")}">${p.s.map(z=>`<option value="${z}" ${z==="M"?"selected":""} ${(p.out||[]).includes(z)?"disabled":""}>${sizeLabel(z)}</option>`).join("")}</select><button class="btn btn-line" data-fitadd="${id}">${t("add")}</button></div>` }).join("")
+   + `<div class="fit-total"><div><span class="mute" style="font-size:13px">${tx(["الطقم كامل","Full outfit"])}</span><br><strong class="num">${money(tot)}</strong></div><button class="btn btn-sage" data-fitadd="all">${tx(["أضيفي الطقم للسلة","Add outfit to bag"])}</button></div>`;
+}
+function fitRefresh(){ const a = $("#fitPick"), b = $("#fitSum"); if(a) a.innerHTML = fitPicks(); if(b) b.innerHTML = fitSummary();
+  const tt = $("#fitTagT"), tb = $("#fitTagB"); if(tt) tt.textContent = tx(byId(FIT.top[FIT.t]).n); if(tb) tb.textContent = tx(byId(FIT.bot[FIT.b]).n) }
+V.fit = () => `${pageHead(tx(["غرفة الغيار","Fitting Room"]), tx(["نسّقي طقمك على نفس الموديل: اسحبي يمين أو يسار على القطعة العلوية أو السفلية، وشوفي السعر قبل ما تضيفي للسلة.","Style your outfit on the same model: swipe left or right on the top or the bottom, then see the price before you add to bag."]), tx(["غرفة الغيار","Fitting Room"]))}
+  <section class="wrap fit">
+    <div class="fit-stage" id="fitStage" role="img" aria-label="${tx(["الموديل لابسة الطقم المختار","The model wearing the selected outfit"])}">
+      <img src="${fitSrc(0,0)}" alt="">
+      <div class="fit-z zt"><img id="fitImgT" src="${FIT.srcT}" alt=""></div>
+      <div class="fit-z zb"><img id="fitImgB" src="${FIT.srcB}" alt=""></div>
+      <div class="fit-nxt" id="fitNxt" hidden><img alt=""></div>
+      <img class="fit-hij" src="fit/hijab.png" alt="">
+      <span class="fit-tag t" id="fitTagT"></span><span class="fit-cue t" id="fitCueT">${tx(["‹ اسحبي ›","‹ Swipe ›"])}</span>
+      <span class="fit-tag b" id="fitTagB"></span><span class="fit-cue b" id="fitCueB">${tx(["‹ اسحبي ›","‹ Swipe ›"])}</span>
+      <div class="fit-hint ${FIT.hint?"":"off"}" id="fitHint">${tx(["اسحبي يمين أو يسار على القميص أو البنطلون","Swipe left or right on the top or the trousers"])}</div>
+    </div>
+    <div class="fit-side">
+      <h2 class="serif">${tx(["اختاري طقمك","Choose your outfit"])}</h2>
+      <p class="mute" style="font-size:14px">${tx(["الموديل ثابتة، والقطعة هي اللي بتتغير.","The model stays the same. Only the piece changes."])}</p>
+      <div id="fitPick">${fitPicks()}</div>
+      <div class="fit-sum" id="fitSum">${fitSummary()}</div>
+    </div>
+  </section>`;
+function fitGo(zone, idx, dir){
+  const cur = zone==="top" ? FIT.t : FIT.b; if(idx===cur || FIT.busy) return;
+  if(zone==="top") FIT.t = idx; else FIT.b = idx;
+  FIT.hint = false; const h = $("#fitHint"); if(h) h.classList.add("off"); const cu = $(zone==="top"?"#fitCueT":"#fitCueB"); if(cu) cu.classList.add("off");
+  fitRefresh();
+  const src = fitSrc(FIT.t, FIT.b);
+  const target = $(zone==="top" ? "#fitImgT" : "#fitImgB"), nx = $("#fitNxt");
+  const done = () => { FIT.srcT = FIT.srcB = src; const a = $("#fitImgT"), c = $("#fitImgB"); if(a) a.src = src; if(c) c.src = src; if(nx) nx.hidden = true; FIT.busy = false };
+  if(!nx || !target || matchMedia("(prefers-reduced-motion:reduce)").matches){ done(); return }
+  const im = nx.querySelector("img"); FIT.busy = true; im.src = src; nx.className = "fit-nxt " + (zone==="top" ? "zt" : "zb");
+  const go = () => { nx.hidden = false; const a = nx.animate([{opacity:0},{opacity:1}],{duration:340,easing:"ease-in-out"}); im.animate([{transform:`translateX(${dir>0?10:-10}px)`},{transform:"translateX(0)"}],{duration:340,easing:"ease-out"}); a.onfinish = done; a.oncancel = done };
+  (im.decode ? im.decode() : Promise.resolve()).then(go, go);
+}
+["11","12","21","22"].forEach(k => { const i = new Image(); i.src = `fit/s${k}.webp` }); { const i = new Image(); i.src = "fit/hijab.png" }
+let fitDrag = null;
+document.addEventListener("pointerdown", e => { const st = e.target.closest("#fitStage"); if(!st || e.target.closest("button")) return; fitDrag = {x:e.clientX, y:e.clientY, r:st.getBoundingClientRect()} });
+document.addEventListener("pointerup", e => { if(!fitDrag) return; const d = fitDrag; fitDrag = null; const dx = e.clientX - d.x, dy = e.clientY - d.y; if(Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) return;
+  const zone = (d.y - d.r.top) / d.r.height < 0.42 ? "top" : "bot"; const cur = zone==="top" ? FIT.t : FIT.b; fitGo(zone, 1-cur, dx<0 ? 1 : -1) });
+document.addEventListener("click", e => { const b = e.target.closest("[data-fitgo],[data-fitpick],[data-fitadd]"); if(!b) return;
+  if(b.dataset.fitgo){ const [z] = b.dataset.fitgo.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, 1-cur, b.classList.contains("r") ? -1 : 1) }
+  if(b.dataset.fitpick){ const [z,i] = b.dataset.fitpick.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, +i, +i>cur ? 1 : -1) }
+  const id = b.dataset.fitadd, list = id==="all" ? fitIds() : [id]; list.forEach(x => { const p = byId(x), sel = $("#fz_"+x); pushBag(x, sel ? sel.value : firstSize(p), p.col[0]) }); save();
+  $("#openBag").animate([{transform:"scale(1)"},{transform:"scale(1.25)"},{transform:"scale(1)"}],{duration:420}); toast(id==="all" ? tx(["انضاف الطقم للسلة","Outfit added to bag"]) : `${t("added")}: ${tx(byId(id).n)}`, [t("viewBag"), openBag]) });
+
 V.about = () => `${pageHead(t("aboutT"), tx(["دار صغيرة بتصمم أساسيات هادية بخامات طبيعية.","A small house designing quiet essentials in natural fabrics."]), t("aboutT"))}
   <div class="wrap sec"><div class="story"><div><h2>${tx(["أقل قطع، استخدام أكثر","Fewer pieces, worn more"])}</h2>
     <p>${tx(["بلّشنا بسؤال بسيط: شو القطع اللي بنرجعلها كل يوم؟ من هون طلعت تشكيلة صغيرة من الأساسيات اللي بتتنسّق مع بعض بسهولة.","We started with a simple question: which pieces do we reach for every day? The answer became a small range of essentials that work together."])}</p>
@@ -908,6 +1008,7 @@ function route(){
   if(changed) window.scrollTo({top:0, behavior:"instant"});
   setupMbar(h);
   closeAll();
+  if(h==="fit") fitRefresh();
 }
 function setupMbar(h){
   const m = $("#mbar"), p = h.startsWith("p-") && byId(h.slice(2));
