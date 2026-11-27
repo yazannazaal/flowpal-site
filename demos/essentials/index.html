@@ -960,8 +960,8 @@ function fitGo(zone, idx){
   fitRefresh();
   FIT.busy = true;
   const jobs = [];
-  if(zone==="top"){ jobs.push(fitSwap("fitImgT", fitTop(FIT.t), "srcT")); jobs.push(fitSwap("fitImgD", fitExt(FIT.t), "srcD")) }
-  else { jobs.push(fitSwap("fitImgB", fitBot(FIT.b), "srcB")); const d = $("#fitImgD"); if(d){ const an = d.animate([{opacity:FIT.b?0:1},{opacity:FIT.b?1:0}],{duration:360,fill:"forwards",easing:"ease-in-out"}); an.onfinish = () => { d.style.opacity = FIT.b?1:0; an.cancel() } } }
+  if(zone==="top"){ jobs.push(fitSwap("fitImgT", fitTop(FIT.t), "srcT")); if(FIT.b) jobs.push(fitSwap("fitImgD", fitExt(FIT.t), "srcD")); else { const d = $("#fitImgD"); if(d){ d.src = fitExt(FIT.t); FIT.srcD = fitExt(FIT.t) } } }
+  else { jobs.push(fitSwap("fitImgB", fitBot(FIT.b), "srcB")); const d = $("#fitImgD"); if(d){ if(d.src.indexOf(fitExt(FIT.t))<0){ d.src = fitExt(FIT.t); FIT.srcD = fitExt(FIT.t) } const an = d.animate([{opacity:FIT.b?0:1},{opacity:FIT.b?1:0}],{duration:360,fill:"forwards",easing:"ease-in-out"}); an.onfinish = () => { d.style.opacity = FIT.b?1:0; an.cancel() } } }
   Promise.all(jobs).then(() => { FIT.busy = false });
 }
 ["base","top0","top1","bot0","bot1","ext0","ext1","hands","hijab"].forEach(k => { const i = new Image(); i.src = `fit/${k}.${k==="hijab"?"png":"webp"}` })
