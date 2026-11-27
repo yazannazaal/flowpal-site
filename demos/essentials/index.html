@@ -441,9 +441,7 @@ body.has-mbar .kit-btn{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 .fit-stage{position:relative;aspect-ratio:2/3;background:var(--stone);border-radius:var(--r-lg);overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
 .fit-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
 
-.fit-z,.fit-nxt{position:absolute;inset:0;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-.zt{-webkit-mask-image:url(fit/zt.png);mask-image:url(fit/zt.png)}
-.zb{-webkit-mask-image:url(fit/zb.png);mask-image:url(fit/zb.png)}
+.fit-z{position:absolute;inset:0}
 .fit-hij{z-index:3}
 .fit-cue{position:absolute;z-index:4;left:50%;transform:translateX(-50%);font-size:13px;letter-spacing:.04em;background:rgba(43,39,35,.84);color:#fff;padding:7px 16px;border-radius:99px;white-space:nowrap;pointer-events:none;animation:fitcue 1.6s ease-in-out infinite;transition:opacity .3s}
 .fit-cue.t{top:calc(31% - 40px)}.fit-cue.b{top:calc(70% - 40px)}.fit-cue.off{opacity:0;animation:none}
@@ -905,8 +903,8 @@ V.account = () => {
 };
 
 /* ---------- fitting room ---------- */
-const FIT = {top:["s4","s3"], bot:["t2","t1"], t:0, b:0, busy:false, hint:true, srcT:"fit/s11.webp", srcB:"fit/s11.webp"};
-const fitSrc = (t,b) => `fit/s${t+1}${b+1}.webp`;
+const FIT = {top:["s4","s3"], bot:["t2","t1"], t:0, b:0, busy:false, hint:true, srcT:"fit/top0.webp", srcB:"fit/bot0.webp", srcD:"fit/ext0.webp"};
+const fitTop = t => `fit/top${t}.webp`, fitBot = b => `fit/bot${b}.webp`, fitExt = t => `fit/ext${t}.webp`;
 const FZ = {
   top:"polygon(0 19.5%,100% 19.5%,100% 60%,67% 60%,67% 40%,33% 40%,33% 60%,0 60%)",
   bot:"polygon(33% 40%,67% 40%,67% 60%,100% 60%,100% 98%,0 98%,0 60%,33% 60%)"};
@@ -925,10 +923,11 @@ function fitRefresh(){ const a = $("#fitPick"), b = $("#fitSum"); if(a) a.innerH
 V.fit = () => `${pageHead(tx(["غرفة الغيار","Fitting Room"]), tx(["نسّقي طقمك على نفس الموديل: اسحبي يمين أو يسار على القطعة العلوية أو السفلية، وشوفي السعر قبل ما تضيفي للسلة.","Style your outfit on the same model: swipe left or right on the top or the bottom, then see the price before you add to bag."]), tx(["غرفة الغيار","Fitting Room"]))}
   <section class="wrap fit">
     <div class="fit-stage" id="fitStage" role="img" aria-label="${tx(["الموديل لابسة الطقم المختار","The model wearing the selected outfit"])}">
-      <img src="${fitSrc(0,0)}" alt="">
-      <div class="fit-z zt"><img id="fitImgT" src="${FIT.srcT}" alt=""></div>
-      <div class="fit-z zb"><img id="fitImgB" src="${FIT.srcB}" alt=""></div>
-      <div class="fit-nxt" id="fitNxt" hidden><img alt=""></div>
+      <img src="fit/base.webp" alt="">
+      <div class="fit-z"><img id="fitImgB" src="${FIT.srcB}" alt=""></div>
+      <div class="fit-z"><img id="fitImgT" src="${FIT.srcT}" alt=""></div>
+      <div class="fit-z"><img id="fitImgD" src="${FIT.srcD}" alt="" style="opacity:${FIT.b?1:0}"></div>
+      <img class="fit-hij" src="fit/hands.webp" alt="" style="z-index:2">
       <img class="fit-hij" src="fit/hijab.png" alt="">
       <span class="fit-tag t" id="fitTagT"></span><span class="fit-cue t" id="fitCueT">${tx(["‹ اسحبي ›","‹ Swipe ›"])}</span>
       <span class="fit-tag b" id="fitTagB"></span><span class="fit-cue b" id="fitCueB">${tx(["‹ اسحبي ›","‹ Swipe ›"])}</span>
@@ -941,27 +940,38 @@ V.fit = () => `${pageHead(tx(["غرفة الغيار","Fitting Room"]), tx(["ن�
       <div class="fit-sum" id="fitSum">${fitSummary()}</div>
     </div>
   </section>`;
-function fitGo(zone, idx, dir){
+/* Layers: a fixed base (head, hands, shoes, background) + one transparent cut-out per garment (top, trousers) + a small waist strip so the shirt hem tucks under jeans. Changing one piece only dissolves that piece; nothing else is redrawn. */
+function fitSwap(id, src, key){
+  const cur = $("#"+id); if(!cur || FIT[key] === src) return Promise.resolve();
+  FIT[key] = src;
+  const nw = document.createElement("img"); nw.alt = ""; nw.src = src;
+  let oa = null; const fin = () => { cur.src = src; if(oa) oa.cancel(); if(nw.parentNode) nw.remove() };
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches){ fin(); return Promise.resolve() }
+  return new Promise(res => {
+    const go = () => { cur.parentNode.appendChild(nw); const o = {duration:360,easing:"ease-in-out"};
+      oa = cur.animate([{opacity:1},{opacity:0}],{...o,fill:"forwards"}); const a = nw.animate([{opacity:0},{opacity:1}],o); a.onfinish = () => { fin(); res() }; a.oncancel = () => { fin(); res() } };
+    (nw.decode ? nw.decode() : Promise.resolve()).then(go, go);
+  });
+}
+function fitGo(zone, idx){
   const cur = zone==="top" ? FIT.t : FIT.b; if(idx===cur || FIT.busy) return;
   if(zone==="top") FIT.t = idx; else FIT.b = idx;
   FIT.hint = false; const h = $("#fitHint"); if(h) h.classList.add("off"); const cu = $(zone==="top"?"#fitCueT":"#fitCueB"); if(cu) cu.classList.add("off");
   fitRefresh();
-  const src = fitSrc(FIT.t, FIT.b);
-  const target = $(zone==="top" ? "#fitImgT" : "#fitImgB"), nx = $("#fitNxt");
-  const done = () => { FIT.srcT = FIT.srcB = src; const a = $("#fitImgT"), c = $("#fitImgB"); if(a) a.src = src; if(c) c.src = src; if(nx) nx.hidden = true; FIT.busy = false };
-  if(!nx || !target || matchMedia("(prefers-reduced-motion:reduce)").matches){ done(); return }
-  const im = nx.querySelector("img"); FIT.busy = true; im.src = src; nx.className = "fit-nxt " + (zone==="top" ? "zt" : "zb");
-  const go = () => { nx.hidden = false; const a = nx.animate([{opacity:0},{opacity:1}],{duration:340,easing:"ease-in-out"}); im.animate([{transform:`translateX(${dir>0?10:-10}px)`},{transform:"translateX(0)"}],{duration:340,easing:"ease-out"}); a.onfinish = done; a.oncancel = done };
-  (im.decode ? im.decode() : Promise.resolve()).then(go, go);
+  FIT.busy = true;
+  const jobs = [];
+  if(zone==="top"){ jobs.push(fitSwap("fitImgT", fitTop(FIT.t), "srcT")); jobs.push(fitSwap("fitImgD", fitExt(FIT.t), "srcD")) }
+  else { jobs.push(fitSwap("fitImgB", fitBot(FIT.b), "srcB")); const d = $("#fitImgD"); if(d){ const an = d.animate([{opacity:FIT.b?0:1},{opacity:FIT.b?1:0}],{duration:360,fill:"forwards",easing:"ease-in-out"}); an.onfinish = () => { d.style.opacity = FIT.b?1:0; an.cancel() } } }
+  Promise.all(jobs).then(() => { FIT.busy = false });
 }
-["11","12","21","22"].forEach(k => { const i = new Image(); i.src = `fit/s${k}.webp` }); { const i = new Image(); i.src = "fit/hijab.png" }
+["base","top0","top1","bot0","bot1","ext0","ext1","hands","hijab"].forEach(k => { const i = new Image(); i.src = `fit/${k}.${k==="hijab"?"png":"webp"}` })
 let fitDrag = null;
 document.addEventListener("pointerdown", e => { const st = e.target.closest("#fitStage"); if(!st || e.target.closest("button")) return; fitDrag = {x:e.clientX, y:e.clientY, r:st.getBoundingClientRect()} });
 document.addEventListener("pointerup", e => { if(!fitDrag) return; const d = fitDrag; fitDrag = null; const dx = e.clientX - d.x, dy = e.clientY - d.y; if(Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) return;
-  const zone = (d.y - d.r.top) / d.r.height < 0.42 ? "top" : "bot"; const cur = zone==="top" ? FIT.t : FIT.b; fitGo(zone, 1-cur, dx<0 ? 1 : -1) });
+  const zone = (d.y - d.r.top) / d.r.height < 0.42 ? "top" : "bot"; const cur = zone==="top" ? FIT.t : FIT.b; fitGo(zone, 1-cur) });
 document.addEventListener("click", e => { const b = e.target.closest("[data-fitgo],[data-fitpick],[data-fitadd]"); if(!b) return;
-  if(b.dataset.fitgo){ const [z] = b.dataset.fitgo.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, 1-cur, b.classList.contains("r") ? -1 : 1) }
-  if(b.dataset.fitpick){ const [z,i] = b.dataset.fitpick.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, +i, +i>cur ? 1 : -1) }
+  if(b.dataset.fitgo){ const [z] = b.dataset.fitgo.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, 1-cur) }
+  if(b.dataset.fitpick){ const [z,i] = b.dataset.fitpick.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, +i) }
   const id = b.dataset.fitadd, list = id==="all" ? fitIds() : [id]; list.forEach(x => { const p = byId(x), sel = $("#fz_"+x); pushBag(x, sel ? sel.value : firstSize(p), p.col[0]) }); save();
   $("#openBag").animate([{transform:"scale(1)"},{transform:"scale(1.25)"},{transform:"scale(1)"}],{duration:420}); toast(id==="all" ? tx(["انضاف الطقم للسلة","Outfit added to bag"]) : `${t("added")}: ${tx(byId(id).n)}`, [t("viewBag"), openBag]) });
 
