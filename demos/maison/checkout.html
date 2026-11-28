@@ -1,35 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Checkout | Maison Verrel</title>
+<title>إتمام الطلب | ميزون فيريل</title>
 <link rel="preconnect" href="https://images.higgs.ai">
-<link rel="stylesheet" href="store.css?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="store.css?v=2">
 </head>
 <body>
 <div id="hd"></div>
 <main class="wrap" id="app"></main>
 <div id="ft"></div>
 <div class="toast" id="toast" role="status"></div>
-<script src="store.js?v=1"></script>
+<script src="store.js?v=2"></script>
 <script>
 MV.chrome('shop');
 var ship='std',app=document.getElementById('app');
 function rows(){return MV.cart().map(function(c){var p=MV.prod(c.k);if(!p)return '';
  var im=p.rail?MV.face(p,'front',52):'<img src="img/'+p.id+'.webp" alt="">';
- return '<div class="row" data-id="'+c.id+'"><div class="th2">'+im+'</div><div><div class="nm">'+MV.esc(p.name)+'</div><div class="mt">Size '+(c.size==='OS'?'One size':c.size)+' · '+MV.money(p.price)+'</div><div class="step"><button data-a="dec" aria-label="Decrease">−</button><output>'+c.qty+'</output><button data-a="inc" aria-label="Increase">+</button></div><button class="rm" data-a="del">Remove</button></div><div class="nm">'+MV.money(p.price*c.qty)+'</div></div>'}).join('')}
+ return '<div class="row" data-id="'+c.id+'"><div class="th2">'+im+'</div><div><div class="nm">'+MV.esc(p.name)+'</div><div class="mt">المقاس '+(c.size==='OS'?'مقاس واحد':c.size)+' · '+MV.money(p.price)+'</div><div class="step"><button data-a="dec" aria-label="تقليل">−</button><output>'+c.qty+'</output><button data-a="inc" aria-label="زيادة">+</button></div><button class="rm" data-a="del">إزالة</button></div><div class="nm">'+MV.money(p.price*c.qty)+'</div></div>'}).join('')}
 function totals(){var s=MV.subtotal(),sh=MV.cart().length?MV.shipping(s):0;return {s:s,sh:sh,t:s+sh}}
-function summary(){var t=totals();return '<div class="box" style="position:sticky;top:90px"><h2>Order summary</h2>'+(MV.cart().length?rows():'<p class="empty" style="padding:30px 0">Your cart is empty. <a href="shop.html" style="text-decoration:underline">Continue shopping</a></p>')+'<div style="margin-top:12px"><div class="tot"><span>Subtotal</span><span>'+MV.money(t.s)+'</span></div><div class="tot"><span>Shipping</span><span>'+(t.sh?MV.money(t.sh):'Free')+'</span></div><div class="tot b"><span>Total</span><span>'+MV.money(t.t)+'</span></div></div></div>'}
-function form(){return '<form class="box" id="f" novalidate><h2>Contact</h2><div class="f2"><div><label for="n">Full name</label><input id="n" required autocomplete="name"></div><div><label for="ph">Phone</label><input id="ph" required inputmode="tel" autocomplete="tel"></div></div><h2 style="margin-top:26px">Delivery</h2><div class="f2"><div><label for="ct">City</label><input id="ct" required></div><div><label for="ad">Address</label><input id="ad" required></div></div><div style="margin-top:14px"><label for="nt">Notes (optional)</label><textarea id="nt" rows="2"></textarea></div><h2 style="margin-top:26px">Payment</h2><label class="opt on"><input type="radio" name="pay" checked><span>Cash on delivery</span></label><p style="font-size:12.5px;color:var(--muted);margin:0 0 20px">Demo store: no payment is taken and no real order is placed.</p><button class="btn" type="submit" id="place">Place order</button></form>'}
-function draw(){app.innerHTML='<div class="crumb"><a href="index.html">Home</a> / <a href="shop.html">Shop</a> / Checkout</div><h1 class="t">Checkout</h1><div class="co" style="margin-top:20px"><div>'+form()+'</div><div id="sum">'+summary()+'</div></div>';
+function summary(){var t=totals();return '<div class="box" style="position:sticky;top:90px"><h2>ملخص الطلب</h2>'+(MV.cart().length?rows():'<p class="empty" style="padding:30px 0">سلتك فاضية. <a href="shop.html" style="text-decoration:underline">كمّل التسوّق</a></p>')+'<div style="margin-top:12px"><div class="tot"><span>المجموع الفرعي</span><span>'+MV.money(t.s)+'</span></div><div class="tot"><span>الشحن</span><span>'+(t.sh?MV.money(t.sh):'مجاني')+'</span></div><div class="tot b"><span>الإجمالي</span><span>'+MV.money(t.t)+'</span></div></div></div>'}
+function form(){return '<form class="box" id="f" novalidate><h2>بيانات التواصل</h2><div class="f2"><div><label for="n">الاسم الكامل</label><input id="n" required autocomplete="name"></div><div><label for="ph">رقم الجوال</label><input id="ph" required inputmode="tel" autocomplete="tel"></div></div><h2 style="margin-top:26px">التوصيل</h2><div class="f2"><div><label for="ct">المدينة</label><input id="ct" required></div><div><label for="ad">العنوان</label><input id="ad" required></div></div><div style="margin-top:14px"><label for="nt">ملاحظات (اختياري)</label><textarea id="nt" rows="2"></textarea></div><h2 style="margin-top:26px">الدفع</h2><label class="opt on"><input type="radio" name="pay" checked><span>الدفع عند الاستلام</span></label><p style="font-size:12.5px;color:var(--muted);margin:0 0 20px">متجر تجريبي: ما بنسحب أي دفعة وما بينعمل أي طلب حقيقي.</p><button class="btn" type="submit" id="place">تأكيد الطلب</button></form>'}
+function draw(){app.innerHTML='<div class="crumb"><a href="index.html">الرئيسية</a> / <a href="shop.html">المتجر</a> / إتمام الطلب</div><h1 class="t">إتمام الطلب</h1><div class="co" style="margin-top:20px"><div>'+form()+'</div><div id="sum">'+summary()+'</div></div>';
  document.getElementById('f').addEventListener('submit',function(e){e.preventDefault();
   if(!MV.cart().length){return}
   var ok=true;['n','ph','ct','ad'].forEach(function(i){var f=document.getElementById(i);var bad=!f.value.trim();f.style.borderColor=bad?'#b03a3a':'';if(bad)ok=false});
   if(!ok)return;var t=totals(),no='MV-'+(1000+Math.floor(Math.random()*9000));
   var name=document.getElementById('n').value.trim();MV.clear();
-  app.innerHTML='<div class="ok"><div class="mark">✓</div><h1>Thank you, '+MV.esc(name.split(' ')[0])+'.</h1><p class="sub" style="margin:0 auto 6px">Your order <b>'+no+'</b> is confirmed (demo). Total '+MV.money(t.t)+', cash on delivery.</p><p class="sub" style="margin:0 auto 26px">This is a demo store, so no real order was placed.</p><a class="btn" href="shop.html" style="width:auto;padding:0 34px">Continue shopping</a></div>'});
+  app.innerHTML='<div class="ok"><div class="mark">✓</div><h1>شكراً '+MV.esc(name.split(' ')[0])+'.</h1><p class="sub" style="margin:0 auto 6px">تم تأكيد طلبك رقم <b dir="ltr">'+no+'</b> (تجريبي). الإجمالي '+MV.money(t.t)+'، الدفع عند الاستلام.</p><p class="sub" style="margin:0 auto 26px">هذا متجر تجريبي، لهيك ما انعمل أي طلب حقيقي.</p><a class="btn" href="shop.html" style="width:auto;padding:0 34px">كمّل التسوّق</a></div>'});
  document.getElementById('sum').addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(!b)return;var id=+b.closest('.row').dataset.id,c=MV.cart().filter(function(x){return x.id===id})[0];if(!c)return;
   var a=b.dataset.a;MV.setQty(id,a==='inc'?c.qty+1:a==='dec'?c.qty-1:0);document.getElementById('sum').innerHTML=summary()})}
 draw();
