@@ -903,8 +903,10 @@ V.account = () => {
 };
 
 /* ---------- fitting room ---------- */
-const FIT = {top:["s4","s3"], bot:["t2","t1"], t:0, b:0, busy:false, hint:true, srcT:"fit/top0.webp", srcB:"fit/bot0.webp", srcD:"fit/ext0.webp"};
-const fitTop = t => `fit/top${t}.webp`, fitBot = b => `fit/bot${b}.webp`, fitExt = t => `fit/ext${t}.webp`;
+const FV = "?v=20261128b"; /* bump when layer images change, so browsers fetch the new files */
+const FIT = {top:["s4","s3","s2","b1"], bot:["t2","t1","t3","b3"], t:0, b:0, busy:false, hint:true, srcT:"fit/top0.webp"+FV, srcB:"fit/bot0.webp"+FV, srcD:"fit/ext0.webp"+FV};
+const fitLo = () => FIT.b===1; /* light jeans: waistband strip over the hem */
+const fitTop = t => `fit/top${t}.webp${FV}`, fitBot = b => `fit/bot${b}.webp${FV}`, fitExt = t => `fit/ext${t}.webp${FV}`;
 const FZ = {
   top:"polygon(0 19.5%,100% 19.5%,100% 60%,67% 60%,67% 40%,33% 40%,33% 60%,0 60%)",
   bot:"polygon(33% 40%,67% 40%,67% 60%,100% 60%,100% 98%,0 98%,0 60%,33% 60%)"};
@@ -926,7 +928,7 @@ V.fit = () => `${pageHead(tx(["غرفة الغيار","Fitting Room"]), tx(["ن�
       <img src="fit/base.webp" alt="">
       <div class="fit-z"><img id="fitImgB" src="${FIT.srcB}" alt=""></div>
       <div class="fit-z"><img id="fitImgT" src="${FIT.srcT}" alt=""></div>
-      <div class="fit-z"><img id="fitImgD" src="${FIT.srcD}" alt="" style="opacity:${FIT.b?1:0}"></div>
+      <div class="fit-z"><img id="fitImgD" src="${FIT.srcD}" alt="" style="opacity:${fitLo()?1:0}"></div>
       <img class="fit-hij" src="fit/hands.webp" alt="" style="z-index:2">
       <img class="fit-hij" src="fit/hijab.webp" alt="">
       <span class="fit-tag t" id="fitTagT"></span><span class="fit-cue t" id="fitCueT">${tx(["‹ اسحبي ›","‹ Swipe ›"])}</span>
@@ -960,17 +962,17 @@ function fitGo(zone, idx){
   fitRefresh();
   FIT.busy = true;
   const jobs = [];
-  if(zone==="top"){ jobs.push(fitSwap("fitImgT", fitTop(FIT.t), "srcT")); if(FIT.b) jobs.push(fitSwap("fitImgD", fitExt(FIT.t), "srcD")); else { const d = $("#fitImgD"); if(d){ d.src = fitExt(FIT.t); FIT.srcD = fitExt(FIT.t) } } }
-  else { jobs.push(fitSwap("fitImgB", fitBot(FIT.b), "srcB")); const d = $("#fitImgD"); if(d){ if(d.src.indexOf(fitExt(FIT.t))<0){ d.src = fitExt(FIT.t); FIT.srcD = fitExt(FIT.t) } const an = d.animate([{opacity:FIT.b?0:1},{opacity:FIT.b?1:0}],{duration:360,fill:"forwards",easing:"ease-in-out"}); an.onfinish = () => { d.style.opacity = FIT.b?1:0; an.cancel() } } }
+  if(zone==="top"){ jobs.push(fitSwap("fitImgT", fitTop(FIT.t), "srcT")); if(fitLo()) jobs.push(fitSwap("fitImgD", fitExt(FIT.t), "srcD")); else { const d = $("#fitImgD"); if(d){ d.src = fitExt(FIT.t); FIT.srcD = fitExt(FIT.t) } } }
+  else { jobs.push(fitSwap("fitImgB", fitBot(FIT.b), "srcB")); const d = $("#fitImgD"); if(d){ if(d.src.indexOf(fitExt(FIT.t))<0){ d.src = fitExt(FIT.t); FIT.srcD = fitExt(FIT.t) } const was = +getComputedStyle(d).opacity, to = fitLo()?1:0; if(was!==to){ const an = d.animate([{opacity:was},{opacity:to}],{duration:360,fill:"forwards",easing:"ease-in-out"}); an.onfinish = () => { d.style.opacity = to; an.cancel() } } } }
   Promise.all(jobs).then(() => { FIT.busy = false });
 }
-["base","top0","top1","bot0","bot1","ext0","ext1","hands","hijab"].forEach(k => { const i = new Image(); i.src = `fit/${k}.webp` })
+["base","top0","top1","top2","top3","bot0","bot1","bot2","bot3","ext0","ext1","ext2","ext3","hands","hijab"].forEach(k => { const i = new Image(); i.src = `fit/${k}.webp${FV}` })
 let fitDrag = null;
 document.addEventListener("pointerdown", e => { const st = e.target.closest("#fitStage"); if(!st || e.target.closest("button")) return; fitDrag = {x:e.clientX, y:e.clientY, r:st.getBoundingClientRect()} });
 document.addEventListener("pointerup", e => { if(!fitDrag) return; const d = fitDrag; fitDrag = null; const dx = e.clientX - d.x, dy = e.clientY - d.y; if(Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) return;
-  const zone = (d.y - d.r.top) / d.r.height < 0.42 ? "top" : "bot"; const cur = zone==="top" ? FIT.t : FIT.b; fitGo(zone, 1-cur) });
+  const zone = (d.y - d.r.top) / d.r.height < 0.42 ? "top" : "bot"; const cur = zone==="top" ? FIT.t : FIT.b, n = FIT[zone].length; fitGo(zone, (cur + (dx<0?1:-1) + n) % n) });
 document.addEventListener("click", e => { const b = e.target.closest("[data-fitgo],[data-fitpick],[data-fitadd]"); if(!b) return;
-  if(b.dataset.fitgo){ const [z] = b.dataset.fitgo.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, 1-cur) }
+  if(b.dataset.fitgo){ const [z] = b.dataset.fitgo.split(":"); const cur = z==="top" ? FIT.t : FIT.b, n = FIT[z].length; return fitGo(z, (cur+1) % n) }
   if(b.dataset.fitpick){ const [z,i] = b.dataset.fitpick.split(":"); const cur = z==="top" ? FIT.t : FIT.b; return fitGo(z, +i) }
   const id = b.dataset.fitadd, list = id==="all" ? fitIds() : [id]; list.forEach(x => { const p = byId(x), sel = $("#fz_"+x); pushBag(x, sel ? sel.value : firstSize(p), p.col[0]) }); save();
   $("#openBag").animate([{transform:"scale(1)"},{transform:"scale(1.25)"},{transform:"scale(1)"}],{duration:420}); toast(id==="all" ? tx(["انضاف الطقم للسلة","Outfit added to bag"]) : `${t("added")}: ${tx(byId(id).n)}`, [t("viewBag"), openBag]) });
