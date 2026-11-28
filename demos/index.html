@@ -5,19 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>قوالب متاجر الملابس · Flowpal</title>
-<meta name="description" content="ست قوالب جاهزة لمتاجر الملابس والأزياء. تفرّج على كل قالب كأنك الزبون، على الكمبيوتر أو الجوال.">
+<meta name="description" content="خمسة قوالب جاهزة لمتاجر الملابس والأزياء. تفرّج على كل قالب كأنك الزبون، على الكمبيوتر أو الجوال.">
 <meta property="og:title" content="قوالب متاجر الملابس · Flowpal">
-<meta property="og:description" content="ست قوالب جاهزة لمتاجر الملابس. تفرّج على كل قالب مباشرة.">
+<meta property="og:description" content="خمسة قوالب جاهزة لمتاجر الملابس. تفرّج على كل قالب مباشرة.">
 <meta property="og:image" content="https://flowpal.co/demos/_previews/odelle-d.webp">
 <link rel="icon" href="_previews/flowpal-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f5f2;--ink:#14130f;--muted:#6b6862;--line:#e4e1da;--card:#fff;--fp:#0f766e;--fp-ink:#fff;--shadow:0 30px 70px -28px rgba(20,19,15,.28);--font:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#0f0f10;--ink:#f2f1ee;--muted:#a09e98;--line:#2a2a2c;--card:#18181a;--fp:#2dd4bf;--fp-ink:#0b1f1c;--shadow:0 30px 70px -28px rgba(0,0,0,.7);color-scheme:dark}}
+:root{--bg:#faf6ef;--ink:#14130f;--muted:#6b6862;--line:#e4e1da;--card:#fff;--fp:#0f766e;--fp-ink:#fff;--shadow:0 30px 70px -28px rgba(20,19,15,.28);--font:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color-scheme:light}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font:400 16px/1.7 var(--font);-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(900px 520px at 88% -80px,rgba(45,212,191,.22),transparent 70%),radial-gradient(800px 480px at 4% 120px,rgba(245,166,35,.16),transparent 70%),radial-gradient(700px 500px at 60% 900px,rgba(139,92,246,.09),transparent 70%),var(--bg);background-repeat:no-repeat;color:var(--ink);font:400 16px/1.7 var(--font);-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 img{display:block;max-width:100%}
@@ -36,7 +35,7 @@ img{display:block;max-width:100%}
 .hero .k{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:var(--fp)}
 .hero .k::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--fp)}
 .hero h1{font-size:clamp(36px,5.2vw,66px);line-height:1.1;font-weight:600;letter-spacing:-.02em;margin-top:14px}
-.hero h1 span{color:var(--muted);font-weight:400}
+.hero h1 span{font-weight:400;background:linear-gradient(90deg,#0f766e,#d97706);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{color:var(--muted);font-size:17px;max-width:30em}
 .steps{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
 .steps span{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px 6px 12px}
@@ -56,22 +55,23 @@ img{display:block;max-width:100%}
 /* grid */
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 30px;padding:38px 0 30px}
 @media (max-width:860px){.grid{grid-template-columns:1fr;gap:34px;padding-top:26px}}
-.card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .2s}
-.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--ink) 30%,var(--line))}
+.card{--a:var(--fp);display:flex;border-top:4px solid var(--a);flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .2s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 .card[hidden]{display:none}
-.shot{position:relative;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;background:#ddd;text-align:inherit}
+.shot{position:relative;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--a);text-align:inherit}
 .shot .d{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .card:hover .shot .d{transform:scale(1.035)}
-.shot .m{position:absolute;bottom:-14px;inset-inline-start:18px;width:22%;aspect-ratio:300/615;border-radius:18px;overflow:hidden;border:4px solid #111;box-shadow:0 18px 40px rgba(0,0,0,.35);background:#111}
+.shot .m{display:block;position:absolute;bottom:-14px;inset-inline-start:18px;width:22%;aspect-ratio:300/615;border-radius:18px;overflow:hidden;border:4px solid #111;box-shadow:0 18px 40px rgba(0,0,0,.35);background:#111}
 .shot .m img{width:100%;height:100%;object-fit:cover;object-position:top}
 .shot::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.32),transparent 45%);opacity:0;transition:opacity .3s}
 .card:hover .shot::after{opacity:1}
-.go{position:absolute;z-index:2;inset-inline-end:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:#fff;color:#111;font-size:14px;font-weight:600;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transform:translateY(8px);opacity:0;transition:.3s cubic-bezier(.2,.8,.2,1)}
+.go svg{width:16px;height:16px;flex:none}
+.go{position:absolute;z-index:2;inset-inline-end:16px;bottom:16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;width:max-content;max-width:none;white-space:nowrap;line-height:1;direction:rtl;padding:0 20px;border-radius:999px;background:#fff;color:#111;font-size:14px;font-weight:600;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transform:translateY(8px);opacity:0;transition:.3s cubic-bezier(.2,.8,.2,1)}
 .card:hover .go,.shot:focus-visible .go{transform:none;opacity:1}
-@media (hover:none){.go{transform:none;opacity:1}}
+@media (hover:none){.go{display:none}}
 .badge{position:absolute;z-index:2;inset-inline-start:14px;top:14px;background:var(--fp);color:var(--fp-ink);font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px}
-.body{display:flex;flex-direction:column;gap:6px;padding:22px 24px 24px;flex:1}
-.num{font:600 12px/1 "Inter Tight",sans-serif;letter-spacing:.12em;color:var(--muted);direction:ltr;text-align:right}
+.body{background:linear-gradient(180deg,color-mix(in srgb,var(--a) 7%,#fff),#fff 60%);display:flex;flex-direction:column;gap:6px;padding:22px 24px 24px;flex:1}
+.num{font:700 12px/1 "Inter Tight",sans-serif;letter-spacing:.12em;color:var(--a);direction:ltr;text-align:right}
 .body h2{font-size:26px;line-height:1.25;font-weight:600}
 .body h2 small{display:block;font:500 13px/1.5 "Inter Tight",sans-serif;color:var(--muted);letter-spacing:.06em;direction:ltr;text-align:right;margin-top:2px}
 .body p{color:var(--muted);font-size:15px;margin-top:4px}
@@ -84,11 +84,11 @@ img{display:block;max-width:100%}
 .btn{height:46px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;border:1px solid var(--line);background:var(--card);transition:.2s}
 .btn:hover{border-color:var(--ink)}
 .btn.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.btn.main:hover{background:var(--fp);border-color:var(--fp);color:var(--fp-ink)}
+.btn.main:hover{background:var(--a);border-color:var(--a);color:#fff}
 .btn svg{width:16px;height:16px;flex:none}
 
 /* footer */
-.cta{margin:20px 0 0;padding:34px 36px;border:1px solid var(--line);border-radius:22px;background:var(--card);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cta{margin:20px 0 0;padding:34px 36px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(120deg,#ecfdf9,#fff6e5);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .cta h3{font-size:22px;font-weight:600}
 .cta p{color:var(--muted);font-size:15px}
 .note{font-size:13px;color:var(--muted);padding:24px 0 44px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
@@ -132,7 +132,7 @@ img{display:block;max-width:100%}
   <section class="hero">
     <div>
       <span class="k">متاجر الملابس والأزياء</span>
-      <h1>ست قوالب جاهزة <span>اختار اللي بيشبه متجرك.</span></h1>
+      <h1>خمسة قوالب جاهزة <span>اختار اللي بيشبه متجرك.</span></h1>
     </div>
     <div>
       <p>كل قالب متجر كامل تقدر تتصفحه: الصفحة الرئيسية، الأقسام، صفحة المنتج والسلة. اضغط على أي قالب وتفرّج عليه كأنك الزبون، على الكمبيوتر أو على الجوال.</p>
@@ -180,19 +180,18 @@ img{display:block;max-width:100%}
 
 <script>
 var T=[
- {id:"c1",n:"ممشى · الاتجاه 1",en:"MAMSHA · LUXE OUTDOOR",d:"متجر رياضي فاخر: صور كبيرة بالطبيعة، ألوان هادئة، وتركيز على المنتج والعلامة. مناسب للعلامات اللي بتبيع جودة مش تخفيضات.",u:"mamsha/c1/",p:["#1b1a17","#b9a37e","#f1ede6","#d9532c"],g:["sport","dark"],t:["رياضي","فاخر","عربي RTL"]},
- {id:"c2",n:"ممشى · الاتجاه 2",en:"MAMSHA · STREETWEAR",d:"ستريت وير بجو ليلي: خلفية داكنة وأخضر نيون وحركة قوية. موجّه للشباب وسنيكرز الماركات.",u:"mamsha/c2/",p:["#0c0c0e","#c8ff2e","#8b5cf6","#ffffff"],g:["sport","dark"],t:["رياضي","شباب","داكن"]},
- {id:"c3",n:"ممشى · الاتجاه 3",en:"MAMSHA · HIGH-CONVERTING",d:"متجر تجاري عالي التحويل: عروض وخصومات وبحث قوي وأقسام واضحة، زي أكبر متاجر الأحذية. الأنسب للكتالوج الكبير.",u:"mamsha/c3/",p:["#12294d","#f5a623","#ffffff","#e53935"],g:["sport"],t:["رياضي","عروض","كتالوج كبير"]},
- {id:"odelle",n:"أوديل إسنشيالز",en:"ODELLE ESSENTIALS",d:"أزياء نسائية محتشمة بتصميم هادئ وأنيق. فيه «غرفة الغيار»: بتسحبي يمين أو يسار وتبدّلي القميص والبنطلون على نفس العارضة، وتختاري المقاس.",u:"essentials/",x:{t:"جرّب غرفة الغيار",u:"essentials/#fit"},p:["#f6f2ec","#848e7c","#a8664b","#2b2723"],g:["fashion","feature"],t:["أزياء محتشمة","غرفة الغيار","عربي RTL"],b:"فيه غرفة الغيار"},
- {id:"vaelin",n:"فايلِن أتيليه",en:"VAELIN ATELIER",d:"دار أزياء راقية للرجال والنساء بأجواء داكنة وفخمة. صور كبيرة، تفاصيل ذهبية، وتجربة تسوّق هادئة.",u:"luxe/",p:["#0d0c0b","#c9a96a","#efe7d8","#6b5a3a"],g:["fashion","dark"],t:["رجالي ونسائي","فاخر","عربي وإنجليزي"]},
- {id:"halden",n:"هالدن سبلاي",en:"HALDEN SUPPLY · RUNWAY",d:"متجر بعرض «الإطلالات»: ست إطلالات كاملة من الرأس للقدم، بتضغط على أي قطعة بتشوف تفاصيلها وبتضيف الإطلالة كاملة للسلة بضغطة.",u:"runway/",p:["#ffffff","#16171a","#8d97a8","#c7b79a"],g:["fashion","feature"],t:["إطلالات كاملة","واجهة إنجليزية","ميزة خاصة"],b:"الإطلالات"}
+ {id:"c1",a:"#c2552b",n:"ممشى · الاتجاه 1",en:"MAMSHA · LUXE OUTDOOR",d:"متجر رياضي فاخر: صور كبيرة بالطبيعة، ألوان هادئة، وتركيز على المنتج والعلامة. مناسب للعلامات اللي بتبيع جودة مش تخفيضات.",u:"mamsha/c1/",p:["#1b1a17","#b9a37e","#f1ede6","#d9532c"],g:["sport","dark"],t:["رياضي","فاخر","عربي RTL"]},
+ {id:"c2",a:"#7c3aed",n:"ممشى · الاتجاه 2",en:"MAMSHA · STREETWEAR",d:"ستريت وير بجو ليلي: خلفية داكنة وأخضر نيون وحركة قوية. موجّه للشباب وسنيكرز الماركات.",u:"mamsha/c2/",p:["#0c0c0e","#c8ff2e","#8b5cf6","#ffffff"],g:["sport","dark"],t:["رياضي","شباب","داكن"]},
+ {id:"c3",a:"#1d4ed8",n:"ممشى · الاتجاه 3",en:"MAMSHA · HIGH-CONVERTING",d:"متجر تجاري عالي التحويل: عروض وخصومات وبحث قوي وأقسام واضحة، زي أكبر متاجر الأحذية. الأنسب للكتالوج الكبير.",u:"mamsha/c3/",p:["#12294d","#f5a623","#ffffff","#e53935"],g:["sport"],t:["رياضي","عروض","كتالوج كبير"]},
+ {id:"odelle",a:"#6f7d63",n:"أوديل إسنشيالز",en:"ODELLE ESSENTIALS",d:"أزياء نسائية محتشمة بتصميم هادئ وأنيق. فيه «غرفة الغيار»: بتسحبي يمين أو يسار وتبدّلي القميص والبنطلون على نفس العارضة، وتختاري المقاس.",u:"essentials/",x:{t:"جرّب غرفة الغيار",u:"essentials/#fit"},p:["#f6f2ec","#848e7c","#a8664b","#2b2723"],g:["fashion","feature"],t:["أزياء محتشمة","غرفة الغيار","عربي RTL"],b:"فيه غرفة الغيار"},
+ {id:"vaelin",a:"#a98443",n:"فايلِن أتيليه",en:"VAELIN ATELIER",d:"دار أزياء راقية للرجال والنساء بأجواء داكنة وفخمة. صور كبيرة، تفاصيل ذهبية، وتجربة تسوّق هادئة.",u:"luxe/",p:["#0d0c0b","#c9a96a","#efe7d8","#6b5a3a"],g:["fashion","dark"],t:["رجالي ونسائي","فاخر","عربي وإنجليزي"]}
 ];
 var grid=document.getElementById("grid"),count=document.getElementById("count");
 var ARR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
 var EXT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 grid.innerHTML=T.map(function(x,i){
- return '<article class="card" data-g="'+x.g.join(" ")+'" data-i="'+i+'">'+
+ return '<article class="card" style="--a:'+x.a+'" data-g="'+x.g.join(" ")+'" data-i="'+i+'">'+
  '<button class="shot" data-open="'+i+'" aria-label="تفرّج على '+esc(x.n)+'">'+
   (x.b?'<span class="badge">'+esc(x.b)+'</span>':'')+
   '<img class="d" src="_previews/'+x.id+'-d.webp" alt="" loading="'+(i<2?'eager':'lazy')+'" width="1000" height="562">'+
