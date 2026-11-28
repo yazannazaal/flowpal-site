@@ -903,7 +903,7 @@ V.account = () => {
 };
 
 /* ---------- fitting room ---------- */
-const FV = "?v=20261128b"; /* bump when layer images change, so browsers fetch the new files */
+const FV = "?v=20261128e"; /* bump when layer images change, so browsers fetch the new files */
 const FIT = {top:["s4","s3","s2","b1"], bot:["t2","t1","t3","b3"], t:0, b:0, busy:false, hint:true, srcT:"fit/top0.webp"+FV, srcB:"fit/bot0.webp"+FV, srcD:"fit/ext0.webp"+FV};
 const fitLo = () => FIT.b===1; /* light jeans: waistband strip over the hem */
 const fitTop = t => `fit/top${t}.webp${FV}`, fitBot = b => `fit/bot${b}.webp${FV}`, fitExt = t => `fit/ext${t}.webp${FV}`;
