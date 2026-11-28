@@ -3,3 +3,4 @@ Disallow: /demos/
 Disallow: /subscribers/
 Disallow: /app/
 Disallow: /q/
+Disallow: /next/
