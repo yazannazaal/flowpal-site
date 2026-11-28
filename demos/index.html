@@ -8,8 +8,8 @@
 <meta name="description" content="خمسة قوالب جاهزة لمتاجر الملابس والأزياء. تفرّج على كل قالب كأنك الزبون، على الكمبيوتر أو الجوال.">
 <meta property="og:title" content="قوالب متاجر الملابس · Flowpal">
 <meta property="og:description" content="خمسة قوالب جاهزة لمتاجر الملابس. تفرّج على كل قالب مباشرة.">
-<meta property="og:image" content="https://flowpal.co/demos/_previews/odelle-d.webp">
-<link rel="icon" href="_previews/flowpal-mark.svg">
+<meta property="og:image" content="https://flowpal.co/demos/_previews/odelle-d.webp?v=2">
+<link rel="icon" href="_previews/flowpal-mark.svg?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -127,7 +127,7 @@ img{display:block;max-width:100%}
 </head>
 <body>
 <div class="wrap">
-  <header class="top"><span class="fp"><img src="_previews/flowpal-mark.svg" alt="">Flowpal</span><small>معرض القوالب · نوفمبر 2026</small></header>
+  <header class="top"><span class="fp"><img src="_previews/flowpal-mark.svg?v=2" alt="">Flowpal</span><small>معرض القوالب · نوفمبر 2026</small></header>
 
   <section class="hero">
     <div>
@@ -194,8 +194,8 @@ grid.innerHTML=T.map(function(x,i){
  return '<article class="card" style="--a:'+x.a+'" data-g="'+x.g.join(" ")+'" data-i="'+i+'">'+
  '<button class="shot" data-open="'+i+'" aria-label="تفرّج على '+esc(x.n)+'">'+
   (x.b?'<span class="badge">'+esc(x.b)+'</span>':'')+
-  '<img class="d" src="_previews/'+x.id+'-d.webp" alt="" loading="'+(i<2?'eager':'lazy')+'" width="1000" height="562">'+
-  '<span class="m"><img src="_previews/'+x.id+'-m.webp" alt="" loading="lazy" width="300" height="615"></span>'+
+  '<img class="d" src="_previews/'+x.id+'-d.webp?v=2" alt="" loading="'+(i<2?'eager':'lazy')+'" width="1000" height="562">'+
+  '<span class="m"><img src="_previews/'+x.id+'-m.webp?v=2" alt="" loading="lazy" width="300" height="615"></span>'+
   '<span class="go">تفرّج على القالب '+ARR+'</span>'+
  '</button>'+
  '<div class="body"><span class="num">'+String(i+1).padStart(2,"0")+' / '+String(T.length).padStart(2,"0")+'</span>'+
