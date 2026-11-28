@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Product | Maison Verrel</title>
+<link rel="preconnect" href="https://images.higgs.ai">
+<link rel="stylesheet" href="store.css?v=1">
+</head>
+<body>
+<div id="hd"></div>
+<main class="wrap">
+<div class="crumb" id="crumb"></div>
+<div class="pdp" id="pdp"></div>
+<h2 class="s" id="relh">You may also like</h2>
+<div class="grid" id="rel"></div>
+</main>
+<div id="ft"></div>
+<div class="toast" id="toast" role="status"></div>
+<script src="store.js?v=1"></script>
+<script>
+MV.chrome('shop');
+var id=new URLSearchParams(location.search).get('id'),p=MV.BYID[id]||MV.CATALOG[0],size=null,view='front',color=0;
+document.title=p.name+' | Maison Verrel';
+document.getElementById('crumb').innerHTML='<a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <a href="shop.html?c='+p.cat+'">'+p.cat+'</a> / '+MV.esc(p.name);
+var k=p.rail?p.k:p.id;
+function main(){var m=document.getElementById('main');
+ if(p.rail){var w=Math.min(m.clientWidth*.9,m.clientHeight*.96/MV.faceRatio(p,view));m.innerHTML='<span class="rod"></span>'+MV.face(p,view,w)}
+ else m.innerHTML='<img src="img/'+p.id+'.webp" alt="'+MV.esc(p.name)+'">'}
+function build(){
+ var views=p.rail?['front','back','side']:['main'];
+ var th=views.map(function(v,i){return '<button class="th" data-v="'+v+'" aria-pressed="'+(i===0)+'" aria-label="View '+v+'">'+(p.rail?'<span style="display:block;width:100%">'+MV.face(p,v,70*.84)+'</span>':'<img src="img/'+p.id+'.webp" alt="">')+'</button>'}).join('');
+ var pr=p.was?'<del style="color:#9a9086;font-weight:400;margin-right:8px">'+MV.money(p.was)+'</del><span style="color:var(--red)">'+MV.money(p.price)+'</span>':MV.money(p.price);
+ var sz=p.sizes.map(function(s){var o=(p.out||[]).indexOf(s)>-1;return '<button class="sz" data-s="'+s+'" aria-pressed="false"'+(o?' disabled':'')+'>'+(s==='OS'?'One size':s)+'</button>'}).join('');
+ var cl=(p.colors&&p.colors.length)?'<p class="lbl">COLOUR · <span id="cn">'+p.colors[0][2]+'</span></p><div class="sw">'+p.colors.map(function(c,i){return '<button style="background:'+c[1]+'" data-c="'+i+'" aria-pressed="'+(i===0)+'" aria-label="'+c[2]+'"></button>'}).join('')+'</div>':'';
+ document.getElementById('pdp').innerHTML='<div class="gal"><div class="thumbs" id="thumbs">'+th+'</div><div class="main" id="main"></div></div><div class="info"><p class="lbl">'+(p.sub||p.cat).toUpperCase()+'</p><h1>'+MV.esc(p.name)+'</h1><div class="pr">'+pr+'</div><p class="d">'+MV.esc(p.desc)+'</p>'+cl+'<p class="lbl">SIZE</p><div class="sizes" id="sizes">'+sz+'</div><button class="btn" id="add">Add to cart</button><div class="det"><details open><summary>Details</summary><p>'+MV.esc(p.mat)+'. Relaxed, true-to-size fit.</p></details><details><summary>Shipping</summary><p>Free shipping on orders over '+MV.money(MV.BRAND.freeShipping)+', otherwise '+MV.money(MV.BRAND.shippingFee)+'. Delivery within the West Bank.</p></details><details><summary>Returns</summary><p>Exchange within 14 days, unworn and with the tag attached.</p></details></div></div>';
+ main();
+ document.getElementById('thumbs').addEventListener('click',function(e){var b=e.target.closest('.th');if(!b||!p.rail)return;view=b.dataset.v;[].forEach.call(this.children,function(c){c.setAttribute('aria-pressed',String(c===b))});main()});
+ document.getElementById('sizes').addEventListener('click',function(e){var b=e.target.closest('.sz');if(!b||b.disabled)return;size=b.dataset.s;[].forEach.call(this.children,function(c){c.setAttribute('aria-pressed',String(c===b))})});
+ var sw=document.querySelector('.sw');if(sw)sw.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;color=+b.dataset.c;[].forEach.call(this.children,function(c){c.setAttribute('aria-pressed',String(c===b))});document.getElementById('cn').textContent=p.colors[color][2]});
+ var first=p.sizes.filter(function(s){return (p.out||[]).indexOf(s)<0})[0];
+ if(p.sizes.length===1){size=first;document.querySelector('.sz').setAttribute('aria-pressed','true')}
+ document.getElementById('add').addEventListener('click',function(){var b=this;
+  if(!size){var s=document.getElementById('sizes');s.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:300});toast('Please choose a size');return}
+  b.disabled=true;b.textContent='Adding…';
+  setTimeout(function(){MV.add(k,size,1);b.disabled=false;b.textContent='Add to cart';toast('Added to your cart <a href="checkout.html">View cart</a>')},700)})}
+function toast(h){var t=document.getElementById('toast');t.innerHTML=h;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},3200)}
+build();
+var rel=MV.CATALOG.filter(function(x){return x.id!==p.id&&x.cat===p.cat});
+if(rel.length<4)rel=rel.concat(MV.CATALOG.filter(function(x){return x.id!==p.id&&x.cat!==p.cat}));
+document.getElementById('rel').innerHTML=rel.slice(0,4).map(function(q){
+ var im=q.rail?MV.face(q,'front',180):'<img src="img/'+q.id+'.webp" alt="'+MV.esc(q.name)+'" loading="lazy">';
+ return '<a class="card" href="product.html?id='+q.id+'"><div class="im">'+im+'</div><h3>'+MV.esc(q.name)+'</h3><div class="meta">'+(q.sub||q.cat)+'</div><span class="price">'+MV.money(q.price)+'</span></a>'}).join('');
+addEventListener('resize',main);
+</script>
+</body></html>
