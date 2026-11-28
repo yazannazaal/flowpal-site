@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>قوالب متاجر الملابس · Flowpal</title>
+<meta name="description" content="ست قوالب جاهزة لمتاجر الملابس والأزياء. تفرّج على كل قالب كأنك الزبون، على الكمبيوتر أو الجوال.">
+<meta property="og:title" content="قوالب متاجر الملابس · Flowpal">
+<meta property="og:description" content="ست قوالب جاهزة لمتاجر الملابس. تفرّج على كل قالب مباشرة.">
+<meta property="og:image" content="https://flowpal.co/demos/_previews/odelle-d.webp">
+<link rel="icon" href="_previews/flowpal-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f5f2;--ink:#14130f;--muted:#6b6862;--line:#e4e1da;--card:#fff;--fp:#0f766e;--fp-ink:#fff;--shadow:0 30px 70px -28px rgba(20,19,15,.28);--font:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0f0f10;--ink:#f2f1ee;--muted:#a09e98;--line:#2a2a2c;--card:#18181a;--fp:#2dd4bf;--fp-ink:#0b1f1c;--shadow:0 30px 70px -28px rgba(0,0,0,.7);color-scheme:dark}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.7 var(--font);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+@media (max-width:760px){.wrap{padding:0 16px}}
+:focus-visible{outline:2px solid var(--fp);outline-offset:3px;border-radius:6px}
+
+/* top */
+.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.fp{display:flex;align-items:center;gap:10px;font:600 15px/1 "Inter Tight",sans-serif;direction:ltr}
+.fp img{width:30px;height:30px}
+.top small{color:var(--muted);font-size:13px}
+
+/* hero */
+.hero{padding:46px 0 34px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:56px;align-items:end}
+.hero .k{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:var(--fp)}
+.hero .k::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--fp)}
+.hero h1{font-size:clamp(36px,5.2vw,66px);line-height:1.1;font-weight:600;letter-spacing:-.02em;margin-top:14px}
+.hero h1 span{color:var(--muted);font-weight:400}
+.hero p{color:var(--muted);font-size:17px;max-width:30em}
+.steps{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.steps span{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px 6px 12px}
+.steps b{width:20px;height:20px;border-radius:50%;background:var(--fp);color:var(--fp-ink);display:grid;place-items:center;font:600 11px "Inter Tight"}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:18px;padding:28px 0 22px}}
+
+/* filters */
+.bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);margin-top:12px}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:12px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:38px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:14px;font-weight:500;transition:.2s}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.count{flex:none;color:var(--muted);font-size:13px}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 30px;padding:38px 0 30px}
+@media (max-width:860px){.grid{grid-template-columns:1fr;gap:34px;padding-top:26px}}
+.card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .2s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--ink) 30%,var(--line))}
+.card[hidden]{display:none}
+.shot{position:relative;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;background:#ddd;text-align:inherit}
+.shot .d{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.card:hover .shot .d{transform:scale(1.035)}
+.shot .m{position:absolute;bottom:-14px;inset-inline-start:18px;width:22%;aspect-ratio:300/615;border-radius:18px;overflow:hidden;border:4px solid #111;box-shadow:0 18px 40px rgba(0,0,0,.35);background:#111}
+.shot .m img{width:100%;height:100%;object-fit:cover;object-position:top}
+.shot::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.32),transparent 45%);opacity:0;transition:opacity .3s}
+.card:hover .shot::after{opacity:1}
+.go{position:absolute;z-index:2;inset-inline-end:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:#fff;color:#111;font-size:14px;font-weight:600;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transform:translateY(8px);opacity:0;transition:.3s cubic-bezier(.2,.8,.2,1)}
+.card:hover .go,.shot:focus-visible .go{transform:none;opacity:1}
+@media (hover:none){.go{transform:none;opacity:1}}
+.badge{position:absolute;z-index:2;inset-inline-start:14px;top:14px;background:var(--fp);color:var(--fp-ink);font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px}
+.body{display:flex;flex-direction:column;gap:6px;padding:22px 24px 24px;flex:1}
+.num{font:600 12px/1 "Inter Tight",sans-serif;letter-spacing:.12em;color:var(--muted);direction:ltr;text-align:right}
+.body h2{font-size:26px;line-height:1.25;font-weight:600}
+.body h2 small{display:block;font:500 13px/1.5 "Inter Tight",sans-serif;color:var(--muted);letter-spacing:.06em;direction:ltr;text-align:right;margin-top:2px}
+.body p{color:var(--muted);font-size:15px;margin-top:4px}
+.row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px}
+.pal{display:flex;gap:6px}
+.pal i{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tags span{font-size:12.5px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 10px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:18px}
+.btn{height:46px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;border:1px solid var(--line);background:var(--card);transition:.2s}
+.btn:hover{border-color:var(--ink)}
+.btn.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.main:hover{background:var(--fp);border-color:var(--fp);color:var(--fp-ink)}
+.btn svg{width:16px;height:16px;flex:none}
+
+/* footer */
+.cta{margin:20px 0 0;padding:34px 36px;border:1px solid var(--line);border-radius:22px;background:var(--card);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cta h3{font-size:22px;font-weight:600}
+.cta p{color:var(--muted);font-size:15px}
+.note{font-size:13px;color:var(--muted);padding:24px 0 44px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+
+/* live preview modal */
+.pv{position:fixed;inset:0;z-index:100;display:none;flex-direction:column;background:var(--bg)}
+.pv.open{display:flex}
+.pv-bar{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.pv-title{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.pv-title b{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-title small{color:var(--muted);font-size:12px}
+.pv-sp{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--bg)}
+.seg button{height:34px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.ib{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:var(--bg);transition:.2s}
+.ib:hover{border-color:var(--ink)}
+.ib svg{width:18px;height:18px}
+.pv-body{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--ink) 7%,var(--bg));padding:18px;overflow:auto}
+.frame{position:relative;background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden;width:100%;height:100%;transition:width .45s cubic-bezier(.2,.8,.2,1),border-radius .3s}
+.frame.mob{width:390px;max-width:100%;height:min(100%,844px);border-radius:34px;border:8px solid #111}
+.frame iframe{width:100%;height:100%;border:0;background:#fff}
+.load{position:absolute;inset:0;display:grid;place-items:center;background:var(--card);color:var(--muted);font-size:14px;transition:opacity .3s}
+.load.off{opacity:0;pointer-events:none}
+.extra{display:none}
+.extra.on{display:inline-flex}
+@media (max-width:760px){
+ .pv-bar{flex-wrap:wrap;row-gap:8px}
+ .pv-body{padding:0}
+ .frame,.frame.mob{border-radius:0;border:0;width:100%;height:100%}
+ .seg{display:none}
+ .hide-m{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><span class="fp"><img src="_previews/flowpal-mark.svg" alt="">Flowpal</span><small>معرض القوالب · نوفمبر 2026</small></header>
+
+  <section class="hero">
+    <div>
+      <span class="k">متاجر الملابس والأزياء</span>
+      <h1>ست قوالب جاهزة <span>اختار اللي بيشبه متجرك.</span></h1>
+    </div>
+    <div>
+      <p>كل قالب متجر كامل تقدر تتصفحه: الصفحة الرئيسية، الأقسام، صفحة المنتج والسلة. اضغط على أي قالب وتفرّج عليه كأنك الزبون، على الكمبيوتر أو على الجوال.</p>
+      <div class="steps"><span><b>1</b>اختار قالب</span><span><b>2</b>اضغط «تفرّج»</span><span><b>3</b>بدّل بين الكمبيوتر والجوال</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="bar"><div class="wrap">
+  <div class="chips" id="chips" role="group" aria-label="تصفية القوالب">
+    <button class="chip" data-f="all" aria-pressed="true">الكل</button>
+    <button class="chip" data-f="sport" aria-pressed="false">رياضي</button>
+    <button class="chip" data-f="fashion" aria-pressed="false">أزياء</button>
+    <button class="chip" data-f="dark" aria-pressed="false">داكن وفاخر</button>
+    <button class="chip" data-f="feature" aria-pressed="false">فيه ميزة خاصة</button>
+  </div>
+  <span class="count" id="count"></span>
+</div></div>
+
+<main class="wrap">
+  <div class="grid" id="grid"></div>
+  <section class="cta">
+    <div><h3>عجبك قالب؟</h3><p>منبنيه لمتجرك بمنتجاتك وأسعارك وألوان علامتك، ومنربطه بمساعد Flowpal للردّ على الزبائن.</p></div>
+    <a class="btn main" href="https://flowpal.co">flowpal.co</a>
+  </section>
+  <footer class="note"><span>كل القوالب نماذج تجريبية من Flowpal. المنتجات والأسعار والعلامات أمثلة فقط.</span><span>flowpal.co/demos</span></footer>
+</main>
+
+<div class="pv" id="pv" role="dialog" aria-modal="true" aria-label="معاينة القالب">
+  <div class="pv-bar">
+    <button class="ib" id="pvClose" aria-label="إغلاق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="pv-title"><b id="pvName"></b><small id="pvSub"></small></div>
+    <span class="pv-sp"></span>
+    <div class="seg" id="seg" role="group" aria-label="نوع الجهاز">
+      <button data-m="d" aria-pressed="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>كمبيوتر</button>
+      <button data-m="m" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>جوال</button>
+    </div>
+    <a class="btn extra" id="pvExtra" href="#" style="height:40px;padding:0 16px"></a>
+    <a class="btn hide-m" id="pvOpen" href="#" target="_blank" rel="noopener" style="height:40px;padding:0 16px">فتح بتبويب جديد <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
+    <button class="ib" id="pvPrev" aria-label="القالب السابق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="ib" id="pvNext" aria-label="القالب التالي"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+  </div>
+  <div class="pv-body"><div class="frame" id="frame"><iframe id="pvFrame" title="معاينة القالب" loading="lazy" allow="fullscreen"></iframe><div class="load" id="pvLoad">جاري تحميل القالب…</div></div></div>
+</div>
+
+<script>
+var T=[
+ {id:"c1",n:"ممشى · الاتجاه 1",en:"MAMSHA · LUXE OUTDOOR",d:"متجر رياضي فاخر: صور كبيرة بالطبيعة، ألوان هادئة، وتركيز على المنتج والعلامة. مناسب للعلامات اللي بتبيع جودة مش تخفيضات.",u:"mamsha/c1/",p:["#1b1a17","#b9a37e","#f1ede6","#d9532c"],g:["sport","dark"],t:["رياضي","فاخر","عربي RTL"]},
+ {id:"c2",n:"ممشى · الاتجاه 2",en:"MAMSHA · STREETWEAR",d:"ستريت وير بجو ليلي: خلفية داكنة وأخضر نيون وحركة قوية. موجّه للشباب وسنيكرز الماركات.",u:"mamsha/c2/",p:["#0c0c0e","#c8ff2e","#8b5cf6","#ffffff"],g:["sport","dark"],t:["رياضي","شباب","داكن"]},
+ {id:"c3",n:"ممشى · الاتجاه 3",en:"MAMSHA · HIGH-CONVERTING",d:"متجر تجاري عالي التحويل: عروض وخصومات وبحث قوي وأقسام واضحة، زي أكبر متاجر الأحذية. الأنسب للكتالوج الكبير.",u:"mamsha/c3/",p:["#12294d","#f5a623","#ffffff","#e53935"],g:["sport"],t:["رياضي","عروض","كتالوج كبير"]},
+ {id:"odelle",n:"أوديل إسنشيالز",en:"ODELLE ESSENTIALS",d:"أزياء نسائية محتشمة بتصميم هادئ وأنيق. فيه «غرفة الغيار»: بتسحبي يمين أو يسار وتبدّلي القميص والبنطلون على نفس العارضة، وتختاري المقاس.",u:"essentials/",x:{t:"جرّب غرفة الغيار",u:"essentials/#fit"},p:["#f6f2ec","#848e7c","#a8664b","#2b2723"],g:["fashion","feature"],t:["أزياء محتشمة","غرفة الغيار","عربي RTL"],b:"فيه غرفة الغيار"},
+ {id:"vaelin",n:"فايلِن أتيليه",en:"VAELIN ATELIER",d:"دار أزياء راقية للرجال والنساء بأجواء داكنة وفخمة. صور كبيرة، تفاصيل ذهبية، وتجربة تسوّق هادئة.",u:"luxe/",p:["#0d0c0b","#c9a96a","#efe7d8","#6b5a3a"],g:["fashion","dark"],t:["رجالي ونسائي","فاخر","عربي وإنجليزي"]},
+ {id:"halden",n:"هالدن سبلاي",en:"HALDEN SUPPLY · RUNWAY",d:"متجر بعرض «الإطلالات»: ست إطلالات كاملة من الرأس للقدم، بتضغط على أي قطعة بتشوف تفاصيلها وبتضيف الإطلالة كاملة للسلة بضغطة.",u:"runway/",p:["#ffffff","#16171a","#8d97a8","#c7b79a"],g:["fashion","feature"],t:["إطلالات كاملة","واجهة إنجليزية","ميزة خاصة"],b:"الإطلالات"}
+];
+var grid=document.getElementById("grid"),count=document.getElementById("count");
+var ARR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+var EXT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+grid.innerHTML=T.map(function(x,i){
+ return '<article class="card" data-g="'+x.g.join(" ")+'" data-i="'+i+'">'+
+ '<button class="shot" data-open="'+i+'" aria-label="تفرّج على '+esc(x.n)+'">'+
+  (x.b?'<span class="badge">'+esc(x.b)+'</span>':'')+
+  '<img class="d" src="_previews/'+x.id+'-d.webp" alt="" loading="'+(i<2?'eager':'lazy')+'" width="1000" height="562">'+
+  '<span class="m"><img src="_previews/'+x.id+'-m.webp" alt="" loading="lazy" width="300" height="615"></span>'+
+  '<span class="go">تفرّج على القالب '+ARR+'</span>'+
+ '</button>'+
+ '<div class="body"><span class="num">'+String(i+1).padStart(2,"0")+' / '+String(T.length).padStart(2,"0")+'</span>'+
+  '<h2>'+esc(x.n)+'<small>'+esc(x.en)+'</small></h2><p>'+esc(x.d)+'</p>'+
+  '<div class="row"><div class="pal" aria-hidden="true">'+x.p.map(function(c){return '<i style="background:'+c+'"></i>'}).join("")+'</div><div class="tags">'+x.t.map(function(t){return '<span>'+esc(t)+'</span>'}).join("")+'</div></div>'+
+  '<div class="acts"><button class="btn main" data-open="'+i+'">تفرّج على القالب '+ARR+'</button>'+
+  (x.x?'<button class="btn" data-open="'+i+'" data-extra="1">'+esc(x.x.t)+'</button>':'')+
+  '<a class="btn" href="'+x.u+'" target="_blank" rel="noopener">فتح بتبويب جديد '+EXT+'</a></div></div></article>';
+}).join("");
+
+/* filters */
+var chips=[].slice.call(document.querySelectorAll(".chip")),cards=[].slice.call(document.querySelectorAll(".card"));
+function filt(f){var n=0;cards.forEach(function(c){var ok=f==="all"||c.dataset.g.split(" ").indexOf(f)>-1;c.hidden=!ok;if(ok)n++});
+ chips.forEach(function(c){c.setAttribute("aria-pressed",c.dataset.f===f?"true":"false")});count.textContent=n+" من "+T.length+" قوالب"}
+chips.forEach(function(c){c.addEventListener("click",function(){filt(c.dataset.f)})});filt("all");
+
+/* live preview */
+var pv=document.getElementById("pv"),fr=document.getElementById("pvFrame"),frame=document.getElementById("frame"),ld=document.getElementById("pvLoad"),cur=0,mode="d",extra=false;
+var nm=document.getElementById("pvName"),sb=document.getElementById("pvSub"),op=document.getElementById("pvOpen"),ex=document.getElementById("pvExtra");
+function vis(){return T.map(function(_,i){return i}).filter(function(i){return !cards[i].hidden})}
+function openPv(i,useExtra){cur=i;var x=T[i];pv.classList.add("open");document.body.style.overflow="hidden";
+ nm.textContent=x.n;sb.textContent=x.en;
+ var url=useExtra&&x.x?x.x.u:x.u;op.href=url;
+ if(x.x){ex.classList.add("on");ex.textContent=useExtra?"الصفحة الرئيسية":x.x.t;ex.dataset.to=useExtra?"0":"1"}else ex.classList.remove("on");
+ ld.classList.remove("off");fr.src=url;history.replaceState(null,"","#"+x.id)}
+fr.addEventListener("load",function(){ld.classList.add("off")});
+function closePv(){pv.classList.remove("open");document.body.style.overflow="";fr.src="about:blank";history.replaceState(null,"",location.pathname)}
+function step(d){var v=vis(),p=v.indexOf(cur);if(p<0)p=0;openPv(v[(p+d+v.length)%v.length])}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(b){openPv(+b.dataset.open,!!b.dataset.extra)}});
+document.getElementById("pvClose").onclick=closePv;
+document.getElementById("pvPrev").onclick=function(){step(1)};document.getElementById("pvNext").onclick=function(){step(-1)};
+ex.addEventListener("click",function(e){e.preventDefault();openPv(cur,ex.dataset.to==="1")});
+document.getElementById("seg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;mode=b.dataset.m;
+ [].forEach.call(this.children,function(c){c.setAttribute("aria-pressed",c===b?"true":"false")});frame.classList.toggle("mob",mode==="m")});
+document.addEventListener("keydown",function(e){if(!pv.classList.contains("open"))return;if(e.key==="Escape")closePv();if(e.key==="ArrowLeft")step(1);if(e.key==="ArrowRight")step(-1)});
+var h=location.hash.slice(1);if(h){var k=T.findIndex(function(x){return x.id===h});if(k>-1)openPv(k)}
+</script>
+</body>
+</html>
