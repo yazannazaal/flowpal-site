@@ -1,12 +1,14 @@
 <!doctype html>
-<html lang="en" class="is-loading">
+<html lang="ar" dir="ltr" class="is-loading">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <!-- The brand name lives in STORE.brand (script below); the title is set from it at runtime. -->
-<title>Maison Verrel — The Rail</title>
+<title>ميزون فيريل | المتجر</title>
 <link rel="preconnect" href="https://images.higgs.ai">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="home.css?v=1">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
 @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format("woff2")}
@@ -22,8 +24,10 @@
 @media (max-width:820px){:root{--rail-top:292;--rail-sag:30;--gap:80;--gs:.30;--start:46}}
 
 *,*::before,*::after{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink)}
-body{font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+html{overflow-x:hidden}body{overflow-x:hidden}
+body.qv-open{overflow:hidden}
+body{font-family:"IBM Plex Sans Arabic","Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 p,h1,h2{margin:0;font-weight:inherit}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -31,7 +35,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset
 svg{display:block}
 
 /* ---------- frame ---------- */
-.page{position:fixed;top:0;left:0;bottom:0;right:0;overflow:hidden;transition:right .6s var(--ease)}
+.page{position:relative;height:100vh;height:100svh;min-height:480px;overflow:hidden;transition:margin-right .6s var(--ease)}
 .stage{position:absolute;inset:0;overflow:hidden;transition:opacity .45s ease,filter .45s ease}
 body.qv-open .stage{opacity:0;filter:blur(8px);pointer-events:none}
 
@@ -139,7 +143,7 @@ body.cart-open .links{left:calc(50% + 24*var(--u))}
 /* ---------- cart drawer ---------- */
 .drawer{position:fixed;top:0;right:0;bottom:0;width:calc(560*var(--u));z-index:20;background:#FDFBF7;border-left:1px solid var(--hair);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .6s var(--ease),visibility 0s linear .6s;visibility:hidden}
 body.cart-open .drawer{transform:none;visibility:visible;transition:transform .6s var(--ease)}
-@media (min-width:821px){body.cart-open .page{right:calc(560*var(--u))}}
+@media (min-width:821px){body.cart-open .page{margin-right:calc(560*var(--u))}}
 .d-head{display:flex;align-items:center;gap:calc(12*var(--u));padding:calc(30*var(--u)) calc(36*var(--u)) calc(18*var(--u))}
 .d-head h2{font-weight:700;font-size:calc(27*var(--u));letter-spacing:-.02em;line-height:1}
 .d-count{min-width:calc(24*var(--u));height:calc(24*var(--u));padding:0 calc(6*var(--u));border-radius:999px;background:#E9E3DA;font-weight:600;font-size:calc(12.5*var(--u));display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
@@ -203,24 +207,52 @@ body.cart-open .drawer{transform:none;visibility:visible;transition:transform .6
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:0s!important;transition-delay:0s!important;animation-duration:0s!important;animation-delay:0s!important}
 }
+
+/* ---------- Arabic ---------- */
+.stage{direction:ltr}
+.util{direction:rtl;justify-content:flex-start;padding-right:calc(48*var(--u));padding-left:0}
+.links{direction:rtl}
+.search span,.eyebrow .a,.eyebrow .b,.qcount,.qsl,.hint,.flabel{letter-spacing:0}
+.eyebrow{direction:rtl}
+.eyebrow .a,.eyebrow .b{letter-spacing:0;font-size:calc(13.4*var(--u))}
+.hl{direction:rtl;font-family:"Amiri","Cormorant Garamond",serif;font-weight:700;letter-spacing:0;line-height:1.12}
+.hl .w{margin-right:0;margin-left:.26em}
+.hl .w:last-of-type{margin-left:0}
+.hl .w4{padding-right:0;margin-right:0;padding-left:.04em}
+.hint-t,.flabel b{direction:rtl;unicode-bidi:plaintext}
+.foot-r{direction:rtl}
+.foot-r p{letter-spacing:0;line-height:1.5}
+.shop svg{transform:scaleX(-1)}
+.qv-info,.qclose{direction:rtl}
+.qv-info{text-align:right}
+.qname{letter-spacing:0;font-family:"Amiri","Cormorant Garamond",serif;font-weight:700;font-size:calc(27*var(--u))}
+.qprice{direction:ltr;text-align:right}
+.drawer{direction:rtl}
+.d-close{margin-left:0;margin-right:auto}
+.d-head h2{letter-spacing:0}
+.r-meta{direction:rtl}
+.scroll-cue{position:absolute;left:50%;translate:-50% 0;bottom:calc(20*var(--u));display:flex;flex-direction:column;align-items:center;gap:calc(2*var(--u));font-size:calc(12.5*var(--u));color:#8A7F72;direction:rtl;pointer-events:auto}
+.scroll-cue svg{width:calc(16*var(--u));height:calc(16*var(--u));fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@media (max-width:820px){.scroll-cue{bottom:calc(8*var(--u))}}
 </style>
 </head>
 <body>
 <div class="page">
   <div class="stage">
-    <nav class="util" aria-label="Utility"><a href="#">Our Ateliers</a><a href="#">Care</a><a href="#">Journal</a><a href="#">Sign In</a></nav>
+    <nav class="util" aria-label="روابط إضافية"><a href="#">أتيليهاتنا</a><a href="#">العناية بالقطع</a><a href="#">المجلة</a><a href="#">تسجيل الدخول</a></nav>
     <header class="nav">
       <a class="wordmark" href="#" data-brand></a>
-      <nav class="links" aria-label="Main"><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="index.html" aria-current="page">The Rail</a><a href="shop.html#contact">Contact</a></nav>
+      <nav class="links" aria-label="القائمة الرئيسية"><a href="index.html" aria-current="page">الرئيسية</a><a href="shop.html">المتجر</a><a href="#sx-atelier">العلاقة</a><a href="#contact">تواصل معنا</a></nav>
       <div class="tools">
-        <a class="search" href="shop.html" aria-label="Search"><svg viewBox="0 0 19 19" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" transform="translate(-2.2 -2.2)"/><path d="M13.3 13.3 17.6 17.6"/></svg><span>Search</span></a>
-        <a class="account" href="#" aria-label="Account"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="7.5" r="4"/><path d="M3.6 20.2c.9-3.9 3.8-6.1 7.4-6.1s6.5 2.2 7.4 6.1"/></svg></a>
-        <button class="bag" type="button" aria-label="Open cart" aria-expanded="false" aria-controls="drawer"><span class="bag-ic"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.6 7.6h10.8l1.7 12.6H3.9z"/><path d="M8 9.6V6.4a3 3 0 0 1 6 0v3.2"/></svg></span><span class="badge" aria-hidden="true">3</span></button>
+        <a class="search" href="shop.html" aria-label="بحث"><svg viewBox="0 0 19 19" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" transform="translate(-2.2 -2.2)"/><path d="M13.3 13.3 17.6 17.6"/></svg><span>بحث</span></a>
+        <a class="account" href="#" aria-label="حسابي"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="7.5" r="4"/><path d="M3.6 20.2c.9-3.9 3.8-6.1 7.4-6.1s6.5 2.2 7.4 6.1"/></svg></a>
+        <button class="bag" type="button" aria-label="افتح السلة" aria-expanded="false" aria-controls="drawer"><span class="bag-ic"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.6 7.6h10.8l1.7 12.6H3.9z"/><path d="M8 9.6V6.4a3 3 0 0 1 6 0v3.2"/></svg></span><span class="badge" aria-hidden="true">3</span></button>
       </div>
     </header>
 
-    <p class="eyebrow"><span class="a">NEW COLLECTION</span><i></i><span class="b">EVENING &amp; TAILORING</span></p>
-    <h1 class="hl"><span class="w w1">Silhouettes</span><span class="w w2">that</span><br class="br-m"><span class="w w3">hang</span><span class="w w4">right.</span></h1>
+    <p class="eyebrow"><span class="a">مجموعة جديدة</span><i></i><span class="b">سهرة وخياطة</span></p>
+    <h1 class="hl"><span class="w w1">قصّات</span><span class="w w2">تنسدل</span><br class="br-m"><span class="w w3">كما</span><span class="w w4">ينبغي.</span></h1>
 
     <svg class="rail-svg" aria-hidden="true">
       <defs><linearGradient id="tube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E9DCBC"/><stop offset=".45" stop-color="#C2A877"/><stop offset="1" stop-color="#7F6743"/></linearGradient></defs>
@@ -228,50 +260,89 @@ body.cart-open .drawer{transform:none;visibility:visible;transition:transform .6
       <path class="r-tube" fill="none" stroke="url(#tube)" stroke-linecap="round"/>
       <path class="r-hi" fill="none" stroke="rgba(255,247,226,.85)" stroke-linecap="round"/>
     </svg>
-    <div class="rail-zone" role="region" aria-label="The Rail"></div>
+    <div class="rail-zone" role="region" aria-label="العلاقة"></div>
 
     <div class="foot-l">
-      <p class="hint"><i></i><span class="hint-t">Hover a piece · click to look closer</span></p>
+      <p class="hint"><i></i><span class="hint-t">مرّر على قطعة · اضغط لتشوفها عن قرب</span></p>
       <p class="flabel" aria-live="polite"><b></b><span></span></p>
     </div>
     <div class="prog" aria-hidden="true"><i></i></div>
+    <a class="scroll-cue" href="#sx-new"><span>تصفّح المتجر</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5"/></svg></a>
     <div class="foot-r">
-      <p>Cut from Italian silk and wool.<br>Tailored to order. Made to last.</p>
-      <a class="shop" href="shop.html">Shop the Collection<svg viewBox="0 0 15 10" aria-hidden="true"><path d="M.7 5h13.4M9.6 1l4.4 4-4.4 4"/></svg></a>
+      <p>من الحرير والصوف الإيطالي.<br>خياطة حسب الطلب. صُنعت لتدوم.</p>
+      <a class="shop" href="shop.html">تسوّق المجموعة<svg viewBox="0 0 15 10" aria-hidden="true"><path d="M.7 5h13.4M9.6 1l4.4 4-4.4 4"/></svg></a>
     </div>
   </div>
 
-  <div class="qv" role="dialog" aria-modal="true" aria-label="Quick view" aria-hidden="true" inert>
+  <div class="qv" role="dialog" aria-modal="true" aria-label="نظرة سريعة" aria-hidden="true" inert>
     <div class="qv-rod"></div>
     <div class="qv-img"><div class="qf qf-front"></div><div class="qf qf-back" style="opacity:0"></div></div>
     <div class="qv-info">
       <p class="qi qcount" style="--j:0"></p>
       <h2 class="qi qname" style="--j:1"></h2>
       <p class="qi qprice" style="--j:2"></p>
-      <div class="qi qtabs" role="tablist" aria-label="View" style="--j:3"><button type="button" role="tab" data-view="front" aria-selected="true">Front</button><button type="button" role="tab" data-view="back" aria-selected="false">Back</button></div>
-      <p class="qi qsl" style="--j:4">SIZE</p>
-      <div class="qi qsizes" role="group" aria-label="Size" style="--j:5"></div>
-      <button class="qi qadd" type="button" style="--j:6">Add to cart</button>
-      <div class="qi qmeta" style="--j:7"><span class="qmeta-n"></span><a href="#" class="qpage">View product page</a></div>
+      <div class="qi qtabs" role="tablist" aria-label="العرض" style="--j:3"><button type="button" role="tab" data-view="front" aria-selected="true">أمامي</button><button type="button" role="tab" data-view="back" aria-selected="false">خلفي</button></div>
+      <p class="qi qsl" style="--j:4">المقاس</p>
+      <div class="qi qsizes" role="group" aria-label="المقاس" style="--j:5"></div>
+      <button class="qi qadd" type="button" style="--j:6">أضف للسلة</button>
+      <div class="qi qmeta" style="--j:7"><span class="qmeta-n"></span><a href="#" class="qpage">صفحة المنتج</a></div>
     </div>
-    <button class="qclose" type="button" aria-label="Close quick view">Close <span aria-hidden="true">×</span></button>
+    <button class="qclose" type="button" aria-label="إغلاق">إغلاق <span aria-hidden="true">×</span></button>
   </div>
 </div>
 
-<aside class="drawer" id="drawer" aria-label="Cart" aria-hidden="true" inert>
+
+<div class="sx" id="sx">
+  <header class="sx-bar" id="sxbar" aria-hidden="true">
+    <a class="sx-wm" href="#top">MAISON VERREL</a>
+    <nav class="sx-links" aria-label="القائمة"><a href="shop.html">المتجر</a><a href="#sx-atelier">الأتيليه</a><a href="#sx-new">وصل حديثاً</a><a href="#contact">تواصل معنا</a></nav>
+    <button class="sx-bag" type="button" aria-label="افتح السلة"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5.6 7.6h10.8l1.7 12.6H3.9z"/><path d="M8.2 9.6V6.2a2.8 2.8 0 0 1 5.6 0v3.4"/></svg><b id="sxcount">0</b></button>
+  </header>
+
+  <section class="sx-sec" aria-labelledby="sx-t1">
+    <div class="sx-head"><p class="sx-k">تسوّق حسب التصنيف</p><h2 id="sx-t1">كل شي بتحتاجه، بمكان واحد</h2></div>
+    <div class="sx-cats"><a class="sx-cat" href="shop.html?c=Atelier"><span class="sx-im" data-r="g1"></span><b>الأتيليه</b></a><a class="sx-cat" href="shop.html?c=Knitwear"><span class="sx-im"><img src="img/k2.webp" alt="" loading="lazy"></span><b>تريكو</b></a><a class="sx-cat" href="shop.html?c=Shirts"><span class="sx-im"><img src="img/s4.webp" alt="" loading="lazy"></span><b>قمصان</b></a><a class="sx-cat" href="shop.html?c=Trousers"><span class="sx-im"><img src="img/t3.webp" alt="" loading="lazy"></span><b>بناطيل</b></a><a class="sx-cat" href="shop.html?c=Jackets"><span class="sx-im"><img src="img/j4.webp" alt="" loading="lazy"></span><b>جاكيتات</b></a><a class="sx-cat" href="shop.html?c=Basics"><span class="sx-im"><img src="img/b1.webp" alt="" loading="lazy"></span><b>أساسيات</b></a><a class="sx-cat" href="shop.html?c=Accessories"><span class="sx-im"><img src="img/a1.webp" alt="" loading="lazy"></span><b>إكسسوارات</b></a></div>
+  </section>
+
+  <section class="sx-sec" id="sx-new" aria-labelledby="sx-t2">
+    <div class="sx-head sx-hrow"><div><p class="sx-k">جديدنا</p><h2 id="sx-t2">وصل حديثاً</h2></div><a class="sx-more" href="shop.html">عرض كل المنتجات</a></div>
+    <div class="sx-grid" id="sxnew"></div>
+  </section>
+
+  <section class="sx-band" id="sx-atelier" aria-labelledby="sx-t3">
+    <div class="sx-band-in">
+      <div class="sx-band-txt"><p class="sx-k">الأتيليه</p><h2 id="sx-t3">قطع بتنخاط حسب الطلب</h2><p>بلايزر وترنشات وفساتين من الحرير والصوف الإيطالي. كل قطعة بتتفصّل وبتنخاط بعناية، وبتوصلك جاهزة للسهرة.</p><a class="sx-btn" href="shop.html?c=Atelier">تسوّق الأتيليه</a></div>
+      <div class="sx-band-gar" id="sxgar"></div>
+    </div>
+  </section>
+
+  <section class="sx-sec" aria-labelledby="sx-t4">
+    <div class="sx-head"><p class="sx-k">الأكثر طلباً</p><h2 id="sx-t4">اختيارات هالموسم</h2></div>
+    <div class="sx-grid" id="sxpick"></div>
+  </section>
+
+  <section class="sx-vals" aria-label="مميزات المتجر">
+    <div><b>شحن مجاني</b><span>للطلبات فوق 150$ داخل الضفة الغربية</span></div>
+    <div><b>الدفع عند الاستلام</b><span>بتدفع لما توصلك القطعة</span></div>
+    <div><b>تبديل خلال 14 يوم</b><span>للقطعة غير المستعملة والتاغ عليها</span></div>
+    <div><b>خياطة بعناية</b><span>أقمشة طبيعية وتفاصيل نظيفة</span></div>
+  </section>
+  <div id="ft"></div>
+</div>
+<aside class="drawer" id="drawer" aria-label="السلة" aria-hidden="true" inert>
   <header class="d-head">
-    <h2>Cart</h2><span class="d-count">0</span>
-    <button class="d-close" type="button" aria-label="Close cart"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1 1 13"/></svg></button>
+    <h2>السلة</h2><span class="d-count">0</span>
+    <button class="d-close" type="button" aria-label="إغلاق السلة"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1 1 13"/></svg></button>
   </header>
   <div class="d-list"></div>
   <footer class="d-foot">
-    <div class="d-total"><span>Estimated total</span><b></b></div>
-    <p class="d-note">Taxes and shipping calculated at checkout.</p>
-    <a class="d-checkout" href="checkout.html" style="display:flex;align-items:center;justify-content:center">Checkout</a>
+    <div class="d-total"><span>الإجمالي التقديري</span><b></b></div>
+    <p class="d-note">الشحن بينحسب عند إتمام الطلب.</p>
+    <a class="d-checkout" href="checkout.html" style="display:flex;align-items:center;justify-content:center">إتمام الطلب</a>
   </footer>
 </aside>
 
-<script src="store.js?v=1"></script>
+<script src="store.js?v=2"></script>
 <script>
 window.MVX = window.MV ? MV.BYID : {};
 (() => {
@@ -283,7 +354,7 @@ window.MVX = window.MV ? MV.BYID : {};
    order, starting cart). The logic below reads nothing else.
    ===================================================================== */
 const STORE = {
-  brand: { name: 'Maison Verrel', wordmark: 'MAISON VERREL', title: 'Maison Verrel — The Rail' },
+  brand: { name: 'ميزون فيريل', wordmark: 'MAISON VERREL', title: 'ميزون فيريل | المتجر' },
   currency: '$',
   imageProxy: 'https://images.higgs.ai/?default=1&output=webp&url={src}&w=1360&q=85',
   sheet: { width: 1360, cellW: 340 },        // sheet px; every crop is cellW wide
@@ -308,6 +379,8 @@ const STORE = {
   tagTilt: [-5, 4, -3, 6, -4, 3, -6, 4, -3, 5],                          // degrees, repeats
   cart: [ { k: 3, size: 'M', qty: 1 }, { k: 4, size: 'S', qty: 1 }, { k: 1, size: 'M', qty: 1 } ]
 };
+
+if (window.MV) STORE.products.forEach((p, i) => { p.name = MV.RAIL[i].name; });
 
 /* ---------------- helpers ---------------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -364,7 +437,7 @@ const qCount = $('.qcount'), qName = $('.qname'), qPrice = $('.qprice'), qTabs =
 const qSizes = $('.qsizes'), qAdd = $('.qadd'), qMetaN = $('.qmeta-n'), qClose = $('.qclose');
 const drawer = $('.drawer'), dList = $('.d-list'), dCount = $('.d-count'), dTotal = $('.d-total b');
 
-if (matchMedia('(hover: none)').matches) $('.hint-t').textContent = 'Tap a piece · tap again to look closer';
+if (matchMedia('(hover: none)').matches) $('.hint-t').textContent = 'المس قطعة · المس مرة ثانية لتشوفها عن قرب';
 
 /* ---------------- rail pieces ---------------- */
 const pieces = STORE.rail.map((k, i) => {
@@ -415,7 +488,7 @@ function drawRail() {
 }
 
 function layout() {
-  const vw = innerWidth, vh = innerHeight;
+  const vw = innerWidth, vh = page.clientHeight || innerHeight;
   if (!vw || !vh) return;                                   // hidden / collapsed frame: wait for next resize
   isPhone = vw <= 820;
   u = isPhone ? Math.min(vw / 390, vh / 780) : Math.min(vw / 1440, vh / 900);
@@ -535,8 +608,9 @@ zone.addEventListener('dragstart', e => e.preventDefault());
 /* ---------------- wheel + keys ---------------- */
 addEventListener('wheel', e => {
   if (qvOpen || (e.target.closest && e.target.closest('.drawer'))) return;
+  if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;     // vertical wheel scrolls the page; sideways drag moves the rail
   e.preventDefault();
-  let d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  let d = e.deltaX;
   if (e.deltaMode === 1) d *= 16; else if (e.deltaMode === 2) d *= W;
   target = clampT(target + d * .9);
 }, { passive: false });
@@ -544,7 +618,7 @@ addEventListener('wheel', e => {
 addEventListener('keydown', e => {
   if (e.key === 'Escape') { if (qvOpen) closeQV(); else if (cartOpen) setCart(false); return; }
   if (e.key === 'Enter' || e.key === ' ') lastPointer = 'keyboard';
-  if (qvOpen || (e.target.closest && e.target.closest('.drawer'))) return;
+  if (qvOpen || scrollY > innerHeight * .5 || (e.target.closest && e.target.closest('.drawer'))) return;
   if (e.key === 'ArrowRight') { target = clampT(target + P.gap * u); e.preventDefault(); }
   else if (e.key === 'ArrowLeft') { target = clampT(target - P.gap * u); e.preventDefault(); }
 });
@@ -588,6 +662,7 @@ const fromRect = r => `translate(${r.left - qvGeo.L}px, ${r.top - qvGeo.T}px) sc
 
 function openQV(i) {
   if (adding) return;
+  if (scrollY > 0) scrollTo(0, 0);
   const p = pieces[i], pr = STORE.products[p.k];
   const startRect = (hov === i ? p.front : p.side).getBoundingClientRect();
   setHover(-1);
@@ -632,14 +707,14 @@ function closeQV(noFlight) {
 qClose.addEventListener('click', () => closeQV());
 
 /* ---------------- add to cart: fly into the bag ---------------- */
-function resetAdd() { qAdd.classList.remove('loading'); qAdd.disabled = false; qAdd.textContent = 'Add to cart'; }
+function resetAdd() { qAdd.classList.remove('loading'); qAdd.disabled = false; qAdd.textContent = 'أضف للسلة'; }
 qAdd.addEventListener('click', async () => {
   if (adding || !qvOpen) return;
   const p = qvSrc, k = p.k, size = qvSize, tok = qvTok;
   adding = true;
   if (reduced()) { closeQV(true); addItem(k, size, false); adding = false; return; }
   qAdd.classList.add('loading'); qAdd.disabled = true;
-  qAdd.innerHTML = '<span class="spin" aria-hidden="true"></span>Adding…';
+  qAdd.innerHTML = '<span class="spin" aria-hidden="true"></span>جاري الإضافة…';
   await wait(1000);
   if (!qvOpen || tok !== qvTok) { resetAdd(); adding = false; return; }     // closed meanwhile
   const face = qvView === 'back' ? qfBack : qfFront, r = face.getBoundingClientRect();
@@ -682,7 +757,7 @@ function addItem(k, size, animate) {
 const TRASH = '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2.5 4.5h13M7 4.5V3h4v1.5M4.2 4.5l.8 11h8l.8-11M7.4 7.5v5.5M10.6 7.5v5.5"/></svg>';
 function renderCart() {
   dList.textContent = '';
-  if (!cart.length) { const e = el('p', 'empty'); e.textContent = 'Your cart is empty.'; dList.append(e); }
+  if (!cart.length) { const e = el('p', 'empty'); e.textContent = 'سلتك فاضية.'; dList.append(e); }
   cart.forEach(item => {
     const pr = catalog.prod(item.k); if (!pr) return; const h = pr.crop ? pr.crop.front[1] : 0;
     const row = el('div', 'row'); row.dataset.id = item.id;
@@ -699,9 +774,9 @@ function renderCart() {
       th.append(im);
     }
     const mid = el('div');
-    mid.innerHTML = `<p class="r-name"></p><p class="r-meta">Size ${item.size}<br>${money(pr.price)}</p>
-      <div class="r-ctl"><div class="step"><button type="button" data-act="dec" aria-label="Decrease quantity"${item.qty <= 1 ? ' disabled' : ''}>−</button><output>${item.qty}</output><button type="button" data-act="inc" aria-label="Increase quantity">+</button></div>
-      <button type="button" class="trash" data-act="del" aria-label="Remove">${TRASH}</button></div>`;
+    mid.innerHTML = `<p class="r-name"></p><p class="r-meta">المقاس ${item.size}<br>${money(pr.price)}</p>
+      <div class="r-ctl"><div class="step"><button type="button" data-act="dec" aria-label="تقليل الكمية"${item.qty <= 1 ? ' disabled' : ''}>−</button><output>${item.qty}</output><button type="button" data-act="inc" aria-label="زيادة الكمية">+</button></div>
+      <button type="button" class="trash" data-act="del" aria-label="إزالة">${TRASH}</button></div>`;
     mid.querySelector('.r-name').textContent = pr.name;
     const tot = el('p', 'r-total'); tot.textContent = money(pr.price * item.qty);
     row.append(th, mid, tot);
@@ -765,6 +840,45 @@ function intro() {
 const fontsReady = document.fonts ? Promise.all([document.fonts.load('600 16px "Inter"'), document.fonts.load('500 16px "Cormorant Garamond"')]).catch(() => {}) : Promise.resolve();
 Promise.all([fontsReady, sheetReady.side, sheetReady.front]).then(intro);
 setTimeout(intro, 2500);
+})();
+</script>
+
+<script>
+(() => {
+  const $ = (q, r = document) => r.querySelector(q);
+  MV.badge && $('#ft') && ($('#ft').innerHTML = MV.footHTML());
+  const card = (p, extra) => {
+    const im = p.rail ? '<span class="sx-gf" data-r="' + p.id + '"></span>' : '<img src="img/' + p.id + '.webp" alt="' + MV.esc(p.name) + '" loading="lazy">';
+    const tag = p.was ? '<i class="sx-tag s">خصم</i>' : (p.isNew ? '<i class="sx-tag">جديد</i>' : '');
+    const pr = p.was ? '<span class="sx-pr"><del>' + MV.money(p.was) + '</del> <em>' + MV.money(p.price) + '</em></span>' : '<span class="sx-pr">' + MV.money(p.price) + '</span>';
+    return '<a class="sx-card" href="product.html?id=' + p.id + '"><span class="sx-im">' + tag + im + '</span><h3>' + MV.esc(p.name) + '</h3><span class="sx-m">' + (p.sub || MV.CATAR[p.cat]) + '</span>' + pr + '</a>';
+  };
+  const ids = a => a.map(i => MV.BYID[i]).filter(Boolean);
+  $('#sxnew').innerHTML = ids(['j3', 'k2', 's2', 't3', 'b1', 'j5', 'a2', 'a5']).map(card).join('');
+  $('#sxpick').innerHTML = ids(['j4', 's4', 't1', 'a1', 'j1', 'b2', 'k1', 'a3']).map(card).join('');
+  $('#sxgar').innerHTML = ['g2', 'g1', 'g0', 'g7'].map(i => '<a href="product.html?id=' + i + '" data-r="' + i + '" aria-label="' + MV.esc(MV.BYID[i].name) + '"><span class="sx-rod"></span></a>').join('');
+  function paint() {
+    document.querySelectorAll('#sx [data-r]').forEach(h => {
+      h.querySelectorAll('.gface').forEach(n => n.remove());
+      const p = MV.BYID[h.dataset.r], box = h.getBoundingClientRect();
+      if (!box.width || !box.height) return;
+      const w = Math.min(box.width * (h.closest('.sx-band-gar') ? .9 : .82), box.height * .9 / MV.faceRatio(p, 'front'));
+      h.insertAdjacentHTML('beforeend', MV.face(p, 'front', w));
+    });
+  }
+  paint(); addEventListener('resize', paint); addEventListener('load', paint);
+  // sticky bar: appears once the hero is mostly scrolled past
+  const bar = $('#sxbar'), hero = $('.page');
+  const onScroll = () => { const on = scrollY > hero.offsetHeight * .8; bar.classList.toggle('on', on); bar.setAttribute('aria-hidden', String(!on)); };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  $('.sx-bag').addEventListener('click', () => $('.bag').click());
+  const src = $('.badge'), dst = $('#sxcount');
+  if (src) { const sync = () => { dst.textContent = src.textContent; }; new MutationObserver(sync).observe(src, { childList: true, characterData: true, subtree: true }); sync(); }
+  // smooth anchors
+  document.querySelectorAll('a[href^="#sx-"], a[href="#top"], a[href="#contact"]').forEach(a => a.addEventListener('click', e => {
+    const t = a.getAttribute('href') === '#top' ? document.body : document.querySelector(a.getAttribute('href'));
+    if (!t) return; e.preventDefault(); const y = a.getAttribute('href') === '#top' ? 0 : t.getBoundingClientRect().top + scrollY - 56; scrollTo({ top: y, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }));
 })();
 </script>
 </body>

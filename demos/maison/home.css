@@ -1,0 +1,66 @@
+/* Maison Verrel home: sections under the hero (Arabic, RTL) */
+.sx{direction:rtl;background:var(--bg);font-family:"IBM Plex Sans Arabic","Inter",system-ui,sans-serif;--red:#9C3B2E}
+.sx *{box-sizing:border-box}
+.sx a{color:inherit;text-decoration:none}
+.sx h2,.sx h3,.sx p{margin:0}
+.sx-bar{position:fixed;top:0;left:0;right:0;z-index:15;height:56px;background:rgba(250,247,242,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);direction:ltr;transform:translateY(-100%);transition:transform .45s var(--ease)}
+.sx-bar.on{transform:none}
+.sx-wm{font:500 20px/1 "Cormorant Garamond",Georgia,serif;letter-spacing:.075em}
+.sx-links{display:flex;gap:30px;direction:rtl;font-weight:500;font-size:14.5px}
+.sx-links a:hover{text-decoration:underline;text-underline-offset:6px}
+.sx-bag{position:relative;width:24px;height:24px}
+.sx-bag svg{width:100%;height:100%;fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sx-bag b{position:absolute;left:12px;top:-8px;min-width:17px;height:17px;border-radius:9px;background:var(--black);color:#fff;font:600 10px/17px "Inter",sans-serif;text-align:center;padding:0 4px}
+@media (max-width:760px){.sx-links{display:none}}
+.sx-sec{max-width:1280px;margin:0 auto;padding:clamp(54px,8vw,96px) clamp(16px,4vw,48px) 0}
+.sx-head{margin-bottom:28px}
+.sx-head.sx-hrow{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.sx-k{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px}
+.sx h2{font:700 clamp(30px,4.2vw,46px)/1.2 "Amiri","Cormorant Garamond",serif}
+.sx-more{font-weight:600;font-size:14.5px;border-bottom:1px solid var(--ink);padding-bottom:2px;white-space:nowrap}
+.sx-cats{display:grid;grid-template-columns:repeat(7,1fr);gap:14px}
+.sx-cat{display:block;text-align:center}
+.sx-cat .sx-im{display:flex;justify-content:center;align-items:flex-start;aspect-ratio:3/4;background:#EFEAE0;border-radius:6px;overflow:hidden}
+.sx-cat img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.sx-cat:hover img{transform:scale(1.05)}
+.sx-cat b{display:block;margin-top:10px;font-weight:600;font-size:15px}
+@media (max-width:1000px){.sx-cats{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:620px){.sx-cats{grid-template-columns:repeat(3,1fr);gap:10px}.sx-cat b{font-size:13.5px}}
+.sx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:34px 18px}
+@media (max-width:1000px){.sx-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:700px){.sx-grid{grid-template-columns:repeat(2,1fr);gap:26px 12px}}
+.sx-card{display:block}
+.sx-card .sx-im{position:relative;display:flex;justify-content:center;align-items:flex-start;aspect-ratio:3/4;background:#EFEAE0;border-radius:6px;overflow:hidden}
+.sx-card img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.sx-card:hover img{transform:scale(1.04)}
+.sx-gf{display:flex;justify-content:center;width:100%;height:100%;padding-top:6%}
+.sx-gf .gface{background-repeat:no-repeat;filter:drop-shadow(0 12px 10px rgba(70,52,34,.16))}
+.sx-tag{position:absolute;right:10px;top:10px;z-index:2;background:var(--black);color:#fff;font-style:normal;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:12px}
+.sx-tag.s{background:var(--red)}
+.sx-card h3{font-size:15px;font-weight:500;margin:12px 0 2px}
+.sx-m{display:block;font-size:13px;color:var(--muted)}
+.sx-pr{display:block;font-weight:600;margin-top:2px}
+.sx-pr del{color:#9a9086;font-weight:400}
+.sx-pr em{font-style:normal;color:var(--red)}
+.sx-band{margin-top:clamp(54px,8vw,96px);background:#EFE8DB}
+.sx-band-in{max-width:1280px;margin:0 auto;padding:clamp(40px,6vw,70px) clamp(16px,4vw,48px);display:grid;grid-template-columns:1fr 1.5fr;gap:40px;align-items:center}
+.sx-band-txt p:not(.sx-k){margin:14px 0 24px;color:#5A5148;line-height:1.8;max-width:420px}
+.sx-btn{display:inline-flex;align-items:center;height:50px;padding:0 34px;background:var(--black);color:#fff!important;border-radius:3px;font-weight:600}
+.sx-band-gar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;direction:ltr}
+.sx-band-gar a{position:relative;display:flex;justify-content:center;aspect-ratio:1/2.1}
+.sx-band-gar .sx-rod{position:absolute;top:0;left:50%;width:1.5px;height:14px;background:#3B3631;z-index:1}
+.sx-band-gar .gface{margin-top:12px;background-repeat:no-repeat;filter:drop-shadow(0 12px 10px rgba(70,52,34,.2));transition:transform .6s var(--ease)}
+.sx-band-gar a:hover .gface{transform:translateY(6px)}
+@media (max-width:900px){.sx-band-in{grid-template-columns:1fr}.sx-band-txt p:not(.sx-k){max-width:none}}
+.sx-vals{max-width:1280px;margin:clamp(54px,8vw,96px) auto 0;padding:0 clamp(16px,4vw,48px);display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.sx-vals div{border-top:1px solid var(--hair);padding-top:16px}
+.sx-vals b{display:block;font-size:16px;margin-bottom:4px}
+.sx-vals span{font-size:13.5px;color:var(--muted);line-height:1.6}
+@media (max-width:760px){.sx-vals{grid-template-columns:repeat(2,1fr)}}
+/* footer (same markup as the inner pages) */
+.sx .foot{border-top:1px solid var(--hair);margin-top:clamp(54px,8vw,96px);padding:46px clamp(16px,4vw,48px) 20px;max-width:1280px;margin-inline:auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}
+@media (max-width:760px){.sx .foot{grid-template-columns:1fr}}
+.sx .foot .wordmark{position:static;font:500 22px/1 "Cormorant Garamond",serif;letter-spacing:.075em;direction:ltr;text-align:right;margin-bottom:10px}
+.sx .foot h4{font-size:13px;color:var(--muted);margin:0 0 12px}
+.sx .foot a,.sx .foot p{display:block;font-size:14px;color:#4a4138;margin:0 0 8px}
+.sx .demo{text-align:center;font-size:12.5px;color:var(--muted);padding:6px 18px 34px;margin:0}
