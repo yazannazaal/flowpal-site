@@ -928,7 +928,7 @@ V.fit = () => `${pageHead(tx(["غرفة الغيار","Fitting Room"]), tx(["ن�
       <div class="fit-z"><img id="fitImgT" src="${FIT.srcT}" alt=""></div>
       <div class="fit-z"><img id="fitImgD" src="${FIT.srcD}" alt="" style="opacity:${FIT.b?1:0}"></div>
       <img class="fit-hij" src="fit/hands.webp" alt="" style="z-index:2">
-      <img class="fit-hij" src="fit/hijab.png" alt="">
+      <img class="fit-hij" src="fit/hijab.webp" alt="">
       <span class="fit-tag t" id="fitTagT"></span><span class="fit-cue t" id="fitCueT">${tx(["‹ اسحبي ›","‹ Swipe ›"])}</span>
       <span class="fit-tag b" id="fitTagB"></span><span class="fit-cue b" id="fitCueB">${tx(["‹ اسحبي ›","‹ Swipe ›"])}</span>
       <div class="fit-hint ${FIT.hint?"":"off"}" id="fitHint">${tx(["اسحبي يمين أو يسار على القميص أو البنطلون","Swipe left or right on the top or the trousers"])}</div>
@@ -964,7 +964,7 @@ function fitGo(zone, idx){
   else { jobs.push(fitSwap("fitImgB", fitBot(FIT.b), "srcB")); const d = $("#fitImgD"); if(d){ if(d.src.indexOf(fitExt(FIT.t))<0){ d.src = fitExt(FIT.t); FIT.srcD = fitExt(FIT.t) } const an = d.animate([{opacity:FIT.b?0:1},{opacity:FIT.b?1:0}],{duration:360,fill:"forwards",easing:"ease-in-out"}); an.onfinish = () => { d.style.opacity = FIT.b?1:0; an.cancel() } } }
   Promise.all(jobs).then(() => { FIT.busy = false });
 }
-["base","top0","top1","bot0","bot1","ext0","ext1","hands","hijab"].forEach(k => { const i = new Image(); i.src = `fit/${k}.${k==="hijab"?"png":"webp"}` })
+["base","top0","top1","bot0","bot1","ext0","ext1","hands","hijab"].forEach(k => { const i = new Image(); i.src = `fit/${k}.webp` })
 let fitDrag = null;
 document.addEventListener("pointerdown", e => { const st = e.target.closest("#fitStage"); if(!st || e.target.closest("button")) return; fitDrag = {x:e.clientX, y:e.clientY, r:st.getBoundingClientRect()} });
 document.addEventListener("pointerup", e => { if(!fitDrag) return; const d = fitDrag; fitDrag = null; const dx = e.clientX - d.x, dy = e.clientY - d.y; if(Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) return;
