@@ -9,7 +9,7 @@
 <meta property="og:title" content="Flowpal | موظف ذكي ومتاجر إلكترونية">
 <meta property="og:description" content="موظف خدمة عملاء ذكي على إنستغرام وماسنجر، ومتاجر إلكترونية بتصميم عصري.">
 <meta property="og:image" content="https://flowpal.co/demos/_previews/odelle-d.webp?v=2">
-<link rel="icon" href="assets/flowpal-mark-color.svg">
+<link rel="icon" href="/assets/flowpal-mark-color.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -177,12 +177,59 @@ footer a:hover{color:var(--teal-d)}
 .rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
 .rv.on{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.m,.rv{opacity:1;transform:none}}
+
+/* v3 */
+.hero{padding:56px 0 30px}
+.hero .wrap{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:30px}
+.duo{position:relative;display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:14px;align-items:start}
+.duo .phone{margin:0;max-width:none;transform:rotate(-2deg)}
+.rail-box{position:relative;height:600px;background:linear-gradient(180deg,#fff,#f6f1e8);border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow);overflow:hidden}
+.rail-box .lab{position:absolute;inset:auto 18px 14px auto;font-size:12.5px;color:var(--mute)}
+.rl-svg{position:absolute;inset:0;width:100%;height:100%}
+.gm{position:absolute;top:0;left:0;will-change:transform}
+.gm .sw{transform-origin:0 0;animation:sw 5s ease-in-out infinite}
+.gm .fc{position:absolute;background-repeat:no-repeat;filter:drop-shadow(0 14px 12px rgba(70,52,34,.18))}
+@keyframes sw{0%,100%{transform:rotate(-2.6deg)}50%{transform:rotate(2.6deg)}}
+@media (max-width:1060px){.hero .wrap{grid-template-columns:1fr}.duo{max-width:640px;margin:0 auto}}
+@media (max-width:560px){.duo{grid-template-columns:1fr}.duo .phone{transform:none;max-width:340px;margin:0 auto}.rail-box{height:420px}}
+/* story */
+.story{height:380vh;position:relative;padding:0;background:linear-gradient(180deg,#fbfaf7,#eef6f6 40%,#fbfaf7)}
+.pin{position:sticky;top:0;height:100vh;display:flex;align-items:center}
+.pin .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;width:100%}
+.cap{position:relative;min-height:300px}
+.cap .c{position:absolute;inset:0;opacity:0;transform:translateY(24px);transition:.5s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.cap .c.on{opacity:1;transform:none}
+.cap .c b{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--ink);color:#fff;font:600 16px "Inter Tight",sans-serif;margin-bottom:16px}
+.cap .c h3{font-size:clamp(26px,3.4vw,40px);line-height:1.3;margin-bottom:10px}
+.cap .c p{font-size:18px;color:var(--ink2);max-width:26em}
+.bar2{display:flex;gap:8px;margin-top:26px}
+.bar2 i{height:4px;flex:1;max-width:60px;border-radius:4px;background:#d9dfe8;transition:.4s}
+.bar2 i.on{background:var(--teal)}
+.stage{position:relative;display:flex;justify-content:center}
+.stage .phone{width:100%;max-width:390px;margin:0}
+.stage .m{opacity:0;transform:translateY(12px);animation:none;transition:.5s cubic-bezier(.2,.8,.2,1)}
+.stage .m.on{opacity:1;transform:none}
+.ordcard{position:absolute;inset-inline-end:-10px;bottom:-26px;width:250px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;opacity:0;transform:translateY(16px) scale(.96);transition:.6s cubic-bezier(.2,.8,.2,1)}
+.ordcard.on{opacity:1;transform:none}
+.ordcard b{display:block;font-size:14.5px}.ordcard small{color:var(--mute);font-size:12.5px}
+.ordcard em{display:inline-block;margin-top:6px;font-style:normal;font-size:12px;font-weight:600;padding:2px 12px;border-radius:999px;background:#e6f7f6;color:#0f7f7d}
+@media (max-width:860px){.pin .wrap{grid-template-columns:1fr;gap:16px}.cap{min-height:150px;order:2}.cap .c h3{font-size:24px}.cap .c p{font-size:16px}.stage{order:1}.ordcard{display:none}.story{height:340vh}}
+/* carousel */
+.tp{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 4px 26px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tp::-webkit-scrollbar{display:none}
+.tp .tc{flex:0 0 min(80vw,560px);scroll-snap-align:center}
+.tp .tc .im{aspect-ratio:16/10}
+.car-b{display:flex;gap:10px;justify-content:flex-end;margin-bottom:14px}
+.car-b button{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;transition:.2s}
+.car-b button:hover{border-color:var(--ink)}
+.car-b svg{width:20px;height:20px}
+@media (prefers-reduced-motion:reduce){.gm .sw{animation:none}.story{height:auto}.pin{position:static;height:auto;padding:60px 0}.cap .c{position:static;opacity:1;transform:none;margin-bottom:20px}.stage .m,.ordcard{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
 <header class="nav" id="nav"><div class="wrap">
-  <a href="#top" aria-label="Flowpal"><img src="assets/flowpal-lockup-color.svg" alt="Flowpal" width="120" height="34"></a>
+  <a href="#top" aria-label="Flowpal"><img src="/assets/flowpal-lockup-color.svg" alt="Flowpal" width="120" height="34"></a>
   <nav class="menu" aria-label="الأقسام"><a href="#ai">الموظف الذكي</a><a href="#stores">المتاجر الإلكترونية</a><a href="#how">كيف نشتغل</a><a href="#contact">تواصل معنا</a></nav>
   <a class="btn p sm" href="#contact">ابدأ معنا</a>
 </div></header>
@@ -196,18 +243,17 @@ footer a:hover{color:var(--teal-d)}
     <div class="cta"><a class="btn p" href="#contact">احكِ معنا</a><a class="btn g" href="#ai">شوف كيف بيشتغل الموظف الذكي</a></div>
     <div class="pills"><span>بالعربية والإنجليزية</span><span>ردّ على مدار الساعة</span><span>تحويل للموظف البشري</span></div>
   </div>
-  <div>
+  <div class="duo">
     <div class="phone" aria-label="مثال توضيحي لمحادثة">
       <div class="ph-top"><div class="ph-av">F</div><div><b>متجرك</b><small>الموظف الذكي · متصل</small></div></div>
       <div class="msgs">
         <div class="m c">مرحبا، في عندكم هالشنطة بالأسود؟</div>
-        <div class="m b">أهلين فيك! أكيد، موجودة بالأسود، وسعرها مكتوب عندي بالمتجر. بتحب أضيفها لطلبك؟</div>
-        <div class="m c">أيوه، قطعتين، والتوصيل لرام الله</div>
-        <div class="m b">تمام. بجهّز لك ملخص الطلب بالأسعار والمجموع، وبتأكد معك قبل ما أثبّته.</div>
-        <div class="m s">تم تسجيل الطلب وصار على لوحة التحكم</div>
+        <div class="m b">أهلين فيك! أكيد، موجودة بالأسود. بتحب أضيفها لطلبك؟</div>
+        <div class="m s">تم تسجيل الطلب</div>
       </div>
-      <p class="ex">مثال توضيحي لطريقة الرد، وليس محادثة حقيقية</p>
+      <p class="ex">مثال توضيحي</p>
     </div>
+    <div class="rail-box" id="rail" aria-label="عرض توضيحي: علاقة ملابس لمتجر إلكتروني"><svg class="rl-svg" id="rsvg"></svg><span class="lab">تصميم تفاعلي لمتجرك</span></div>
   </div>
 </div></section>
 
@@ -230,6 +276,29 @@ footer a:hover{color:var(--teal-d)}
     <div class="card rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>صريح وآمن</h3><p>ما بيخترع أسعار ولا عروض ولا معلومات، وبيقول إنه مساعد آلي إذا الزبون سأل.</p></div>
   </div>
 </div></section>
+
+<section class="story" id="story" aria-label="كيف يشتغل الموظف الذكي"><div class="pin"><div class="wrap">
+  <div>
+    <span class="eyebrow">قصة طلب</span>
+    <div class="cap" id="cap">
+      <div class="c on"><b>1</b><h3>الزبون بيسأل بأي وقت</h3><p>رسالة على إنستغرام الساعة وحدة بالليل؟ الموظف الذكي بيرد فورًا بالعامية، من بيانات متجرك.</p></div>
+      <div class="c"><b>2</b><h3>بيجاوب بمعلومات متجرك</h3><p>الأسعار والمنتجات والتوصيل كلها من معلوماتك أنت، وإذا ما عنده المعلومة بيحوّل لفريقك.</p></div>
+      <div class="c"><b>3</b><h3>بياخد الطلب ويراجعه معه</h3><p>بيجمع المنتجات والعنوان والاسم والهاتف، وبيرسل ملخصًا ما بيثبّته إلا بعد موافقة الزبون.</p></div>
+      <div class="c"><b>4</b><h3>الطلب وصلك جاهز</h3><p>الطلب ظاهر على لوحة التحكم، والمحادثة محفوظة، وبتتابع أنت التجهيز والتسليم.</p></div>
+    </div>
+    <div class="bar2" id="bar2"><i class="on"></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="stage"><div class="phone"><div class="ph-top"><div class="ph-av">F</div><div><b>متجرك</b><small>الموظف الذكي</small></div></div>
+    <div class="msgs" id="smsgs">
+      <div class="m c">مرحبا، الشنطة السودا متوفرة؟</div>
+      <div class="m b">أهلين! أكيد متوفرة، وسعرها مكتوب عندي بالمتجر. بتحب أضيفها؟</div>
+      <div class="m c">أيوه، قطعتين، والتوصيل لرام الله</div>
+      <div class="m b">تمام. هاد ملخص طلبك بالأسعار والمجموع، بثبّته إذا بتوافق؟</div>
+      <div class="m c">موافق</div>
+      <div class="m s">تم تسجيل الطلب</div>
+    </div><p class="ex">مثال توضيحي لطريقة الرد</p></div>
+    <div class="ordcard" id="ordc"><small>لوحة التحكم</small><b>طلب جديد</b><em>مؤكد</em></div></div>
+</div></div></section>
 
 <section id="how" style="padding-top:20px"><div class="wrap">
   <div class="head rv"><span class="eyebrow">كيف نشتغل</span><h2>من أول حديث لحد ما يرد على زبائنك</h2></div>
@@ -256,15 +325,16 @@ footer a:hover{color:var(--teal-d)}
 
 <section class="stores" id="stores"><div class="wrap">
   <div class="head rv"><span class="eyebrow">المتاجر الإلكترونية</span><h2>متجر بيشبه علامتك، وبيحب الزبون يتصفحه</h2><p class="sub">بنبني لك متجرًا إلكترونيًا بتصميم عصري وعربي بالكامل، يشتغل على الجوال والكمبيوتر. هاي قوالب جاهزة للأزياء، اضغط على أي واحد وتفرّج عليه كأنك الزبون.</p></div>
-  <div class="tp">
-    <a class="tc rv" href="demos/#c1"><div class="im"><img src="demos/_previews/c1-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>أفق</b><small>رياضي فاخر</small></div></a>
-    <a class="tc rv" href="demos/#c2"><div class="im"><img src="demos/_previews/c2-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>نيون</b><small>ستريت وير</small></div></a>
-    <a class="tc rv" href="demos/#c3"><div class="im"><img src="demos/_previews/c3-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>سوق</b><small>متجر تجاري لكتالوج كبير</small></div></a>
-    <a class="tc rv" href="demos/#odelle"><div class="im"><img src="demos/_previews/odelle-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>سكينة</b><small>أزياء نسائية محتشمة</small></div></a>
-    <a class="tc rv" href="demos/#vaelin"><div class="im"><img src="demos/_previews/vaelin-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>ليل</b><small>دار أزياء راقية</small></div></a>
-    <a class="tc rv" href="demos/" style="display:grid;place-items:center;text-align:center;background:linear-gradient(135deg,#0f1b33,#173a60);color:#fff;min-height:220px"><div class="tx"><b style="font-size:21px">شوف كل القوالب</b><small style="color:#b9c6dc">معاينة حيّة على الكمبيوتر والجوال</small></div></a>
+  <div class="car-b"><button id="cp" aria-label="السابق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button><button id="cn" aria-label="التالي"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+  <div class="tp" id="tp">
+    <a class="tc rv" href="/demos/#c1"><div class="im"><img src="/demos/_previews/c1-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>أفق</b><small>رياضي فاخر</small></div></a>
+    <a class="tc rv" href="/demos/#c2"><div class="im"><img src="/demos/_previews/c2-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>نيون</b><small>ستريت وير</small></div></a>
+    <a class="tc rv" href="/demos/#c3"><div class="im"><img src="/demos/_previews/c3-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>سوق</b><small>متجر تجاري لكتالوج كبير</small></div></a>
+    <a class="tc rv" href="/demos/#odelle"><div class="im"><img src="/demos/_previews/odelle-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>سكينة</b><small>أزياء نسائية محتشمة</small></div></a>
+    <a class="tc rv" href="/demos/#vaelin"><div class="im"><img src="/demos/_previews/vaelin-d.webp?v=2" alt="" loading="lazy" width="1000" height="562"></div><div class="tx"><b>ليل</b><small>دار أزياء راقية</small></div></a>
+    <a class="tc rv" href="/demos/" style="display:grid;place-items:center;text-align:center;background:linear-gradient(135deg,#0f1b33,#173a60);color:#fff;min-height:220px"><div class="tx"><b style="font-size:21px">شوف كل القوالب</b><small style="color:#b9c6dc">معاينة حيّة على الكمبيوتر والجوال</small></div></a>
   </div>
-  <div class="fit rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a2 2 0 1 1 2 2c-1 0-2 .6-2 1.6V9M3 18l9-6 9 6z"/></svg></div><div class="t"><h3>غرفة الغيار</h3><p>ميزة بقالب سكينة: الزبونة بتسحب يمين أو يسار وبتبدّل القميص والبنطلون على نفس العارضة لتشوف التنسيق قبل الشراء.</p></div><a class="btn g sm" href="demos/essentials/#fit">جرّبها</a></div>
+  <div class="fit rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a2 2 0 1 1 2 2c-1 0-2 .6-2 1.6V9M3 18l9-6 9 6z"/></svg></div><div class="t"><h3>غرفة الغيار</h3><p>ميزة بقالب سكينة: الزبونة بتسحب يمين أو يسار وبتبدّل القميص والبنطلون على نفس العارضة لتشوف التنسيق قبل الشراء.</p></div><a class="btn g sm" href="/demos/essentials/#fit">جرّبها</a></div>
 </div></section>
 
 <section class="final" id="contact" style="padding-top:92px"><div class="wrap"><div class="fb">
@@ -275,8 +345,49 @@ footer a:hover{color:var(--teal-d)}
 
 <div class="wrap en" lang="en"><h3>Flowpal in English</h3><p>Flowpal builds AI messaging assistants, set up for your business, that reply to your customers on Instagram and Facebook Messenger, answer questions about your products and prices, take orders and hand the conversation over to your team when needed. We also build online stores with modern, Arabic-first design.</p></div>
 
-<footer><div class="wrap"><span dir="ltr">© 2026 Flowpal</span><nav><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="data-deletion.html">Data Deletion</a><a href="mailto:business@flowpal.co">business@flowpal.co</a><a href="https://wa.me/970566108726" rel="noopener"><span dir="ltr">+970 56 610 8726</span></a><a href="mailto:privacy@flowpal.co">privacy@flowpal.co</a></nav></div></footer>
+<footer><div class="wrap"><span dir="ltr">© 2026 Flowpal</span><nav><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/data-deletion.html">Data Deletion</a><a href="mailto:business@flowpal.co">business@flowpal.co</a><a href="https://wa.me/970566108726" rel="noopener"><span dir="ltr">+970 56 610 8726</span></a><a href="mailto:privacy@flowpal.co">privacy@flowpal.co</a></nav></div></footer>
 
+<script>
+(function(){
+/* hanging rail */
+var SHEET="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261113_115504_3ab92758-5854-4a1c-85db-ff8efd929e86.png&w=1360&q=85";
+var G=[[0,44,619,185],[1,45,860,514],[2,45,876,834],[4,1024,937,177],[3,45,606,1169],[7,1024,962,1166]];
+var box=document.getElementById("rail"),svg=document.getElementById("rsvg"),gms=[];
+function build(){
+ var W=box.clientWidth,H=box.clientHeight,top=H*.12,sag=H*.1;
+ function ry(x){var t=(x-W/2)/(W/2);return top+sag*(1-t*t)}
+ svg.setAttribute("viewBox","0 0 "+W+" "+H);
+ var y0=ry(0),yc=2*ry(W/2)-y0;
+ svg.innerHTML='<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dcbc"/><stop offset=".45" stop-color="#c2a877"/><stop offset="1" stop-color="#7f6743"/></linearGradient></defs><path d="M0 '+(y0+4)+' Q '+W/2+' '+(yc+4)+' '+W+' '+(y0+4)+'" stroke="rgba(80,60,35,.12)" stroke-width="3" fill="none"/><path d="M0 '+y0+' Q '+W/2+' '+yc+' '+W+' '+y0+'" stroke="url(#rg)" stroke-width="5" fill="none"/>';
+ gms.forEach(function(g){g.remove()});gms=[];
+ var n=W<420?3:(W<560?4:(W<700?5:6)),s=Math.min(.42,(H*.85)/1000);
+ var gap=W/(n+.2),start=gap*.6;
+ for(var i=0;i<n;i++){
+  var d=G[i],x=start+i*gap,el=document.createElement("div");el.className="gm";
+  el.style.transform="translate("+x+"px,"+(ry(x)-3)+"px)";
+  var h=(d[2]+6)*s;
+  el.innerHTML='<div class="sw" style="animation-delay:'+(-i*.9)+'s"><div class="fc" style="width:'+340*s+'px;height:'+h+'px;left:'+(-170*s)+'px;top:0;background-image:url('+SHEET+');background-size:'+1360*s+'px auto;background-position:'+(-(d[3]-170)*s)+'px '+(-d[1]*s)+'px"></div></div>';
+  box.appendChild(el);gms.push(el)}
+}
+build();addEventListener("resize",build);
+/* story */
+var st=document.getElementById("story"),msgs=[].slice.call(document.querySelectorAll("#smsgs .m")),caps=[].slice.call(document.querySelectorAll("#cap .c")),bars=[].slice.call(document.querySelectorAll("#bar2 i")),oc=document.getElementById("ordc");
+function story(){
+ var r=st.getBoundingClientRect(),p=Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)));
+ var step=Math.min(3,Math.floor(p*4)),cnt=[1,3,5,6][step];
+ if(p>0&&p<.04)cnt=1;
+ msgs.forEach(function(m,i){m.classList.toggle("on",i<cnt)});
+ caps.forEach(function(c,i){c.classList.toggle("on",i===step)});
+ bars.forEach(function(b,i){b.classList.toggle("on",i<=step)});
+ oc.classList.toggle("on",step===3);
+}
+story();addEventListener("scroll",story,{passive:true});addEventListener("resize",story);
+/* carousel */
+var tp=document.getElementById("tp");
+function mv(d){var w=tp.querySelector(".tc").getBoundingClientRect().width+22;tp.scrollBy({left:d*w,behavior:"smooth"})}
+document.getElementById("cn").onclick=function(){mv(-1)};document.getElementById("cp").onclick=function(){mv(1)};
+})();
+</script>
 <script>
 (function(){
 var n=document.getElementById("nav");function sc(){n.classList.toggle("s",scrollY>8)}sc();addEventListener("scroll",sc,{passive:true});
